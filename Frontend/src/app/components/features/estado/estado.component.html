@@ -1,0 +1,16 @@
+<app-generic-list 
+      [titulo]="titulo" 
+      [colunas]="config?.colunas" 
+      [endpoint]="endpoint"
+      [confirmMessageField]="'NomeEstado'" 
+      [itens]="itens"
+      (incluir)="onIncluirItem()" 
+      (editar)="onEditarItem($event)"
+      (excluir)="onExcluirItem($event)">
+ </app-generic-list>
+ <app-generic-form 
+      [showHeader]="true" 
+      (visibleChange)="onVisibleChange($event)"
+      [modelo]="endpoint"
+      [visible]="isFormVisible">
+</app-generic-form>

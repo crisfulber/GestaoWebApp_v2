@@ -1,0 +1,11 @@
+<div class="generic-actions">
+  <button *ngIf="mostrarIncluir" (click)="onIncluir()" class="btn btn-success">
+    <i class="bx bxs-plus-circle"></i> Incluir
+  </button>
+  <button *ngIf="mostrarEditar" (click)="onEditar()" class="btn btn-primary">
+    <i class="bx bxs-edit"></i> Editar
+  </button>
+  <button *ngIf="mostrarExcluir" (click)="onExcluir()" class="btn btn-danger">
+    <i class="bx bxs-trash"></i> Excluir
+  </button>
+</div>

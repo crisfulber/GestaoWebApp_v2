@@ -1,0 +1,79 @@
+# Visual Studio generated files
+##############################
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+*.vcxproj.user
+*.vs/
+_ReSharper*/
+[Bb]in/
+[Oo]bj/
+*.csproj.vspscc
+*.vssscc
+*.tss
+
+# Build results
+##############################
+*.dll
+*.exe
+*.pdb
+*.tlog
+*.lastcodeanalysissucceeded
+*.nupkg
+
+# Packages
+##############################
+packages/
+*.nupkg
+
+# Logs and temp files
+##############################
+*.log
+[Tt]mp/
+_svn
+.svn
+*.tmproj
+*.shproj
+[Dd]ebug*/
+[Rr]elease*/
+*.cache
+*.DotSettings.user
+
+# User Specific Files
+##############################
+*.DotSettings.user
+*.suo
+*.user
+*.cache
+*.chm
+*.ilk
+*.ncb
+*.sdf
+*.openfiles
+*.pfx
+*.publishsettings
+*.vspscc
+*.vssscc
+*.codeanalysis
+
+# Windows files
+##############################
+[Dd]esktop.ini
+[Tt]humbs.db
+
+# Other
+##############################
+*.bak
+*.swp
+*.*~
+.DS_Store
+# Rider directories
+.idea/
+*.iml
+
+# VS Code
+.vscode/
+
+# .NET SDK 6 global exception telemetry
+.dotnet/telemetry.json

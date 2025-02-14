@@ -1,0 +1,15 @@
+<app-generic-list 
+  [titulo]="titulo" 
+  [colunas]="config?.colunas" 
+  [endpoint]="endpoint"
+  [confirmMessageField]="'NomeEmpresa'" 
+  (incluir)="onIncluirItem()" 
+  (editar)="onEditarItem($event)"
+  (excluir)="onExcluirItem($event)">
+</app-generic-list>
+<app-generic-form 
+  [visible]="isFormVisible" 
+  [showHeader]="true" 
+  (visibleChange)="isFormVisible = $event"
+  [modelo]="endpoint">
+</app-generic-form>
