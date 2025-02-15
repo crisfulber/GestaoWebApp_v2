@@ -30,7 +30,7 @@ export class GenericActionsComponent {
   onEditar(): void {
     const id = this.itemSelecionado?.id;
     if (id) {
-      this.router.navigate([`/${this.endpoint}/editar`, id], { queryParams: { modelo: this.endpoint } });
+      // this.router.navigate([`/${this.endpoint}/editar`, id], { queryParams: { modelo: this.endpoint } });
       this.editar.emit(this.itemSelecionado);
     } else {
       console.error('ID do item não encontrado para edição.');

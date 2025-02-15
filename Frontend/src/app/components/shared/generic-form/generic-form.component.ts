@@ -1,7 +1,7 @@
 import { Component, Input, OnInit, Output, EventEmitter, Inject, SimpleChanges } from '@angular/core';
 import { FormBuilder, FormGroup, FormControl, Validators, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router'; // Not used, consider removing
 import { ConfigService, CampoConfig } from '../../../services/config.service';
 import { AutoCompleteModule } from 'primeng/autocomplete';
 import { DialogModule } from 'primeng/dialog';
@@ -13,6 +13,7 @@ import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
 import { INestedService } from '../../../services/inested.service';
 import { NESTED_SERVICE_TOKEN } from '../../../services/nested.service.token';
+// Removed HttpHeaders import as it's not used
 
 @Component({
     selector: 'app-generic-form',
@@ -23,118 +24,157 @@ import { NESTED_SERVICE_TOKEN } from '../../../services/nested.service.token';
     providers: [MessageService]
 })
 export class GenericFormComponent implements OnInit {
-    @Output() visibleChange = new EventEmitter<boolean>();
-    private _visible: boolean = false;
-
-    @Input()
-    set visible(value: boolean) {
-        console.log('Visible Setter:', value);
-        this._visible = value;
-    }
-
-    get visible(): boolean {
-        return this._visible;
-    }
-    @Input() showHeader: boolean = true;
-    titulo: string = '';
+    @Output() onFormHide = new EventEmitter<any>(); // Specify type for event emitter
+    @Input() showHeader = true;
+    @Input() key: any; // Consider a more specific type if possible
+    @Input() visible = false;
+    @Input() itemSelecionado: any; // Consider a more specific type if possible
+    titulo = '';
     campos: CampoConfig[] = [];
-    endpoint: string = '';
-    private _modelo: string = '';
-
-    @Input()
-    set modelo(value: string) {
-        this._modelo = value;
-        console.log('Modelo:', this._modelo);
-    }
-
-    get modelo(): string {
-        console.log('Modelo Get:', this._modelo);
-        return this._modelo;
-    }
+    endpoint = '';
+    private _modelo = '';
     form: FormGroup;
-    filteredOptions: any[] = [];
-    id: string | null = null;
+    filteredOptions: any[] = []; // Consider a more specific type if possible
+    private _id: number | null = null;
+    loading = false; // Add loading indicator
 
     constructor(
         private fb: FormBuilder,
         @Inject(NESTED_SERVICE_TOKEN) private nestedService: INestedService,
-        private route: ActivatedRoute,
-        private router: Router,
         private configService: ConfigService,
-        private messageService: MessageService
+        private messageService: MessageService,
     ) {
         this.form = this.fb.group({});
     }
 
-    ngOnChanges(changes: SimpleChanges): void {
-        if (changes['modelo'] && this.modelo) {
-            const configuracao = this.configService.getConfiguracao(this.modelo);
-            if (configuracao) {
-                this.campos = configuracao.campos;
-                this.titulo = configuracao.titulo;
-                this.endpoint = configuracao.endpoint;
-                this.initializeForm();
-
-                if (this.id) {
-                    this.nestedService.getById(this.endpoint, +this.id).subscribe(data => {
-                        this.form.patchValue(data);
-                    });
-                }
-            } else {
-                console.error(`Configuração para o modelo "${this.modelo}" não encontrada.`);
-            }
-        } else if (changes['modelo'] && !this.modelo) {
-            console.error(`O modelo não foi definido.`);
+    @Input()
+    set id(value: number | null) {
+        this._id = value;
+        if (value) { // Only call if value is not null or undefined
+            this.buscarDadosPorId(value);
+        } else {
+            this.form.reset(); // Clear form if ID is null
         }
     }
 
-    ngOnInit() {
-        this.id = this.route.snapshot.params['id'];
-        this.route.queryParams.subscribe(queryParams => {
-            if (queryParams['itemSelecionado']) {
-                this.form.patchValue(JSON.parse(queryParams['itemSelecionado']));
-            }
+    get id(): number | null {
+        return this._id;
+    }
+
+    @Input()
+    set modelo(value: string) {
+        this._modelo = value;
+    }
+
+    get modelo(): string {
+        return this._modelo;
+    }
+
+    ngOnChanges(changes: SimpleChanges): void {
+        if (changes['modelo'] && this.modelo) {
+            this.loadConfig();
+        }
+
+        if (changes['itemSelecionado'] && this.itemSelecionado) {
+            this.form.patchValue(this.itemSelecionado);
+        }
+    }
+
+    ngOnInit(): void {
+        if (this.modelo) { // Load config if modelo is already set on init
+            this.loadConfig();
+        }
+    }
+
+    private loadConfig() {
+        const configuracao = this.configService.getConfiguracao(this.modelo);
+        if (configuracao) {
+            this.campos = configuracao.campos;
+            this.titulo = configuracao.titulo;
+            this.endpoint = configuracao.endpoint;
+            this.initializeForm();
+        } else {
+            console.error(`Configuração para o modelo "${this.modelo}" não encontrada.`);
+            this.messageService.add({ severity: 'error', summary: 'Erro', detail: `Configuração para o modelo "${this.modelo}" não encontrada.` });
+        }
+    }
+
+
+    buscarDadosPorId(id: number): void {
+        this.loading = true; // Show loading indicator
+        this.nestedService.getById(this.endpoint, id).subscribe({
+            next: data => {
+                this.form.patchValue(data);
+            },
+            error: error => {
+                console.error('Erro ao carregar dados:', error);
+                this.messageService.add({ severity: 'error', summary: 'Erro', detail: 'Erro ao carregar dados.' });
+            },
+            complete: () => this.loading = false // Hide loading indicator
         });
     }
 
     initializeForm(): void {
-        console.log('Campos:', this.campos);
+        this.form.reset(); // Clear existing form controls
         this.campos.forEach(campo => {
             this.form.addControl(campo.campo, new FormControl('', campo.tipo === 'select' ? Validators.required : null));
             if (campo.tipo === 'select' && campo.optionsEndpoint) {
-                this.nestedService.getAll(campo.optionsEndpoint).subscribe(data => {
-                    console.log('Dados retornados:', data);
-                    if (campo.labelField && campo.valueField) {
-                        this.filteredOptions = data.map(item => {
-                            let label = item[campo.labelField as keyof typeof item];
-                            const value = item[campo.valueField as keyof typeof item];
-
-                            if (campo.concatFields) {
-                                campo.concatFields.forEach(field => {
-                                    if (item[field as keyof typeof item]) {
-                                        label += ` (${item[field as keyof typeof item]})`;
-                                    }
-                                });
-                            }
-                            if (label && value) {
-                                return { label: `${label}`, value };
-                            } else {
-                                console.error(`Dados inválidos: item =`, item);
-                                return null;
-                            }
-                        }).filter(option => option !== null);
-                    } else {
-                        console.error(`Campos labelField ou valueField não definidos para ${campo.campo}`);
-                    }
-                    console.log('Dados filtrados corretamente:', this.filteredOptions);
-                });
+                this.loadSelectOptions(campo);
             }
         });
     }
 
+    private loadSelectOptions(campo: CampoConfig) {
+        if (campo.optionsEndpoint) { // Check if optionsEndpoint is defined
+            this.nestedService.getAll(campo.optionsEndpoint).subscribe({
+                next: data => {
+                    this.filteredOptions = data.map(item => {
+                        const labelField = campo.labelField ?? '';
+                        const valueField = campo.valueField ?? '';
+
+                        let label = item[labelField as keyof typeof item] ?? '';
+                        const value = item[valueField as keyof typeof item];
+
+                        if (campo.concatFields) {
+                            campo.concatFields.forEach(field => {
+                                const fieldValue = item[field ?? '' as keyof typeof item] ?? '';
+                                if (fieldValue) {
+                                    label += ` (${fieldValue})`;
+                                }
+                            });
+                        }
+
+                        return value ? { label, value } : null;
+                    }).filter(option => option !== null);
+                },
+                error: error => {
+                    console.error(`Erro ao carregar opções para ${campo.campo}:`, error);
+                    this.messageService.add({ severity: 'error', summary: 'Erro', detail: `Erro ao carregar opções para ${campo.label}.` });
+                }
+            });
+        } else {
+            console.warn(`optionsEndpoint is not defined for field ${campo.campo}.`);
+            // Optionally, you could set filteredOptions to an empty array here if you want to avoid displaying anything for this select:
+            // this.filteredOptions = [];
+        }
+    }
+
+
+    onHide(): void {
+        this.onFormHide.emit(null);
+        this.form.reset(); // Reset form on hide
+        this._id = null; // Reset ID as well
+    }
+
+    cancelar(): void {
+        this.onHide();
+    }
+
     salvar(): void {
         if (this.form.valid) {
+            this.loading = true; // Show loading indicator
             const formData = { ...this.form.value };
+
             this.campos.forEach(campo => {
                 if (campo.tipo === 'select' && formData[campo.campo] && formData[campo.campo].value) {
                     formData[`Id${campo.label}`] = formData[campo.campo].value;
@@ -142,41 +182,31 @@ export class GenericFormComponent implements OnInit {
                 }
             });
 
+            const request = this.id
+                ? this.nestedService.update(this.endpoint, this.id, formData)
+                : this.nestedService.create(this.endpoint, formData);
 
-            console.log('Dados do formulário antes do envio:', formData);
-
-            this.nestedService.create(this.endpoint, formData).subscribe(
-                response => {
-                    console.log('Resposta do servidor:', response);
+            request.subscribe({
+                next: response => {
                     this.messageService.add({ severity: 'success', summary: 'Sucesso', detail: 'Dados salvos com sucesso!' });
-                    this.visible = false;
-                    this.visibleChange.emit(this.visible);
-                    this.router.navigate([`/${this.endpoint}`]);
+                    this.onHide(); // Hide and reset the form after successful save
                 },
-                error => {
+                error: error => {
                     console.error('Erro ao salvar dados:', error);
                     this.messageService.add({ severity: 'error', summary: 'Erro', detail: 'Erro ao salvar os dados, verifique e tente novamente' });
-                }
-            );
-        } else {
-            console.error('Formulário inválido');
-            this.messageService.add({ severity: 'warn', summary: 'Aviso', detail: 'Preencha todos os campos corretamente' });
-        }
-    }
+                },
+                complete: () => this.loading = false // Hide loading indicator
+            });
 
-    cancelar(): void {
-        if (this.visible) {
-            this.visible = false;
-            this.visibleChange.emit(this.visible);
-            this.router.navigate([`/${this.endpoint}`]);
+        } else {
+            this.messageService.add({ severity: 'warn', summary: 'Aviso', detail: 'Preencha todos os campos corretamente' });
         }
     }
 
     filterOptions(event: any): void {
         const query = event.query.toLowerCase();
         this.filteredOptions = this.filteredOptions.filter(option =>
-            option.label && option.label.toLowerCase().includes(query)
+            option?.label?.toLowerCase().includes(query) // Safe navigation operator
         );
-        console.log('Opções filtradas corretamente:', this.filteredOptions);
     }
 }

@@ -84,13 +84,13 @@ export class ConfigService {
         { label: 'Município', campo: 'NomeMunicipio', tipo: 'text' },
       ],
     },
-    'Estado': {
+    'estado': {
       titulo: 'Estados',
       campos: [
         { label: 'Estado', campo: 'nomeEstado', tipo: 'text' },
         { label: 'Sigla', campo: 'sigla', tipo: 'text' },
       ],
-      endpoint: 'Estado',
+      endpoint: 'estado',
       colunas: [
         { label: 'Estado', campo: 'nomeEstado' },
         { label: 'Sigla', campo: 'sigla' },
