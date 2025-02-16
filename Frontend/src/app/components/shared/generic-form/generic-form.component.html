@@ -1,71 +1,62 @@
 <p-toast></p-toast>
-<p-dialog 
-   *ngIf="visible"
-   [visible]="visible"
-   [header]="showHeader ? 'Cadastro de ' + titulo: ''"
-   [modal]="true"
-   [style]="{width: '50vw'}"
-   [draggable]="false"
-   [resizable]="false"
-   (onHide)="onHide()" 
+<p-dialog
+    *ngIf="visible"
+    [visible]="visible"
+    [header]="showHeader ? 'Cadastro de ' + titulo: ''"
+    [modal]="true"
+    [style]="{width: '80vw'}"
+    [draggable]="false"
+    [resizable]="false"
+    (onHide)="onHide()"
 >
 <form [formGroup]="form" (ngSubmit)="salvar()">
-   <div class="form-group" *ngFor="let campo of campos">
-        <label [for]="campo.campo">{{ campo.label }}</label>
-        <p-autoComplete 
-            *ngIf="campo.tipo === 'select'" 
-            [formControlName]="campo.campo" 
+    <div class="form-group" *ngFor="let campo of campos">
+         <label [for]="campo.campo">{{ campo.label }}</label>
+         <p-dropdown
+            *ngIf="campo.tipo === 'dropdown'"
+            [formControlName]="campo.campo"
             [id]="'id_' + campo.campo"
             [name]="'name_' + campo.campo"
-            [placeholder]="'Selecione ' + campo.label" 
-            [suggestions]="filteredOptions"
-            [field]="'label'" 
-            [dropdown]="true" 
-            [forceSelection]="true"
-            (completeMethod) = "filterOptions($event)"
-            (onSelect) = "form.get(campo.campo)?.setValue($event)"
-            [showClear]="true">
-       </p-autoComplete>
-        <p-dropdown 
-            *ngIf="campo.tipo === 'dropdown'" 
-            [formControlName]="campo.campo" 
+            [options]="selectOptions[campo.campo]"
+            [optionLabel]="optionLabelField"
+            [optionValue]="optionValueField"
+            placeholder="Selecione "
+            appendTo="body"
+            [panelStyle]="{'min-width':'100%', 'width': 'auto'}">
+               <ng-template pTemplate="selectedItem">
+                  {{ selectedItem ? selectedItem[optionLabelField] : "Selecione" }}
+               </ng-template>
+         </p-dropdown>
+         <p-calendar
+            *ngIf="campo.tipo === 'date'"
+            [formControlName]="campo.campo"
             [id]="'id_' + campo.campo"
             [name]="'name_' + campo.campo"
-            [options]="filteredOptions" 
-            [placeholder]="'Selecione ' + campo.label" 
-            [showClear]="true"
-            [filter]="true" 
-            [filterBy]="'label'">
-       </p-dropdown>
-        <p-calendar 
-            *ngIf="campo.tipo === 'date'" 
-            [formControlName]="campo.campo" 
-            [id]="'id_' + campo.campo"
-            [name]="'name_' + campo.campo" 
-            [placeholder]="'Selecione ' + campo.label" 
+            [placeholder]="'Selecione ' + campo.label"
             [showClear]="true" dateFormat="dd/mm/yy"
-            [monthNavigator]="true" 
-            [yearNavigator]="true" 
+            [monthNavigator]="true"
+            [yearNavigator]="true"
             yearRange="1900:2050">
-      </p-calendar>
-         <input 
-            pInputText 
+       </p-calendar>
+         <input
+            pInputText
             *ngIf="campo.tipo !== 'select' && campo.tipo !== 'dropdown' && campo.tipo !== 'date'"
-            [formControlName]="campo.campo" 
+            [formControlName]="campo.campo"
             [id]="'id_' + campo.campo"
             [name]="'name_' + campo.campo"
-            [type]="campo.tipo || 'text'" />
-   </div>
+            [type]="campo.tipo || 'text'" 
+         />
+    </div>
 </form>
    <ng-template pTemplate="footer">
-      <p-button 
-         label="Salvar" 
-         icon="pi pi-save" 
+      <p-button
+         label="Salvar"
+         icon="pi pi-save"
          (click)="salvar()">
       </p-button>
-      <p-button 
-         label="Cancelar" 
-         icon="pi pi-times" 
+      <p-button
+         label="Cancelar"
+         icon="pi pi-times"
          styleClass="p-button-secondary p-button-text"
          (click)="cancelar()">
       </p-button>

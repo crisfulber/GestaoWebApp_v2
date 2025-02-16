@@ -78,42 +78,41 @@ export class ConfigService {
       colunas: [
         { label: 'Rua', campo: 'Rua' },
         { label: 'N°', campo: 'Numero', tipo: 'number' },
-        { label: 'Complemento', campo: 'Complemento', tipo: 'text' },
-        { label: 'Bairro', campo: 'Bairro', tipo: 'text' },
-        { label: 'CEP', campo: 'CEP', tipo: 'text' },
-        { label: 'Município', campo: 'NomeMunicipio', tipo: 'text' },
+        { label: 'Complemento', campo: 'Complemento' },
+        { label: 'Bairro', campo: 'Bairro' },
+        { label: 'CEP', campo: 'CEP' },
+        { label: 'Município', campo: 'NomeMunicipio' },
       ],
     },
     'estado': {
       titulo: 'Estados',
       campos: [
-        { label: 'Estado', campo: 'nomeEstado', tipo: 'text' },
-        { label: 'Sigla', campo: 'sigla', tipo: 'text' },
+        { label: 'Estado', campo: 'NomeEstado', tipo: 'text' },
+        { label: 'Sigla', campo: 'Sigla', tipo: 'text' },
       ],
       endpoint: 'estado',
       colunas: [
-        { label: 'Estado', campo: 'nomeEstado' },
-        { label: 'Sigla', campo: 'sigla' },
+        { label: 'Estado', campo: 'NomeEstado' },
+        { label: 'Sigla', campo: 'Sigla' },
       ],
     },
-    'Municipio': {
+    'municipio': {
       titulo: 'Municípios',
       campos: [
         { label: 'Nome', campo: 'NomeMunicipio', tipo: 'text' },
         {
-          label: 'UF',
-          campo: 'SiglaEstado',
-          tipo: 'select',
-          optionsEndpoint: 'Estado',
+          label: 'UF', 
+          campo: 'IdEstado', 
+          tipo: 'dropdown',
+          optionsEndpoint: 'estado', 
           labelField: 'NomeEstado',
           valueField: 'Id',
-          concatFields: ['Sigla']
         },
       ],
-      endpoint: 'Municipio',
+      endpoint: 'municipio',
       colunas: [
-        { label: 'Nome', campo: 'nomeMunicipio', tipo: 'text' },
-        { label: 'Estado', campo: 'SiglaEstado', tipo: 'text' },
+        { label: 'Nome', campo: 'NomeMunicipio' },
+        { label: 'Estado', campo: 'SiglaEstado' }, 
       ],
     },
     'Setor': {
@@ -176,7 +175,6 @@ export class ConfigService {
   };
 
   getConfiguracao(modelo: string) {
-    console.log('Modelo recebido em getConfiguracao:', modelo);
     const configuracao = this.configuracoes[modelo];
     if (!configuracao) {
       console.error(`Configuração para o modelo "${modelo}" não encontrada.`);

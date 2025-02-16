@@ -6,7 +6,7 @@
     [itens]="itens"
     (incluir)="onIncluirItem()" 
     (editar)="onEditarItem($event)"
-    (excluir)="onExcluirItem($event)">
+    (excluir)="confirmDelete($event)">
 </app-generic-list>
 
 <app-generic-form 
@@ -15,4 +15,5 @@
     [visible]="isFormVisible"
     [itemSelecionado]="itemSelecionado"
     [id]="itemId">  
+    <p-confirmDialog></p-confirmDialog>
 </app-generic-form>

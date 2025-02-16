@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Inject, Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, catchError, throwError } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -12,7 +12,14 @@ export class ApiService<T> {
   ) { }
 
   getAll(endpoint: string): Observable<T[]> {
-    return this.http.get<T[]>(`${this.apiUrl}/${endpoint}`);
+    return this.http.get<T[]>(`${this.apiUrl}/${endpoint}`).pipe(
+      catchError(this.handleError)
+    );
+  }
+
+  private handleError(error: any) {
+    console.error('Ocorreu um erro:', error);
+    return throwError(() => new Error('Algo deu errado; por favor, tente novamente mais tarde.'));
   }
 
   getById(endpoint: string, id: number): Observable<T> {

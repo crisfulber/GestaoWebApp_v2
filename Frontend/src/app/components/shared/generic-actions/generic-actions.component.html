@@ -5,7 +5,7 @@
   <button *ngIf="mostrarEditar" (click)="onEditar()" class="btn btn-primary">
     <i class="bx bxs-edit"></i> Editar
   </button>
-  <button *ngIf="mostrarExcluir" (click)="onExcluir()" class="btn btn-danger">
-    <i class="bx bxs-trash"></i> Excluir
+  <button *ngIf="mostrarExcluir" (click)="onConfirmDelete()" class="p-button-danger" pButton icon="pi pi-trash">
+    Excluir
   </button>
 </div>

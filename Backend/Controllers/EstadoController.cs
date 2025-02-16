@@ -9,55 +9,100 @@ namespace Backend.Controllers
     public class EstadoController : ControllerBase
     {
         private readonly AppDbContext _context;
+        private readonly ILogger<EstadoController> _logger;
 
-        public EstadoController(AppDbContext context)
+        public EstadoController(AppDbContext context, ILogger<EstadoController> logger)
         {
             _context = context;
+            _logger = logger;
         }
 
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Estado>>> GetEstados()
         {
-            return await _context.Estados.ToListAsync();
+            try
+            {
+                return await _context.Estados.ToListAsync();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Erro ao obter a lista de estados.");
+                return StatusCode(500, "Erro ao obter a lista de estados.");
+            }
         }
 
         [HttpGet("{id}")]
         public async Task<ActionResult<Estado>> GetEstado(int id)
         {
-            var estado = await _context.Estados.FindAsync(id);
-
-            if (estado == null)
+            try
             {
-                return NotFound();
-            }
+                var estado = await _context.Estados.FindAsync(id);
 
-            return estado;
+                if (estado == null)
+                {
+                    return NotFound();
+                }
+
+                return estado;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Erro ao obter o estado com ID {id}.");
+                return StatusCode(500, "Erro ao obter o estado.");
+            }
         }
 
         [HttpPost]
         public async Task<ActionResult<Estado>> PostEstado(Estado estado)
         {
-            _context.Estados.Add(estado);
-            await _context.SaveChangesAsync();
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
 
-            return CreatedAtAction("GetEstado", new { id = estado.Id }, estado);
+                _context.Estados.Add(estado);
+                await _context.SaveChangesAsync();
+
+                return CreatedAtAction("GetEstado", new { id = estado.Id }, estado);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Erro ao criar um novo estado.");
+                return StatusCode(500, "Erro ao criar um novo estado.");
+            }
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutEstado(int id, Estado estado)
+        public async Task<IActionResult> PutEstado(int id, Estado estadoAtualizado)
         {
-            if (id != estado.Id)
+            if (id != estadoAtualizado.Id)
             {
-                return BadRequest();
+                return BadRequest("O ID na rota não corresponde ao ID no corpo da requisição.");
             }
 
-            _context.Entry(estado).State = EntityState.Modified;
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
 
             try
             {
+                var estadoExistente = await _context.Estados.FindAsync(id);
+                if (estadoExistente == null)
+                {
+                    return NotFound();
+                }
+
+                estadoExistente.NomeEstado = estadoAtualizado.NomeEstado;
+                estadoExistente.Sigla = estadoAtualizado.Sigla;
+
                 await _context.SaveChangesAsync();
+
+                return NoContent();
             }
-            catch (DbUpdateConcurrencyException)
+            catch (DbUpdateConcurrencyException ex)
             {
                 if (!EstadoExists(id))
                 {
@@ -65,26 +110,38 @@ namespace Backend.Controllers
                 }
                 else
                 {
-                    throw;
+                    _logger.LogError(ex, $"Erro de concorrência ao atualizar o estado com ID {id}.");
+                    return StatusCode(500, "Erro de concorrência ao atualizar o estado.");
                 }
             }
-
-            return NoContent();
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Erro ao atualizar o estado com ID {id}.");
+                return StatusCode(500, "Erro ao atualizar o estado.");
+            }
         }
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteEstado(int id)
         {
-            var estado = await _context.Estados.FindAsync(id);
-            if (estado == null)
+            try
             {
-                return NotFound();
+                var estado = await _context.Estados.FindAsync(id);
+                if (estado == null)
+                {
+                    return NotFound();
+                }
+
+                _context.Estados.Remove(estado);
+                await _context.SaveChangesAsync();
+
+                return NoContent();
             }
-
-            _context.Estados.Remove(estado);
-            await _context.SaveChangesAsync();
-
-            return NoContent();
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Erro ao excluir o estado com ID {id}.");
+                return StatusCode(500, "Erro ao excluir o estado.");
+            }
         }
 
         private bool EstadoExists(int id)

@@ -1,4 +1,4 @@
-import { Component, Inject } from '@angular/core';
+import { Component, Inject, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { GenericListComponent } from '../../shared/generic-list/generic-list.component';
 import { GenericFormComponent } from '../../shared/generic-form/generic-form.component';
@@ -6,15 +6,19 @@ import { ConfigService } from '../../../services/config.service';
 import { FormsModule } from '@angular/forms';
 import { NESTED_SERVICE_TOKEN } from '../../../services/nested.service.token';
 import { INestedService } from '../../../services/inested.service';
-import { Router, ActivatedRoute, NavigationEnd } from '@angular/router'; // Import ActivatedRoute and NavigationEnd
-import { filter } from 'rxjs/operators'; // Import filter operator
+import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
+import { filter } from 'rxjs/operators';
+import { MessageService, ConfirmationService } from 'primeng/api';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
 
 @Component({
   selector: 'app-estado',
   standalone: true,
-  imports: [CommonModule, GenericListComponent, GenericFormComponent, FormsModule],
+  imports: [CommonModule, GenericListComponent, GenericFormComponent, FormsModule, ConfirmDialogModule],
   templateUrl: './estado.component.html',
   styleUrls: ['./estado.component.scss'],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
+  providers: [MessageService, ConfirmationService]
 })
 export class EstadoComponent {
   titulo: string = 'Estado';
@@ -22,23 +26,22 @@ export class EstadoComponent {
   config: any;
   isFormVisible: boolean = false;
   itens: any[] = [];
-  itemId: number | null = null; // Store the ID for editing
+  itemId: number | null = null;
   itemSelecionado: any = null;
 
   constructor(
     private configService: ConfigService,
     @Inject(NESTED_SERVICE_TOKEN) private nestedService: INestedService,
     private router: Router,
-    private route: ActivatedRoute // Inject ActivatedRoute
+    private route: ActivatedRoute,
+    private messageService: MessageService,
+    private confirmationService: ConfirmationService
   ) {
     this.config = this.configService.getConfiguracao(this.endpoint);
     this.carregarItens();
 
-    // Subscribe to route changes to get the ID
-    this.router.events.pipe(
-      filter(event => event instanceof NavigationEnd)
-    ).subscribe(() => {
-      this.getItemIDFromRoute(); // Call function to set the ID
+    this.router.events.pipe(filter(event => event instanceof NavigationEnd)).subscribe(() => {
+      this.getItemIDFromRoute();
     });
   }
 
@@ -59,24 +62,45 @@ export class EstadoComponent {
 
   onIncluirItem() {
     this.isFormVisible = true;
-    this.itemId = null; // Reset the ID for new items
-    this.itemSelecionado = null; // Clear selected item
+    this.itemId = null;
+    this.itemSelecionado = null;
   }
 
   onEditarItem(item: any) {
     this.itemSelecionado = item;
     this.isFormVisible = true;
-    this.itemId = item.id; // Set the ID for editing
+    this.itemId = item.Id;
+  }
+
+  confirmDelete(item: any) {
+    this.confirmationService.confirm({
+      message: `Deseja realmente excluir o item "${item.NomeEstado || item.Id}"?`,
+      header: 'Confirmação',
+      icon: 'pi pi-exclamation-triangle',
+      acceptLabel: 'Sim',
+      rejectLabel: 'Cancelar',
+      acceptButtonStyleClass: 'p-button-danger',
+      rejectButtonStyleClass: 'p-button-text',
+      accept: () => this.onExcluirItem(item)
+    });
   }
 
   onExcluirItem(item: any) {
-    // Implement delete logic here
+    this.nestedService.delete(this.endpoint, item.Id).subscribe({
+      next: () => {
+        this.messageService.add({ severity: 'success', summary: 'Sucesso', detail: 'Item excluído com sucesso!' });
+        this.carregarItens();
+      },
+      error: () => {
+        this.messageService.add({ severity: 'error', summary: 'Erro', detail: 'Erro ao excluir o item. Tente novamente.' });
+      }
+    });
   }
 
   onFormHide(event: any) {
     this.isFormVisible = false;
-    this.itemId = null; // Reset ID after form is closed
-    this.itemSelecionado = null; // Clear selected item
-    this.carregarItens(); // Refresh the list
+    this.itemId = null;
+    this.itemSelecionado = null;
+    this.carregarItens();
   }
 }

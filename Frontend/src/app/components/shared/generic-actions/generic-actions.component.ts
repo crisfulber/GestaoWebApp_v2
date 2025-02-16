@@ -28,24 +28,17 @@ export class GenericActionsComponent {
   }
 
   onEditar(): void {
-    const id = this.itemSelecionado?.id;
+    const id = this.itemSelecionado?.Id;
     if (id) {
-      // this.router.navigate([`/${this.endpoint}/editar`, id], { queryParams: { modelo: this.endpoint } });
       this.editar.emit(this.itemSelecionado);
     } else {
       console.error('ID do item não encontrado para edição.');
     }
   }
 
-  onExcluir(): void {
-    const id = this.itemSelecionado?.id;
-    if (id) {
-      const confirmMessage = this.itemSelecionado[this.confirmMessageField] || 'Selecionado';
-      if (confirm(`Deseja realmente excluir o item "${confirmMessage}"?`)) {
-        this.excluir.emit(this.itemSelecionado);
-      }
-    } else {
-      console.error('ID do item não encontrado para exclusão.');
+  onConfirmDelete(): void {
+    if (this.itemSelecionado) {
+      this.excluir.emit(this.itemSelecionado);
     }
   }
 }
