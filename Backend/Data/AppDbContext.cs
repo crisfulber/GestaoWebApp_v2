@@ -10,6 +10,7 @@ namespace Backend.Data
 
     public DbSet<Municipio> Municipios { get; set; }
     public DbSet<Estado> Estados { get; set; }
+    public DbSet<Endereco> Enderecos { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -21,10 +22,25 @@ namespace Backend.Data
           .HasForeignKey(m => m.IdEstado)
           .OnDelete(DeleteBehavior.Cascade);
 
+      modelBuilder.Entity<Endereco>()
+          .HasOne(e => e.Municipio)
+          .WithMany()
+          .HasForeignKey(e => e.IdMunicipio)
+          .OnDelete(DeleteBehavior.Restrict); 
+
+      modelBuilder.Entity<Endereco>()
+          .HasOne(e => e.Estado)
+          .WithMany()
+          .HasForeignKey(e => e.IdEstado)
+          .OnDelete(DeleteBehavior.Restrict);
+
       modelBuilder.Entity<Estado>()
           .HasKey(e => e.Id);
 
       modelBuilder.Entity<Municipio>()
+          .HasKey(m => m.Id);
+
+      modelBuilder.Entity<Endereco>()
           .HasKey(m => m.Id);
     }
   }

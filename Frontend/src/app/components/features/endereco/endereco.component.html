@@ -1,62 +1,19 @@
-<!-- Listagem -->
-<div class="card">
-  <div *ngIf="!isFormVisible" class="header">
-    <h1>{{ titulo }}</h1>
-    <button (click)="onIncluirItem()" class="btn btn-success">Incluir</button>
-  </div>
-  
-  <div *ngIf="!isFormVisible">
-    <table>
-      <thead>
-        <tr>
-          <th *ngFor="let coluna of colunas">{{ coluna.label }}</th>
-          <th>Ações</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let item of itens">
-          <td *ngFor="let coluna of colunas">{{ item[coluna.campo] }}</td>
-          <td>
-            <button (click)="onEditarItem(item)" class="btn btn-primary">Editar</button>
-            <button (click)="onExcluirItem(item)" class="btn btn-danger">Excluir</button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
+<app-generic-list
+    [titulo]="titulo"
+    [colunas]="config?.colunas"
+    [endpoint]="endpoint"
+    [confirmMessageField]="'Rua'"
+    [itens]="itens"
+    (incluir)="onIncluirItem()"
+    (editar)="onEditarItem($event)"
+    (excluir)="confirmDelete($event)">
+</app-generic-list>
 
-<!-- Formulário de Cadastro/Edição -->
-<div *ngIf="isFormVisible" class="form-container">
-  <h2>{{ isEditMode ? 'Editar Endereço' : 'Novo Endereço ' }}</h2>
-  <form [formGroup]="form" (ngSubmit)="salvar()">
-    <div class="form-group">
-      <label for="rua">Rua</label>
-      <input id="rua" type="text" formControlName="rua" class="form-control" />
-    </div>
-    <div class="form-group">
-      <label for="numero">Número</label>
-      <input id="numero" type="number" formControlName="numero" class="form-control" />
-    </div>
-    <div class="form-group">
-      <label for="bairro">Bairro</label>
-      <input id="bairro" type="text" formControlName="bairro" class="form-control" />
-    </div>
-    <div class="form-group">
-      <label for="complemento">Complemento</label>
-      <input id="complemento" type="text" formControlName="complemento" class="form-control" />
-    </div>
-    <div class="form-group">
-      <label for="idMunicipio">Município</label>
-      <select id="idMunicipio" formControlName="idMunicipio" class="form-control">
-        <option *ngFor="let municipio of municipios" [value]="municipio.id">{{ municipio.nomeMunicipio }}</option>
-      </select>
-    </div>
-    <div class="form-group">
-      <label for="cep">CEP</label>
-      <input id="cep" type="text" formControlName="cep" class="form-control" />
-    </div>
-    <button type="submit" class="btn btn-success">Salvar</button>
-    <button type="button" class="btn btn-secondary" (click)="cancelar()">Cancelar</button>
-  </form>
-</div>
-</div>
+<app-generic-form
+    (onFormHide)="onFormHide($event)"
+    [modelo]="endpoint"
+    [visible]="isFormVisible"
+    [itemSelecionado]="itemSelecionado"
+    (autoCompleteSelect)="onAutoCompleteSelect($event)"
+>
+</app-generic-form>

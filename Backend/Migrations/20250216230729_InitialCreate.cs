@@ -39,15 +39,14 @@ namespace Backend.Migrations
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     NomeMunicipio = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    IdEstado = table.Column<int>(type: "int", nullable: false),
-                    EstadoId = table.Column<int>(type: "int", nullable: false)
+                    IdEstado = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Municipios", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Municipios_Estados_EstadoId",
-                        column: x => x.EstadoId,
+                        name: "FK_Municipios_Estados_IdEstado",
+                        column: x => x.IdEstado,
                         principalTable: "Estados",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -55,54 +54,62 @@ namespace Backend.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
-                name: "Empresas",
+                name: "Enderecos",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    NomeEmpresa = table.Column<string>(type: "longtext", nullable: false)
+                    Rua = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    EnderecoRua = table.Column<string>(type: "longtext", nullable: false)
+                    Numero = table.Column<int>(type: "int", nullable: false),
+                    Complemento = table.Column<string>(type: "longtext", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    EnderecoNumero = table.Column<string>(type: "longtext", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    EnderecoComplemento = table.Column<string>(type: "longtext", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    EnderecoBairro = table.Column<string>(type: "longtext", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    EnderecoCEP = table.Column<string>(type: "longtext", nullable: false)
+                    Bairro = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     IdMunicipio = table.Column<int>(type: "int", nullable: false),
-                    MunicipioId = table.Column<int>(type: "int", nullable: false)
+                    IdEstado = table.Column<int>(type: "int", nullable: false),
+                    CEP = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4")
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Empresas", x => x.Id);
+                    table.PrimaryKey("PK_Enderecos", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Empresas_Municipios_MunicipioId",
-                        column: x => x.MunicipioId,
+                        name: "FK_Enderecos_Estados_IdEstado",
+                        column: x => x.IdEstado,
+                        principalTable: "Estados",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Enderecos_Municipios_IdMunicipio",
+                        column: x => x.IdMunicipio,
                         principalTable: "Municipios",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Empresas_MunicipioId",
-                table: "Empresas",
-                column: "MunicipioId");
+                name: "IX_Enderecos_IdEstado",
+                table: "Enderecos",
+                column: "IdEstado");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Municipios_EstadoId",
+                name: "IX_Enderecos_IdMunicipio",
+                table: "Enderecos",
+                column: "IdMunicipio");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Municipios_IdEstado",
                 table: "Municipios",
-                column: "EstadoId");
+                column: "IdEstado");
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Empresas");
+                name: "Enderecos");
 
             migrationBuilder.DropTable(
                 name: "Municipios");

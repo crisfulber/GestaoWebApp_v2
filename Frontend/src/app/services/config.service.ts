@@ -8,6 +8,9 @@ export interface CampoConfig {
   labelField?: string;
   valueField?: string;
   concatFields?: string[];
+  suggestions?: (event: any) => any[];
+  readonly?: boolean;
+  field?: string;
 }
 
 @Injectable({
@@ -56,32 +59,41 @@ export class ConfigService {
         { label: 'Município', campo: 'EnderecoNomeMunicipio' }
       ],
     },
-    'Endereco': {
+    'endereco': {
       titulo: 'Endereços',
       campos: [
         { label: 'Rua', campo: 'Rua', tipo: 'text' },
-        { label: 'N°', campo: 'numero', tipo: 'number' },
+        { label: 'N°', campo: 'Numero', tipo: 'number' },
         { label: 'Complemento', campo: 'Complemento', tipo: 'text' },
         { label: 'Bairro', campo: 'Bairro', tipo: 'text' },
         { label: 'CEP', campo: 'CEP', tipo: 'text' },
         {
           label: 'Município',
           campo: 'NomeMunicipio',
-          tipo: 'select',
-          optionsEndpoint: 'Municipio',
-          labelField: 'nomeMunicipio',
-          valueField: 'Id',
-          concatFields: ['municipio']
+          tipo: 'autocomplete',
+          optionsEndpoint: 'municipio',
+          labelField: 'NomeMunicipio',
+          valueField: 'NomeMunicipio',
         },
+        {
+          label: 'Estado',
+          campo: 'Estado',
+          tipo: 'autocomplete',
+          optionsEndpoint: 'estado',
+          labelField: 'Sigla',
+          valueField: 'Sigla',
+          readonly: true
+        }
       ],
-      endpoint: 'Endereco',
+      endpoint: 'endereco',
       colunas: [
         { label: 'Rua', campo: 'Rua' },
-        { label: 'N°', campo: 'Numero', tipo: 'number' },
+        { label: 'N°', campo: 'Numero' },
         { label: 'Complemento', campo: 'Complemento' },
         { label: 'Bairro', campo: 'Bairro' },
         { label: 'CEP', campo: 'CEP' },
         { label: 'Município', campo: 'NomeMunicipio' },
+        { label: 'Estado', campo: 'Estado' },
       ],
     },
     'estado': {
@@ -101,10 +113,10 @@ export class ConfigService {
       campos: [
         { label: 'Nome', campo: 'NomeMunicipio', tipo: 'text' },
         {
-          label: 'UF', 
-          campo: 'IdEstado', 
+          label: 'UF',
+          campo: 'IdEstado',
           tipo: 'dropdown',
-          optionsEndpoint: 'estado', 
+          optionsEndpoint: 'estado',
           labelField: 'NomeEstado',
           valueField: 'Id',
         },
@@ -112,7 +124,7 @@ export class ConfigService {
       endpoint: 'municipio',
       colunas: [
         { label: 'Nome', campo: 'NomeMunicipio' },
-        { label: 'Estado', campo: 'SiglaEstado' }, 
+        { label: 'Estado', campo: 'SiglaEstado' },
       ],
     },
     'Setor': {

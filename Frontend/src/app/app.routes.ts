@@ -9,6 +9,7 @@ export const routes: Routes = [
     { path: 'municipio', loadComponent: () => import('./components/features/municipio/municipio.component').then(m => m.MunicipioComponent) },
     { path: 'setor', loadComponent: () => import('./components/features/setor/setor.component').then(m => m.SetorComponent) },
     { path: 'unidade', loadComponent: () => import('./components/features/unidade/unidade.component').then(m => m.UnidadeComponent) },
+    { path: 'autocomplete-test', loadComponent: () => import('./components/features/autocomplete-test/autocomplete-test.component').then(m => m.AutocompleteTestComponent) },
     {
         path: ':modelo/novo',
         loadComponent: () => import('./components/shared/generic-form/generic-form.component').then(m => m.GenericFormComponent)

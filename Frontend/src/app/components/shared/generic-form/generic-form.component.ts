@@ -1,3 +1,4 @@
+// generic-form.component.ts
 import { Component, Input, OnInit, Output, EventEmitter, Inject, OnChanges, SimpleChanges } from '@angular/core';
 import { FormBuilder, FormGroup, FormControl, Validators, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
@@ -7,7 +8,6 @@ import { DialogModule } from 'primeng/dialog';
 import { InputTextModule } from 'primeng/inputtext';
 import { ButtonModule } from 'primeng/button';
 import { CalendarModule } from 'primeng/calendar';
-import { DropdownModule } from 'primeng/dropdown';
 import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
 import { INestedService } from '../../../services/inested.service';
@@ -18,7 +18,7 @@ import { NESTED_SERVICE_TOKEN } from '../../../services/nested.service.token';
     standalone: true,
     imports: [
         CommonModule, ReactiveFormsModule, AutoCompleteModule, DialogModule,
-        InputTextModule, ButtonModule, CalendarModule, ToastModule, DropdownModule
+        InputTextModule, ButtonModule, CalendarModule, ToastModule
     ],
     templateUrl: './generic-form.component.html',
     styleUrls: ['./generic-form.component.scss'],
@@ -26,14 +26,11 @@ import { NESTED_SERVICE_TOKEN } from '../../../services/nested.service.token';
 })
 export class GenericFormComponent implements OnInit, OnChanges {
     @Output() onFormHide = new EventEmitter<void>();
+    @Output() autoCompleteSelect = new EventEmitter<{ campo: string, valor: any }>();
     @Input() showHeader = true;
     @Input() visible = false;
     @Input() itemSelecionado: any;
     @Input() modelo = '';
-    @Input() selectOptions: { [key: string]: any[] } = {};
-    @Input() optionLabelField: string = 'label';
-    @Input() optionValueField: string = 'value';
-    @Input() filterByField: string = '';
 
     titulo = '';
     campos: CampoConfig[] = [];
@@ -41,13 +38,12 @@ export class GenericFormComponent implements OnInit, OnChanges {
     form: FormGroup;
     id: number | null = null;
     loading = false;
-    selectedItem: any
 
     constructor(
         private fb: FormBuilder,
         @Inject(NESTED_SERVICE_TOKEN) private nestedService: INestedService,
         private configService: ConfigService,
-        private messageService: MessageService,
+        private messageService: MessageService
     ) {
         this.form = this.fb.group({});
     }
@@ -88,11 +84,11 @@ export class GenericFormComponent implements OnInit, OnChanges {
                 new FormControl('', Validators.required)
             );
         });
+        console.log('FormGroup depois de inicializar:', this.form); // Adicione este log
 
         this.form.valueChanges.subscribe((change) => {
             this.campos.forEach(campo => {
                 if (campo.tipo == 'dropdown') {
-                    this.selectedItem = this.selectOptions[campo.campo].find(option => option[this.optionValueField] == change[campo.campo]);
                 }
             });
         });
@@ -112,7 +108,7 @@ export class GenericFormComponent implements OnInit, OnChanges {
             this.messageService.add({ severity: 'warn', summary: 'Aviso', detail: 'Preencha todos os campos corretamente' });
             return;
         }
-        
+
         Object.keys(this.form.controls).forEach(key => {
             const control = this.form.get(key);
             const campoConfig = this.campos.find(c => c.campo === key);

@@ -21,7 +21,7 @@ namespace Backend.Migrations
 
             MySqlModelBuilderExtensions.AutoIncrementColumns(modelBuilder);
 
-            modelBuilder.Entity("Empresa", b =>
+            modelBuilder.Entity("Endereco", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -29,41 +29,37 @@ namespace Backend.Migrations
 
                     MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("EnderecoBairro")
+                    b.Property<string>("Bairro")
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<string>("EnderecoCEP")
+                    b.Property<string>("CEP")
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<string>("EnderecoComplemento")
-                        .IsRequired()
+                    b.Property<string>("Complemento")
                         .HasColumnType("longtext");
 
-                    b.Property<string>("EnderecoNumero")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("EnderecoRua")
-                        .IsRequired()
-                        .HasColumnType("longtext");
+                    b.Property<int>("IdEstado")
+                        .HasColumnType("int");
 
                     b.Property<int>("IdMunicipio")
                         .HasColumnType("int");
 
-                    b.Property<int>("MunicipioId")
+                    b.Property<int>("Numero")
                         .HasColumnType("int");
 
-                    b.Property<string>("NomeEmpresa")
+                    b.Property<string>("Rua")
                         .IsRequired()
                         .HasColumnType("longtext");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("MunicipioId");
+                    b.HasIndex("IdEstado");
 
-                    b.ToTable("Empresas");
+                    b.HasIndex("IdMunicipio");
+
+                    b.ToTable("Enderecos");
                 });
 
             modelBuilder.Entity("Estado", b =>
@@ -95,9 +91,6 @@ namespace Backend.Migrations
 
                     MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("EstadoId")
-                        .HasColumnType("int");
-
                     b.Property<int>("IdEstado")
                         .HasColumnType("int");
 
@@ -107,18 +100,26 @@ namespace Backend.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("EstadoId");
+                    b.HasIndex("IdEstado");
 
                     b.ToTable("Municipios");
                 });
 
-            modelBuilder.Entity("Empresa", b =>
+            modelBuilder.Entity("Endereco", b =>
                 {
+                    b.HasOne("Estado", "Estado")
+                        .WithMany()
+                        .HasForeignKey("IdEstado")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
                     b.HasOne("Municipio", "Municipio")
                         .WithMany()
-                        .HasForeignKey("MunicipioId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .HasForeignKey("IdMunicipio")
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
+
+                    b.Navigation("Estado");
 
                     b.Navigation("Municipio");
                 });
@@ -127,7 +128,7 @@ namespace Backend.Migrations
                 {
                     b.HasOne("Estado", "Estado")
                         .WithMany()
-                        .HasForeignKey("EstadoId")
+                        .HasForeignKey("IdEstado")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

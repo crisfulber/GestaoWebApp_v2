@@ -1,169 +1,153 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Inject, CUSTOM_ELEMENTS_SCHEMA, OnInit, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormBuilder, FormGroup, FormControl, Validators, ReactiveFormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
-import { ApiService } from '../../../services/api.service';
-
-export interface Endereco {
-  id: number;
-  rua: string;
-  numero: number;
-  bairro: string;
-  complemento: string;
-  idMunicipio: number;
-  cep: string;
-  municipio: string;
-  [key: string]: any;
-}
-
-export interface Municipio {
-  id: number;
-  nomeMunicipio: string;
-  estadoSigla: string;
-  [key: string]: any;
-}
+import { GenericListComponent } from '../../shared/generic-list/generic-list.component';
+import { GenericFormComponent } from '../../shared/generic-form/generic-form.component';
+import { ConfigService } from '../../../services/config.service';
+import { FormsModule } from '@angular/forms';
+import { NESTED_SERVICE_TOKEN } from '../../../services/nested.service.token';
+import { INestedService } from '../../../services/inested.service';
+import { Router, ActivatedRoute } from '@angular/router';
+import { MessageService, ConfirmationService } from 'primeng/api';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { AutoCompleteModule } from 'primeng/autocomplete';
+import { DropdownModule } from 'primeng/dropdown';
 
 @Component({
   selector: 'app-endereco',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, GenericListComponent, GenericFormComponent, FormsModule, ConfirmDialogModule, DropdownModule, AutoCompleteModule],
   templateUrl: './endereco.component.html',
   styleUrls: ['./endereco.component.scss'],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
+  providers: [MessageService, ConfirmationService]
 })
-export class EnderecoComponent implements OnInit {
-  titulo: string = 'Endereco';
-  colunas = [
-    { label: 'Rua', campo: 'rua' },
-    { label: 'Numero', campo: 'numero' },
-    { label: 'Bairro', campo: 'bairro' },
-    { label: 'Complemento', campo: 'complemento' },
-    { label: 'Município', campo: 'municipio' },
-    { label: 'CEP', campo: 'cep' }
-  ];
-  itens: Endereco[] = [];
-  municipios: Municipio[] = [];
-  endpoint: string = 'endereco';
 
-  form: FormGroup;
+export class EnderecoComponent implements OnInit {
+  titulo: string = 'Endereço';
+  endpoint: string = 'endereco';
+  config: any;
   isFormVisible: boolean = false;
-  isEditMode: boolean = false;
-  currentItemId: number | null = null;
+  itens: any[] = [];
+  itemId: number | null = null;
+  itemSelecionado: any = { IdEstado: "", NomeMunicipio: "" };
+  municipios: any[] = [];
+  estados: any[] = []; 
+  filteredMunicipios: any[] = [];
+  filteredEstados: any[] = [];
 
   constructor(
-    private fb: FormBuilder,
-    private apiService: ApiService<Endereco>,
-    private municipioService: ApiService<Municipio>,
-    private router: Router
+    private configService: ConfigService,
+    @Inject(NESTED_SERVICE_TOKEN) private nestedService: INestedService,
+    private router: Router,
+    private route: ActivatedRoute,
+    private messageService: MessageService,
+    private confirmationService: ConfirmationService
   ) {
-    this.form = this.fb.group({
-      rua: new FormControl('', Validators.required),
-      numero: new FormControl('', Validators.required),
-      bairro: new FormControl('', Validators.required),
-      complemento: new FormControl(''),
-      idMunicipio: new FormControl('', Validators.required),
-      cep: new FormControl('', Validators.required)
-    });
   }
 
-  ngOnInit(): void {
-    this.carregarDados();
-    this.carregarMunicipios();
-  }
+  ngOnInit() {
+    this.config = this.configService.getConfiguracao(this.endpoint);
+    this.loadMunicipios();
 
-  carregarDados(): void {
-    this.apiService.getAll(this.endpoint).subscribe({
-      next: (data) => {
-        this.itens = data;
-      },
-      error: (err) => console.error('Erro ao carregar enderecos:', err),
-    });
-  }
+    const municipioCampo = this.config.campos.find((campo: any) => campo.campo == "NomeMunicipio");
+    const estadoCampo = this.config.campos.find((campo: any) => campo.campo == "Estado");
 
-  carregarMunicipios(): void {
-    this.municipioService.getAll('municipio').subscribe({
-      next: (data) => {
-        this.municipios = data;
-      },
-      error: (err) => console.error('Erro ao carregar municipios:', err),
-    });
-  }
+    municipioCampo.suggestions = (event: any) => this.filterMunicipio(event);
+    municipioCampo.field = 'NomeMunicipio';
 
-  onIncluirItem(): void {
-    this.isFormVisible = true;
-    this.isEditMode = false;
-    this.form.reset();
-  }
+    estadoCampo.suggestions = (event: any) => this.filterEstado(event);
+    estadoCampo.field = 'Sigla';
 
-  onEditarItem(item: Endereco): void {
-    this.isFormVisible = true;
-    this.isEditMode = true;
-    this.currentItemId = item.id;
+    if (this.itemSelecionado && this.itemSelecionado.NomeMunicipio) {
+      const municipioSelecionado = this.municipios.find(m => m.NomeMunicipio === this.itemSelecionado.NomeMunicipio);
 
-    const setFormValues = () => {
-      this.form.patchValue({
-        rua: item.rua,
-        numero: item.numero,
-        bairro: item.bairro,
-        complemento: item.complemento,
-        idMunicipio: item.idMunicipio,
-        cep: item.cep
-      });
-    };
-
-    if (this.municipios.length > 0) {
-      setFormValues();
-    } else {
-      this.carregarMunicipios();
-      const interval = setInterval(() => {
-        if (this.municipios.length > 0) {
-          setFormValues();
-          clearInterval(interval);
-        }
-      }, 100);
-    }
-  }
-
-  onExcluirItem(item: Endereco): void {
-    if (confirm(`Deseja realmente excluir o endereco "${item.rua}"?`)) {
-      this.apiService.delete(this.endpoint, item.id).subscribe({
-        next: () => {
-          this.itens = this.itens.filter((i) => i.id !== item.id);
-        },
-        error: (err) => console.error('Erro ao excluir endereco:', err),
-      });
-    }
-  }
-
-  salvar(): void {
-    if (this.form.valid) {
-      const formData = { ...this.form.value };
-      if (this.isEditMode && this.currentItemId !== null) {
-        formData.id = this.currentItemId;
-        this.apiService.update(this.endpoint, this.currentItemId, formData).subscribe({
-          next: () => {
-            alert('Endereço atualizado com sucesso!');
-            this.carregarDados();
-            this.isFormVisible = false;
-          },
-          error: (err) => console.error('Erro ao atualizar endereço:', err)
-        });
-      } else {
-        this.apiService.create(this.endpoint, formData).subscribe({
-          next: () => {
-            alert('Endereço criado com sucesso!');
-            this.carregarDados();
-            this.isFormVisible = false;
-          },
-          error: (err) => console.error('Erro ao criar endereço:', err)
-        });
+      if (municipioSelecionado) {
+        this.loadEstados(municipioSelecionado.IdEstado);
       }
-    } else {
-      console.error('Formulário inválido');
     }
   }
 
-  cancelar(): void {
+  carregarItens() {
+    this.nestedService.getAll(this.endpoint).subscribe(itens => {
+      this.itens = itens;
+    });
+  }
+
+  onIncluirItem() {
+    this.isFormVisible = true;
+    this.itemId = null;
+    this.itemSelecionado = { IdEstado: "", NomeMunicipio: "" };
+  }
+
+  onEditarItem(item: any) {
+    this.itemSelecionado = item;
+    this.isFormVisible = true;
+    this.itemId = item.Id;
+  }
+
+  confirmDelete(item: any) {
+    this.confirmationService.confirm({
+      message: `Deseja realmente excluir o item "${item.NomeMunicipio || item.Id}"?`,
+      header: 'Confirmação',
+      icon: 'pi pi-exclamation-triangle',
+      acceptLabel: 'Sim',
+      rejectLabel: 'Cancelar',
+      acceptButtonStyleClass: 'p-button-danger',
+      rejectButtonStyleClass: 'p-button-text',
+      accept: () => this.onExcluirItem(item)
+    });
+  }
+
+  onExcluirItem(item: any) {
+    this.nestedService.delete(this.endpoint, item.Id).subscribe({
+      next: () => {
+        this.messageService.add({ severity: 'success', summary: 'Sucesso', detail: 'Item excluído com sucesso!' });
+        this.carregarItens();
+      },
+      error: () => {
+        this.messageService.add({ severity: 'error', summary: 'Erro', detail: 'Erro ao excluir o item. Tente novamente.' });
+      }
+    });
+  }
+
+  onFormHide(event: any) {
     this.isFormVisible = false;
-    this.form.reset();
+    this.itemId = null;
+    this.itemSelecionado = null;
+    this.carregarItens();
+  }
+  
+  loadMunicipios() {
+    this.nestedService.getAll('municipio').subscribe(municipios => {
+      this.municipios = municipios;
+    });
+  }
+
+  loadEstados(idEstado: number) {
+    this.nestedService.getAll('estado')
+      .subscribe(estados => {
+        this.filteredEstados = estados.filter(estado => estado.Id === idEstado);
+      });
+  }
+
+  filterMunicipio(event: any) {
+    let query = event.query;
+    this.filteredMunicipios = this.municipios.filter(municipio =>
+      municipio.NomeMunicipio.toLowerCase().includes(query.toLowerCase())
+    );
+  }
+
+  filterEstado(event: any) {
+    let query = event.query;
+    this.filteredEstados = this.estados.filter(estado => estado.Sigla.toLowerCase().includes(query.toLowerCase()));
+  }
+
+  onAutoCompleteSelect(event: { campo: string, valor: any }) {
+    if (event.campo === 'NomeMunicipio') {
+      this.itemSelecionado.NomeMunicipio = event.valor.NomeMunicipio;
+      this.loadEstados(event.valor.IdEstado); 
+    } else if (event.campo === 'Estado') {
+      this.itemSelecionado.Estado = event.valor.Sigla;
+    }
   }
 }
