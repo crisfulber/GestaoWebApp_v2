@@ -17,3 +17,20 @@
     (autoCompleteSelect)="onAutoCompleteSelect($event)"
 >
 </app-generic-form>
+<!-- Para Município -->
+<p-autoComplete
+  [(ngModel)]="itemSelecionado.NomeMunicipio"
+  [suggestions]="filteredMunicipios"
+  (completeMethod)="filterMunicipio($event)"
+  field="NomeMunicipio"
+  [dropdown]="true">
+</p-autoComplete>
+
+<!-- Para Estado -->
+<p-autoComplete
+  [(ngModel)]="itemSelecionado.Estado"
+  [suggestions]="filteredEstados"
+  (completeMethod)="filterEstado($event)"
+  field="Sigla"
+  [dropdown]="true">
+</p-autoComplete>
