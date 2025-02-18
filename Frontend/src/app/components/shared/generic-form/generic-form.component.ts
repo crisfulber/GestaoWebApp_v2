@@ -79,12 +79,12 @@ export class GenericFormComponent implements OnInit, OnChanges {
     private initializeForm(): void {
         this.form = this.fb.group({ Id: [null] });
         this.campos.forEach(campo => {
+            const control = new FormControl('', Validators.required); // Cria o FormControl aqui
             this.form.addControl(
                 campo.campo,
-                new FormControl('', Validators.required)
+                control // Adiciona o controle ao formulário
             );
         });
-        console.log('FormGroup depois de inicializar:', this.form); // Adicione este log
 
         this.form.valueChanges.subscribe((change) => {
             this.campos.forEach(campo => {
