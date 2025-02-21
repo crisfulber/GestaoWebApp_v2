@@ -130,7 +130,7 @@ namespace Backend.Controllers
                 return StatusCode(500, "Erro ao atualizar o município.");
             }
         }
-
+        
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteMunicipio(int id)
         {

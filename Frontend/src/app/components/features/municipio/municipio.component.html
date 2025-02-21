@@ -1,23 +1,63 @@
-<app-generic-list
-    [titulo]="titulo"
-    [colunas]="config?.colunas"
-    [endpoint]="endpoint"
-    [confirmMessageField]="'NomeMunicipio'"
-    [itens]="itens"
-    (incluir)="onIncluirItem()"
-    (editar)="onEditarItem($event)"
-    (excluir)="confirmDelete($event)">
-</app-generic-list>
+<p-toast></p-toast>
+<p-confirmDialog [style]="{width: '50vw'}"></p-confirmDialog>
 
-<app-generic-form
-    (onFormHide)="onFormHide($event)"
-    [modelo]="endpoint"
-    [visible]="isFormVisible"
-    [itemSelecionado]="itemSelecionado"
-    [id]="itemId"
-    [selectOptions]="selectOptions"
-    optionLabelField="NomeEstado"
-    optionValueField="Id"
-    filterByField="NomeEstado"> 
-    <p-confirmDialog></p-confirmDialog>
-</app-generic-form>
+<div class="card">
+    <p-table [value]="municipios" dataKey="id" [rows]="50" [showCurrentPageReport]="true"
+        [rowsPerPageOptions]="[10,25,50]" styleClass="p-datatable-gridlines" [paginator]="true"
+        currentPageReportTemplate="Mostrando {first} até {last} de {totalRecords} municípios"
+        [globalFilterFields]="['NomeMunicipio', 'SiglaEstado']" [rowHover]="true" #dt>
+        <ng-template pTemplate="caption">
+            <div class="flex align-items-center justify-content-between">
+                <button pButton pRipple label="Novo" icon="pi pi-plus" class="p-buttonenergi mr-2"
+                    (click)="openNew()"></button>
+                <span class="p-input-icon-left">
+                    <input pInputText type="text" (input)="dt.filterGlobal($any($event.target).value, 'contains')"
+                        placeholder="Pesquisar..." />
+                </span>
+            </div>
+        </ng-template>
+        <ng-template pTemplate="header">
+            <tr>
+                <th pSortableColumn="NomeMunicipio">Nome<p-sortIcon field="NomeMunicipio"></p-sortIcon></th>
+                <th>Estado</th>
+                <th></th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-municipio>
+            <tr>
+                <td>{{municipio.NomeMunicipio}}</td>
+                <td>{{getEstadoSigla(municipio.IdEstado)}}</td>
+                <td>
+                    <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button mr-2"
+                        (click)="editMunicipio(municipio)"></button>
+                    <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-danger"
+                        (click)="deleteMunicipio(municipio)"></button>
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
+</div>
+
+<p-dialog [(visible)]="municipioDialog" [style]="{width: '450px'}" header="Detalhes do Município" [modal]="true"
+    styleClass="p-fluid">
+    <ng-template pTemplate="content">
+        <div class="field">
+            <label for="NomeMunicipio">Nome</label>
+            <input type="text" pInputText id="NomeMunicipio" [(ngModel)]="municipio.NomeMunicipio" required autofocus />
+            <small class="p-error" *ngIf="submitted && !municipio.NomeMunicipio">Nome é obrigatório.</small>
+        </div>
+        <div class="field">
+            <label for="IdEstado">Estado</label>
+            <p-dropdown [options]="estados" [(ngModel)]="municipio.IdEstado" optionLabel="NomeEstado" optionValue="Id"
+                placeholder="Selecione um Estado" appendTo="body"></p-dropdown>
+            <small class="p-error" *ngIf="submitted && !municipio.IdEstado">Estado é obrigatório.</small>
+        </div>
+    </ng-template>
+
+    <ng-template pTemplate="footer">
+        <button pButton pRipple label="Cancelar" icon="pi pi-times" class="p-button-text"
+            (click)="hideDialog()"></button>
+        <button pButton pRipple label="Salvar" icon="pi pi-check" class="p-button-text"
+            (click)="saveMunicipio()"></button>
+    </ng-template>
+</p-dialog>

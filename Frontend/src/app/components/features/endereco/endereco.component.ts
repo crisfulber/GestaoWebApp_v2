@@ -1,166 +1,210 @@
-import { Component, Inject, CUSTOM_ELEMENTS_SCHEMA, OnInit, ViewChild } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { GenericListComponent } from '../../shared/generic-list/generic-list.component';
-import { GenericFormComponent } from '../../shared/generic-form/generic-form.component';
-import { ConfigService } from '../../../services/config.service';
+import { Component, OnInit, NO_ERRORS_SCHEMA } from '@angular/core';
+import { EnderecoService } from '../../../services/endereco.service';
+import { EstadoService } from '../../../services/estado.service';
+import { MunicipioService } from '../../../services/municipio.service';
+import { ConfirmationService, MessageService } from 'primeng/api';
 import { FormsModule } from '@angular/forms';
-import { NESTED_SERVICE_TOKEN } from '../../../services/nested.service.token';
-import { INestedService } from '../../../services/inested.service';
-import { Router, ActivatedRoute } from '@angular/router';
-import { MessageService, ConfirmationService } from 'primeng/api';
+import { ButtonModule } from 'primeng/button';
+import { InputTextModule } from 'primeng/inputtext';
+import { DialogModule } from 'primeng/dialog';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
-import { AutoCompleteModule } from 'primeng/autocomplete';
+import { ToastModule } from 'primeng/toast';
+import { TableModule } from 'primeng/table';
+import { ToolbarModule } from 'primeng/toolbar';
+import { CommonModule } from '@angular/common';
 import { DropdownModule } from 'primeng/dropdown';
+import { Endereco } from '../../interface/endereco';
+import { Municipio } from '../../interface/municipio';
+import { Estado } from '../../interface/estado';
 
 @Component({
-  selector: 'app-endereco',
-  standalone: true,
-  imports: [CommonModule, GenericListComponent, GenericFormComponent, FormsModule, ConfirmDialogModule, DropdownModule, AutoCompleteModule],
-  templateUrl: './endereco.component.html',
-  styleUrls: ['./endereco.component.scss'],
-  schemas: [CUSTOM_ELEMENTS_SCHEMA],
-  providers: [MessageService, ConfirmationService]
+    selector: 'app-endereco',
+    standalone: true,
+    imports: [CommonModule, FormsModule, ButtonModule, InputTextModule, DialogModule,
+        ConfirmDialogModule, ToastModule, TableModule, ToolbarModule, DropdownModule],
+    templateUrl: './endereco.component.html',
+    styleUrls: ['./endereco.component.css'],
+    providers: [MessageService, ConfirmationService],
+    schemas: [NO_ERRORS_SCHEMA]
 })
-
 export class EnderecoComponent implements OnInit {
-  titulo: string = 'Endereço';
-  endpoint: string = 'endereco';
-  config: any;
-  isFormVisible: boolean = false;
-  itens: any[] = [];
-  itemId: number | null = null;
-  itemSelecionado: any = { IdEstado: null, NomeMunicipio: null, Estado: null };
-  municipios: any[] = [];
-  estados: any[] = [];
-  filteredMunicipios: any[] = [];
-  filteredEstados: any[] = [];
 
-  constructor(
-    private configService: ConfigService,
-    @Inject(NESTED_SERVICE_TOKEN) private nestedService: INestedService,
-    private router: Router,
-    private route: ActivatedRoute,
-    private messageService: MessageService,
-    private confirmationService: ConfirmationService
-  ) {
-  }
+    enderecos: Endereco[] = [];
+    estados: Estado[] = [];
+    municipios: Municipio[] = [];
+    enderecoDialog: boolean = false;
+    endereco: Endereco = { Id: 0, Rua: '', Numero: 0, Bairro: '', IdMunicipio: null, IdEstado: null, CEP: '' };
+    submitted: boolean = false;
 
-  ngOnInit() {
-    this.config = this.configService.getConfiguracao(this.endpoint);
-    this.loadMunicipios();
-    this.loadEstados();
-  
-    const municipioCampo = this.config.campos.find((campo: any) => campo.campo == "NomeMunicipio");
-    const estadoCampo = this.config.campos.find((campo: any) => campo.campo == "Estado");
-  
-    municipioCampo.suggestions = (event: any) => this.filterMunicipio(event);
-    municipioCampo.field = 'NomeMunicipio';
-  
-    estadoCampo.suggestions = (event: any) => this.filterEstado(event);
-    estadoCampo.field = 'Sigla';
-  }
-  
+    constructor(
+        private enderecoService: EnderecoService,
+        private estadoService: EstadoService,
+        private municipioService: MunicipioService,
+        private messageService: MessageService,
+        private confirmationService: ConfirmationService
+    ) { }
 
-
-  carregarItens() {
-    this.nestedService.getAll(this.endpoint).subscribe(itens => {
-      this.itens = itens;
-    });
-  }
-
-  onIncluirItem() {
-    this.isFormVisible = true;
-    this.itemId = null;
-    this.itemSelecionado = { IdEstado: "", NomeMunicipio: "" };
-  }
-
-  onEditarItem(item: any) {
-    this.itemSelecionado = item;
-    this.isFormVisible = true;
-    this.itemId = item.Id;
-  }
-
-  confirmDelete(item: any) {
-    this.confirmationService.confirm({
-      message: `Deseja realmente excluir o item "${item.NomeMunicipio || item.Id}"?`,
-      header: 'Confirmação',
-      icon: 'pi pi-exclamation-triangle',
-      acceptLabel: 'Sim',
-      rejectLabel: 'Cancelar',
-      acceptButtonStyleClass: 'p-button-danger',
-      rejectButtonStyleClass: 'p-button-text',
-      accept: () => this.onExcluirItem(item)
-    });
-  }
-
-  onExcluirItem(item: any) {
-    this.nestedService.delete(this.endpoint, item.Id).subscribe({
-      next: () => {
-        this.messageService.add({ severity: 'success', summary: 'Sucesso', detail: 'Item excluído com sucesso!' });
-        this.carregarItens();
-      },
-      error: () => {
-        this.messageService.add({ severity: 'error', summary: 'Erro', detail: 'Erro ao excluir o item. Tente novamente.' });
-      }
-    });
-  }
-
-  onFormHide(event: any) {
-    this.isFormVisible = false;
-    this.itemId = null;
-    this.itemSelecionado = null;
-    this.carregarItens();
-  }
-
-  loadMunicipios() {
-    this.nestedService.getAll('municipio').subscribe({
-      next: (municipios) => {
-        this.municipios = municipios;
-        console.log("Municípios carregados:", this.municipios);
-      },
-      error: (err) => console.error("Erro ao carregar municípios:", err)
-    });
-  }
-
-  loadEstados() {
-    this.nestedService.getAll('estado').subscribe(estados => {
-      this.estados = estados;
-    });
-  }
-
-  filterMunicipio(event: any) {
-    let query = event.query.toLowerCase();
-  
-    if (!this.municipios || this.municipios.length === 0) {
-      console.warn("Lista de municípios está vazia.");
-      return []; // Retornar array vazio se não houver municípios
+    ngOnInit() {
+        this.loadEnderecos();
+        this.loadEstados();
+        this.loadMunicipios();
     }
-  
-    const filteredMun = this.municipios.filter(municipio =>
-      municipio.NomeMunicipio.toLowerCase().includes(query)
-    );
-  
-    console.log("Lista filtrada: ", filteredMun);
-  
-    return filteredMun; // Retornar o array filtrado
-  }    
 
-  filterEstado(event: any) {
-    let query = event.query;
-    this.itemSelecionado.Estado = null; // Limpar seleção anterior
-    const filteredStates = this.estados.filter(estado => estado.Sigla.toLowerCase().includes(query.toLowerCase()));
-    return filteredStates; // Retornar o array filtrado
-  }  
-
-  onAutoCompleteSelect(event: { campo: string, valor: any }) {
-    if (event.campo === 'NomeMunicipio') {
-      this.itemSelecionado.NomeMunicipio = event.valor.NomeMunicipio;
-      this.itemSelecionado.IdEstado = event.valor.IdEstado; // Store IdEstado
-      const selectedState = this.estados.find(estado => estado.Id === event.valor.IdEstado);
-      this.itemSelecionado.Estado = selectedState ? selectedState.Sigla : null; // Set Estado
-    } else if (event.campo === 'Estado') {
-      this.itemSelecionado.Estado = event.valor.Sigla;
+    loadEnderecos() {
+        this.enderecoService.getEnderecos().subscribe({
+            next: (data) => {
+                this.enderecos = data;
+            },
+            error: (error) => {
+                this.messageService.add({ severity: 'error', summary: 'Erro', detail: 'Erro ao carregar endereços' });
+                console.error('Erro ao carregar endereços:', error);
+            }
+        });
     }
-  }
 
+    loadEstados() {
+        this.estadoService.getEstados().subscribe({
+            next: (data) => {
+                this.estados = data;
+            },
+            error: (error) => {
+                this.messageService.add({ severity: 'error', summary: 'Erro', detail: 'Erro ao carregar estados' });
+                console.error('Erro ao carregar estados:', error);
+            }
+        });
+    }
+
+    loadMunicipios() {
+        this.municipioService.getMunicipios().subscribe({
+            next: (data) => {
+                this.municipios = data; 
+            },
+            error: (error) => {
+                this.messageService.add({ severity: 'error', summary: 'Erro', detail: 'Erro ao carregar municípios' });
+                console.error('Erro ao carregar municípios:', error);
+            }
+        });
+    }
+
+    openNew() {
+        this.endereco = { Id: 0, Rua: '', Numero: 0, Bairro: '', IdMunicipio: null, IdEstado: null, CEP: '' };
+        this.submitted = false;
+        this.enderecoDialog = true;
+    }
+
+    editEndereco(endereco: Endereco) {
+        this.endereco = { ...endereco };
+        this.enderecoDialog = true;
+    }
+
+    deleteEndereco(endereco: Endereco) {
+        this.confirmationService.confirm({
+            message: 'Tem certeza que deseja deletar o endereço ' + endereco.Rua + ', ' + endereco.Numero + '?',
+            header: 'Confirmar',
+            icon: 'pi pi-exclamation-triangle',
+            accept: () => {
+                this.enderecoService.deleteEndereco(endereco.Id).subscribe({
+                    next: () => {
+                        this.enderecos = this.enderecos.filter(val => val.Id !== endereco.Id);
+                        this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Endereço Deletado', life: 3000 });
+                        this.loadEnderecos();
+                    },
+                    error: (error) => {
+                        this.messageService.add({ severity: 'error', summary: 'Erro', detail: 'Erro ao deletar o endereço ' + endereco.Rua + ', ' + endereco.Numero, life: 3000 });
+                        console.error('Erro ao deletar endereço:', error);
+                    }
+                });
+            }
+        });
+    }
+
+    hideDialog() {
+        this.enderecoDialog = false;
+        this.submitted = false;
+    }
+
+    saveEndereco() {
+        this.submitted = true;
+
+        if (!this.endereco.Rua?.trim()) {
+            this.messageService.add({ severity: 'error', summary: 'Erro', detail: 'Rua é obrigatório.' });
+            return;
+        }
+        if (!this.endereco.Bairro?.trim()) {
+            this.messageService.add({ severity: 'error', summary: 'Erro', detail: 'Bairro é obrigatório.' });
+            return;
+        }
+        if (!this.endereco.IdMunicipio) {
+            this.messageService.add({ severity: 'error', summary: 'Erro', detail: 'Município é obrigatório.' });
+            return;
+        }
+        if (!this.endereco.IdEstado) {
+            this.messageService.add({ severity: 'error', summary: 'Erro', detail: 'Estado é obrigatório.' });
+            return;
+        }
+        if (!this.endereco.CEP?.trim()) {
+            this.messageService.add({ severity: 'error', summary: 'Erro', detail: 'CEP é obrigatório.' });
+            return;
+        }
+
+        this.endereco.Rua = this.endereco.Rua.toUpperCase();
+        this.endereco.Bairro = this.endereco.Bairro.toUpperCase();
+
+        const enderecoParaEnviar = {
+            ...this.endereco,
+            IdMunicipio: this.endereco.IdMunicipio,
+            IdEstado: this.endereco.IdEstado === null ? 0 : this.endereco.IdEstado
+        };
+
+        if (this.endereco.Id) {
+            this.enderecoService.updateEndereco(this.endereco.Id, enderecoParaEnviar as Endereco).subscribe({
+                next: () => {
+                    this.enderecos[this.findIndexById(this.endereco.Id)] = this.endereco;
+                    this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Endereço Atualizado', life: 3000 });
+                    this.loadEnderecos();
+                },
+                error: (error) => {
+                    this.messageService.add({ severity: 'error', summary: 'Erro', detail: 'Erro ao atualizar o endereço ' + this.endereco.Rua + ', ' + this.endereco.Numero, life: 3000 });
+                    console.error('Erro ao atualizar endereço:', error);
+                }
+            });
+        } else {
+            this.enderecoService.addEndereco(enderecoParaEnviar as Endereco).subscribe({
+                next: (data) => {
+                    this.enderecos.push(data);
+                    this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Endereço Criado', life: 3000 });
+                    this.loadEnderecos();
+                },
+                error: (error) => {
+                    this.messageService.add({ severity: 'error', summary: 'Erro', detail: 'Erro ao criar o endereço ' + this.endereco.Rua + ', ' + this.endereco.Numero, life: 3000 });
+                    console.error('Erro ao criar endereço:', error);
+                }
+            });
+        }
+
+        this.enderecos = [...this.enderecos];
+        this.enderecoDialog = false;
+        this.endereco = { Id: 0, Rua: '', Numero: 0, Bairro: '', IdMunicipio: null, IdEstado: null, CEP: '' };
+    }
+
+    findIndexById(Id: number): number {
+        let index = -1;
+        for (let i = 0; i < this.enderecos.length; i++) {
+            if (this.enderecos[i].Id === Id) {
+                index = i;
+                break;
+            }
+        }
+        return index;
+    }
+
+    getEstadoSigla(idEstado: number): string {
+        const estado = this.estados.find(e => e.Id === idEstado);
+        return estado ? estado.Sigla : '';
+    }
+    
+    getMunicipioNome(idMunicipio: number): string {
+        const municipio = this.municipios.find(m => m.Id === idMunicipio);
+        return municipio ? municipio.NomeMunicipio : '';
+    }
 }

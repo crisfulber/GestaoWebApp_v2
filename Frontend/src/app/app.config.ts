@@ -9,13 +9,9 @@ import localePt from '@angular/common/locales/pt';
 import { ReactiveFormsModule } from '@angular/forms';
 import { AuthService } from './services/auth.service';
 import { ApiService } from './services/api.service';
-import { NestedService } from './services/nested.service';
-import { INestedService } from './services/inested.service';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { providePrimeNG } from 'primeng/config';
 import Aura from '@primeng/themes/aura';
-import { NESTED_SERVICE_TOKEN } from './services/nested.service.token';
-
 
 registerLocaleData(localePt);
 
@@ -42,7 +38,6 @@ export const appConfig: ApplicationConfig = {
         { provide: 'API_URL', useValue: 'http://localhost:5243/api' },
         { provide: LOCALE_ID, useValue: 'pt-BR' },
         { provide: AuthService, useClass: AuthService },
-        { provide: NESTED_SERVICE_TOKEN, useClass: NestedService },
         { provide: ApiService, useClass: ApiService },
 
     ],

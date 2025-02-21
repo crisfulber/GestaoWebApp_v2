@@ -11,6 +11,8 @@ export interface CampoConfig {
   suggestions?: (event: any) => any[];
   readonly?: boolean;
   field?: string;
+  options?: string;
+  template?: string;
 }
 
 @Injectable({
@@ -18,71 +20,23 @@ export interface CampoConfig {
 })
 export class ConfigService {
   private configuracoes: { [key: string]: any } = {
-    'Contato': {
-      titulo: 'Contatos',
-      campos: [
-        { label: 'Telefone', campo: 'telefone', tipo: 'text' },
-        { label: 'Email', campo: 'email', tipo: 'text' },
-      ],
-      endpoint: 'Contato',
-      colunas: [
-        { label: 'Telefone', campo: 'telefone', },
-        { label: 'Email', campo: 'email', },
-      ],
-    },
-    'Empresa': {
-      titulo: 'Empresas',
-      campos: [
-        { label: 'Empresa', campo: 'NomeEmpresa', tipo: 'text' },
-        { label: 'Rua', campo: 'EnderecoRua', tipo: 'text' },
-        { label: 'Número', campo: 'EnderecoNumero', tipo: 'text' },
-        { label: 'Complemento', campo: 'EnderecoComplemento', tipo: 'text' },
-        { label: 'Bairro', campo: 'EnderecoBairro', tipo: 'text' },
-        { label: 'CEP', campo: 'EnderecoCEP', tipo: 'text' },
-        {
-          label: 'Município',
-          campo: 'Id',
-          tipo: 'select',
-          optionsEndpoint: 'Municipio',
-          labelField: 'NomeMunicipio',
-          valueField: 'Id'
-        },
-      ],
-      endpoint: 'Empresa',
-      colunas: [
-        { label: 'Nome', campo: 'NomeEmpresa' },
-        { label: 'Rua', campo: 'EnderecoRua' },
-        { label: 'Número', campo: 'EnderecoNumero' },
-        { label: 'Complemento', campo: 'EnderecoComplemento' },
-        { label: 'Bairro', campo: 'EnderecoBairro' },
-        { label: 'CEP', campo: 'EnderecoCEP' },
-        { label: 'Município', campo: 'EnderecoNomeMunicipio' }
-      ],
-    },
     'endereco': {
       titulo: 'Endereços',
       campos: [
         { label: 'Rua', campo: 'Rua', tipo: 'text' },
-        { label: 'N°', campo: 'Numero', tipo: 'number' },
-        { label: 'Complemento', campo: 'Complemento', tipo: 'text' },
-        { label: 'Bairro', campo: 'Bairro', tipo: 'text' },
-        { label: 'CEP', campo: 'CEP', tipo: 'text' },
+        { label: 'N°', campo: 'Numero' },
+        { label: 'Complemento', campo: 'Complemento' },
+        { label: 'Bairro', campo: 'Bairro' },
+        { label: 'CEP', campo: 'CEP' },
         {
           label: 'Município',
           campo: 'NomeMunicipio',
-          tipo: 'autocomplete',
-          optionsEndpoint: 'municipio',
-          labelField: 'NomeMunicipio',
-          valueField: 'NomeMunicipio',
+          template: `<app-municipio-select [formControl]="form.controls['NomeMunicipio']"></app-municipio-select>`
         },
         {
           label: 'Estado',
           campo: 'Estado',
-          tipo: 'autocomplete',
-          optionsEndpoint: 'estado',
-          labelField: 'Sigla',
-          valueField: 'Sigla',
-          readonly: true
+          template: `<app-estado-select [formControl]="form.controls['Estado']"></app-estado-select>`
         }
       ],
       endpoint: 'endereco',
@@ -125,63 +79,6 @@ export class ConfigService {
       colunas: [
         { label: 'Nome', campo: 'NomeMunicipio' },
         { label: 'Estado', campo: 'SiglaEstado' },
-      ],
-    },
-    'Setor': {
-      titulo: 'Setores',
-      campos: [
-        { label: 'Nome', campo: 'NomeSetor', tipo: 'text' },
-        {
-          label: 'Unidade',
-          campo: 'Unidade',
-          tipo: 'select',
-          optionsEndpoint: 'Unidade',
-          labelField: 'NomeUnidade',
-          valueField: 'Id'
-        }
-      ],
-      endpoint: 'Setor',
-      colunas: [
-        { label: 'Nome', campo: 'NomeSetor' },
-        { label: 'Unidade', campo: 'NomeUnidade' },
-      ],
-    },
-    'Unidade': {
-      titulo: 'Unidades',
-      campos: [
-        { label: 'Nome', campo: 'NomeUnidade', tipo: 'text' },
-        { label: 'Rua', campo: 'EnderecoRua', tipo: 'text' },
-        { label: 'Número', campo: 'EnderecoNumero', tipo: 'text' },
-        { label: 'Complemento', campo: 'EnderecoComplemento', tipo: 'text' },
-        { label: 'Bairro', campo: 'EnderecoBairro', tipo: 'text' },
-        { label: 'CEP', campo: 'EnderecoCEP', tipo: 'text' },
-        {
-          label: 'Município',
-          campo: 'EnderecoMunicipio',
-          tipo: 'select',
-          optionsEndpoint: 'Municipio',
-          labelField: 'NomeMunicipio',
-          valueField: 'Id'
-        },
-        {
-          label: 'Empresa',
-          campo: 'NomeEmpresa',
-          tipo: 'select',
-          optionsEndpoint: 'Empresa',
-          labelField: 'NomeEmpresa',
-          valueField: 'Id'
-        }
-      ],
-      endpoint: 'Unidade',
-      colunas: [
-        { label: 'Nome', campo: 'NomeUnidade' },
-        { label: 'Empresa', campo: 'NomeEmpresa' },
-        { label: 'Rua', campo: 'EnderecoRua' },
-        { label: 'Número', campo: 'EnderecoNumero' },
-        { label: 'Complemento', campo: 'EnderecoComplemento' },
-        { label: 'Bairro', campo: 'EnderecoBairro' },
-        { label: 'CEP', campo: 'EnderecoCEP' },
-        { label: 'Município', campo: 'EnderecoNomeMunicipio' },
       ],
     },
   };

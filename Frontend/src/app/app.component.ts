@@ -25,39 +25,39 @@ export class AppComponent implements OnInit {
       icon: 'pi pi-fw pi-building',
       routerLink: '/empresa'
     },
-     {
+    {
       label: 'Endereços',
       icon: 'pi pi-fw pi-map-marker',
       routerLink: '/endereco'
     },
     {
-       label: 'Estados',
-        icon: 'pi pi-fw pi-map',
-       routerLink: '/estado'
+      label: 'Estados',
+      icon: 'pi pi-fw pi-map',
+      routerLink: '/estado'
     },
-     {
+    {
       label: 'Municípios',
       icon: 'pi pi-fw pi-map-marker',
-       routerLink: '/municipio'
+      routerLink: '/municipio'
     },
     {
-       label: 'Funções',
-        icon: 'pi pi-fw pi-briefcase',
-       routerLink: '/funcao'
+      label: 'Funções',
+      icon: 'pi pi-fw pi-briefcase',
+      routerLink: '/funcao'
     },
     {
-       label: 'Setores',
-       icon: 'pi pi-fw pi-sitemap',
-       routerLink: '/setor'
+      label: 'Setores',
+      icon: 'pi pi-fw pi-sitemap',
+      routerLink: '/setor'
     },
-     {
+    {
       label: 'Unidades',
-       icon: 'pi pi-fw pi-th-large',
-       routerLink: '/unidade'
+      icon: 'pi pi-fw pi-th-large',
+      routerLink: '/unidade'
     }
-   
+
   ];
   ngOnInit() {
-  
+
   }
 }

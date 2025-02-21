@@ -1,32 +1,31 @@
-// generic-form.component.ts
 import { Component, Input, OnInit, Output, EventEmitter, Inject, OnChanges, SimpleChanges } from '@angular/core';
-import { FormBuilder, FormGroup, FormControl, Validators, ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, FormGroup, FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { ConfigService, CampoConfig } from '../../../services/config.service';
-import { AutoCompleteModule } from 'primeng/autocomplete';
-import { DialogModule } from 'primeng/dialog';
 import { InputTextModule } from 'primeng/inputtext';
 import { ButtonModule } from 'primeng/button';
+import { DialogModule } from 'primeng/dialog';
 import { CalendarModule } from 'primeng/calendar';
 import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
-import { INestedService } from '../../../services/inested.service';
-import { NESTED_SERVICE_TOKEN } from '../../../services/nested.service.token';
+import { ApiService } from '../../../services/api.service';
+
+interface GenericFormComponentProps {
+    [key: string]: any;
+}
 
 @Component({
     selector: 'app-generic-form',
     standalone: true,
     imports: [
-        CommonModule, ReactiveFormsModule, AutoCompleteModule, DialogModule,
-        InputTextModule, ButtonModule, CalendarModule, ToastModule
+        CommonModule, ReactiveFormsModule, InputTextModule, ButtonModule, DialogModule, CalendarModule, ToastModule
     ],
     templateUrl: './generic-form.component.html',
     styleUrls: ['./generic-form.component.scss'],
     providers: [MessageService]
 })
-export class GenericFormComponent implements OnInit, OnChanges {
+export class GenericFormComponent implements OnInit, OnChanges, GenericFormComponentProps {
     @Output() onFormHide = new EventEmitter<void>();
-    @Output() autoCompleteSelect = new EventEmitter<{ campo: string, valor: any }>();
     @Input() showHeader = true;
     @Input() visible = false;
     @Input() itemSelecionado: any;
@@ -41,7 +40,7 @@ export class GenericFormComponent implements OnInit, OnChanges {
 
     constructor(
         private fb: FormBuilder,
-        @Inject(NESTED_SERVICE_TOKEN) private nestedService: INestedService,
+        private apiService: ApiService, 
         private configService: ConfigService,
         private messageService: MessageService
     ) {
@@ -79,24 +78,17 @@ export class GenericFormComponent implements OnInit, OnChanges {
     private initializeForm(): void {
         this.form = this.fb.group({ Id: [null] });
         this.campos.forEach(campo => {
-            const control = new FormControl('', Validators.required); 
+            const control = new FormControl('', Validators.required);
             this.form.addControl(
                 campo.campo,
-                control 
+                control
             );
-        });
-
-        this.form.valueChanges.subscribe((change) => {
-            this.campos.forEach(campo => {
-                if (campo.tipo == 'dropdown') {
-                }
-            });
         });
     }
 
     buscarDadosPorId(id: number): void {
         this.loading = true;
-        this.nestedService.getById(this.endpoint, id).subscribe({
+        this.apiService.getById<any>(this.endpoint, id).subscribe({ 
             next: data => this.form.patchValue(data),
             error: () => this.messageService.add({ severity: 'error', summary: 'Erro', detail: 'Erro ao carregar dados.' }),
             complete: () => this.loading = false
@@ -105,7 +97,7 @@ export class GenericFormComponent implements OnInit, OnChanges {
 
     salvar(): void {
         if (!this.form.valid) {
-            this.messageService.add({ severity: 'warn', summary: 'Aviso', detail: 'Preencha todos os campos corretamente' });
+            this.messageService.add({ severity: 'warn', detail: 'Preencha todos os campos corretamente' });
             return;
         }
 
@@ -123,12 +115,12 @@ export class GenericFormComponent implements OnInit, OnChanges {
         if (!this.id) delete formData.Id;
 
         const request = this.id
-            ? this.nestedService.update(this.endpoint, this.id, formData)
-            : this.nestedService.create(this.endpoint, formData);
+            ? this.apiService.update(this.endpoint, this.id, formData)
+            : this.apiService.create(this.endpoint, formData);
 
         request.subscribe({
             next: () => {
-                this.messageService.add({ severity: 'success', summary: 'Sucesso', detail: 'Dados salvos com sucesso!' });
+                this.messageService.add({ severity: 'success', detail: 'Dados salvos com sucesso!' });
                 this.onHide();
             },
             error: () => this.messageService.add({ severity: 'error', summary: 'Erro', detail: 'Erro ao salvar os dados.' }),

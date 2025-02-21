@@ -1,36 +1,97 @@
-<app-generic-list
-    [titulo]="titulo"
-    [colunas]="config?.colunas"
-    [endpoint]="endpoint"
-    [confirmMessageField]="'Rua'"
-    [itens]="itens"
-    (incluir)="onIncluirItem()"
-    (editar)="onEditarItem($event)"
-    (excluir)="confirmDelete($event)">
-</app-generic-list>
+<p-toast></p-toast>
+<p-confirmDialog [style]="{width: '50vw'}"></p-confirmDialog>
 
-<app-generic-form
-    (onFormHide)="onFormHide($event)"
-    [modelo]="endpoint"
-    [visible]="isFormVisible"
-    [itemSelecionado]="itemSelecionado"
-    (autoCompleteSelect)="onAutoCompleteSelect($event)"
->
-</app-generic-form>
-<!-- Para Município -->
-<p-autoComplete
-  [(ngModel)]="itemSelecionado.NomeMunicipio"
-  [suggestions]="filteredMunicipios"
-  (completeMethod)="filterMunicipio($event)"
-  field="NomeMunicipio"
-  [dropdown]="true">
-</p-autoComplete>
+<div class="card">
+    <p-table [value]="enderecos" dataKey="id" [rows]="10" [showCurrentPageReport]="true"
+        [rowsPerPageOptions]="[10,25,50]" styleClass="p-datatable-gridlines" [paginator]="true"
+        currentPageReportTemplate="Mostrando {first} até {last} de {totalRecords} endereços"
+        [globalFilterFields]="['Rua', 'Numero', 'Bairro', 'NomeMunicipio', 'SiglaEstado', 'CEP']" [rowHover]="true" #dt>
+        <ng-template pTemplate="caption">
+            <div class="flex align-items-center justify-content-between">
+                <button pButton pRipple label="Novo" icon="pi pi-plus" class="p-buttonenergi mr-2"
+                    (click)="openNew()"></button>
+                <span class="p-input-icon-left">
+                    <input pInputText type="text" (input)="dt.filterGlobal($any($event.target).value, 'contains')"
+                        placeholder="Pesquisar..." />
+                </span>
+            </div>
+        </ng-template>
+        <ng-template pTemplate="header">
+            <tr>
+                <th pSortableColumn="Rua">Rua<p-sortIcon field="Rua"></p-sortIcon></th>
+                <th pSortableColumn="Numero">Número<p-sortIcon field="Numero"></p-sortIcon></th>
+                <th pSortableColumn="Bairro">Bairro<p-sortIcon field="Bairro"></p-sortIcon></th>
+                <th>Município</th>
+                <th>Estado</th>
+                <th pSortableColumn="CEP">CEP<p-sortIcon field="CEP"></p-sortIcon></th>
+                <th></th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-endereco>
+            <tr>
+                <td>{{endereco.Rua}}</td>
+                <td>{{endereco.Numero}}</td>
+                <td>{{endereco.Bairro}}</td>
+                <td>{{getMunicipioNome(endereco.IdMunicipio)}}</td>
+                <td>{{getEstadoSigla(endereco.IdEstado)}}</td>
+                <td>{{endereco.CEP}}</td>
+                <td>
+                    <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button mr-2"
+                        (click)="editEndereco(endereco)"></button>
+                    <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-danger"
+                        (click)="deleteEndereco(endereco)"></button>
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
+</div>
 
-<!-- Para Estado -->
-<p-autoComplete
-  [(ngModel)]="itemSelecionado.Estado"
-  [suggestions]="filteredEstados"
-  (completeMethod)="filterEstado($event)"
-  field="Sigla"
-  [dropdown]="true">
-</p-autoComplete>
+<p-dialog [(visible)]="enderecoDialog" [style]="{width: '450px'}" header="Detalhes do Endereço" [modal]="true"
+    styleClass="p-fluid">
+    <ng-template pTemplate="content">
+        <div class="field">
+            <label for="Rua">Rua</label>
+            <input type="text" pInputText id="Rua" [(ngModel)]="endereco.Rua" required autofocus />
+            <small class="p-error" *ngIf="submitted && !endereco.Rua">Rua é obrigatório.</small>
+        </div>
+        <div class="field">
+            <label for="Numero">Número</label>
+            <input type="number" pInputText id="Numero" [(ngModel)]="endereco.Numero" required />
+            <small class="p-error" *ngIf="submitted && !endereco.Numero">Número é obrigatório.</small>
+        </div>
+        <div class="field">
+            <label for="Complemento">Complemento</label>
+            <input type="text" pInputText id="Complemento" [(ngModel)]="endereco.Complemento" />
+        </div>
+        <div class="field">
+            <label for="Bairro">Bairro</label>
+            <input type="text" pInputText id="Bairro" [(ngModel)]="endereco.Bairro" required />
+            <small class="p-error" *ngIf="submitted && !endereco.Bairro">Bairro é obrigatório.</small>
+        </div>
+        <div class="field">
+            <label for="IdMunicipio">Município</label>
+            <p-dropdown [options]="municipios" [(ngModel)]="endereco.IdMunicipio" optionLabel="NomeMunicipio"
+                optionValue="Id" placeholder="Selecione um Município">
+            </p-dropdown>
+            <small class="p-error" *ngIf="submitted && !endereco.IdMunicipio">Município é obrigatório.</small>
+        </div>
+        <div class="field">
+            <label for="IdEstado">Estado</label>
+            <p-dropdown [options]="estados" [(ngModel)]="endereco.IdEstado" optionLabel="NomeEstado" optionValue="Id"
+                placeholder="Selecione um Estado"></p-dropdown>
+            <small class="p-error" *ngIf="submitted && !endereco.IdEstado">Estado é obrigatório.</small>
+        </div>
+        <div class="field">
+            <label for="CEP">CEP</label>
+            <input type="text" pInputText id="CEP" [(ngModel)]="endereco.CEP" required />
+            <small class="p-error" *ngIf="submitted && !endereco.CEP">CEP é obrigatório.</small>
+        </div>
+    </ng-template>
+
+    <ng-template pTemplate="footer">
+        <button pButton pRipple label="Cancelar" icon="pi pi-times" class="p-button-text"
+            (click)="hideDialog()"></button>
+        <button pButton pRipple label="Salvar" icon="pi pi-check" class="p-button-text"
+            (click)="saveEndereco()"></button>
+    </ng-template>
+</p-dialog>

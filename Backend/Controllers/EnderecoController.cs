@@ -53,35 +53,29 @@ namespace Backend.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<Endereco>> PostEndereco(Endereco endereco)
+        public async Task<ActionResult<Endereco>> PostEndereco([FromBody] Endereco endereco)
         {
-            try
+            _logger.LogInformation($"Recebido IdMunicipio: {endereco.IdMunicipio}");
+
+            if (!ModelState.IsValid)
             {
-                if (!ModelState.IsValid)
-                {
-                    return BadRequest(ModelState);
-                }
-
-                if (!_context.Municipios.Any(m => m.Id == endereco.IdMunicipio))
-                {
-                    return BadRequest("IdMunicipio inválido.");
-                }
-
-                if (!_context.Estados.Any(e => e.Id == endereco.IdEstado))
-                {
-                    return BadRequest("IdEstado inválido.");
-                }
-
-                _context.Enderecos.Add(endereco);
-                await _context.SaveChangesAsync();
-
-                return CreatedAtAction("GetEndereco", new { id = endereco.Id }, endereco);
+                return BadRequest(ModelState);
             }
-            catch (Exception ex)
+
+            if (!_context.Municipios.Any(m => m.Id == endereco.IdMunicipio))
             {
-                _logger.LogError(ex, "Erro ao criar um novo endereço.");
-                return StatusCode(500, "Erro ao criar um novo endereço.");
+                return BadRequest("IdMunicipio inválido.");
             }
+
+            if (!_context.Estados.Any(e => e.Id == endereco.IdEstado))
+            {
+                return BadRequest("IdEstado inválido.");
+            }
+
+            _context.Enderecos.Add(endereco);
+            await _context.SaveChangesAsync();
+
+            return CreatedAtAction("GetEndereco", new { id = endereco.Id }, endereco);
         }
 
         [HttpPut("{id}")]

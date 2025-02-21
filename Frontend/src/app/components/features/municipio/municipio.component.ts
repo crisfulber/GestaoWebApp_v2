@@ -1,123 +1,170 @@
-import { Component, Inject, CUSTOM_ELEMENTS_SCHEMA, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { GenericListComponent } from '../../shared/generic-list/generic-list.component';
-import { GenericFormComponent } from '../../shared/generic-form/generic-form.component';
-import { ConfigService } from '../../../services/config.service';
+import { Component, OnInit, NO_ERRORS_SCHEMA } from '@angular/core';
+import { MunicipioService } from '../../../services/municipio.service';
+import { EstadoService } from '../../../services/estado.service';
+import { ConfirmationService, MessageService } from 'primeng/api';
 import { FormsModule } from '@angular/forms';
-import { NESTED_SERVICE_TOKEN } from '../../../services/nested.service.token';
-import { INestedService } from '../../../services/inested.service';
-import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
-import { filter } from 'rxjs/operators';
-import { MessageService, ConfirmationService } from 'primeng/api';
+import { ButtonModule } from 'primeng/button';
+import { InputTextModule } from 'primeng/inputtext';
+import { DialogModule } from 'primeng/dialog';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { ToastModule } from 'primeng/toast';
+import { TableModule } from 'primeng/table';
+import { ToolbarModule } from 'primeng/toolbar';
+import { CommonModule } from '@angular/common';
+import { DropdownModule } from 'primeng/dropdown';
+import { AutoCompleteModule } from 'primeng/autocomplete';
+import { Municipio } from '../../interface/municipio';
+import { Estado } from '../../interface/estado';
 
 @Component({
   selector: 'app-municipio',
   standalone: true,
-  imports: [CommonModule, GenericListComponent, GenericFormComponent, FormsModule, ConfirmDialogModule],
+  imports: [CommonModule, FormsModule, ButtonModule, InputTextModule, DialogModule,
+    ConfirmDialogModule, ToastModule, TableModule, ToolbarModule, DropdownModule, AutoCompleteModule],
   templateUrl: './municipio.component.html',
-  styleUrls: ['./municipio.component.scss'],
-  schemas: [CUSTOM_ELEMENTS_SCHEMA],
-  providers: [MessageService, ConfirmationService]
+  styleUrls: ['./municipio.component.css'],
+  providers: [MessageService, ConfirmationService],
+  schemas: [NO_ERRORS_SCHEMA]
 })
 export class MunicipioComponent implements OnInit {
-  titulo: string = 'Município';
-  endpoint: string = 'municipio';
-  config: any;
-  isFormVisible: boolean = false;
-  itens: any[] = [];
-  itemId: number | null = null;
-  itemSelecionado: any = null;
-  estados: any[] = [];
-  selectOptions: { [key: string]: any[] } = {}; 
+
+  municipios: Municipio[] = [];
+  estados: Estado[] = [];
+  municipioDialog: boolean = false;
+  municipio: Municipio = { Id: 0, NomeMunicipio: '', IdEstado: null };
+  submitted: boolean = false;
 
   constructor(
-    private configService: ConfigService,
-    @Inject(NESTED_SERVICE_TOKEN) private nestedService: INestedService,
-    private router: Router,
-    private route: ActivatedRoute,
+    private municipioService: MunicipioService,
+    private estadoService: EstadoService,
     private messageService: MessageService,
     private confirmationService: ConfirmationService
-  ) {
-    this.router.events.pipe(filter(event => event instanceof NavigationEnd)).subscribe(() => {
-      this.getItemIDFromRoute();
-    });
-  }
+  ) { }
 
   ngOnInit() {
-    this.config = this.configService.getConfiguracao(this.endpoint);
-    this.carregarEstados(); 
-    this.getItemIDFromRoute();
+    this.loadMunicipios();
+    this.loadEstados();
   }
 
-  getItemIDFromRoute() {
-    const idParam = this.route.snapshot.paramMap.get('id');
-    this.itemId = idParam ? +idParam : null;
-  }
-
-  carregarEstados() {
-    this.nestedService.getAll('estado').subscribe(estados => {
-      this.estados = estados;
-      this.selectOptions = { 
-        IdEstado: estados 
-      };
-      this.carregarItens(); 
-    });
-  }
-
-  carregarItens() {
-    this.nestedService.getAll(this.endpoint).subscribe(municipios => {
-      this.itens = municipios.map(municipio => {
-        const estadoCorrespondente = this.estados.find(estado => estado.Id === municipio.IdEstado);
-        return {
-          ...municipio,
-          SiglaEstado: estadoCorrespondente ? estadoCorrespondente.Sigla : 'N/A'
-        };
-      });
-    });
-  }
-
-  onIncluirItem() {
-    this.isFormVisible = true;
-    this.itemId = null;
-    this.itemSelecionado = null;
-  }
-
-  onEditarItem(item: any) {
-    this.itemSelecionado = item;
-    this.isFormVisible = true;
-    this.itemId = item.Id;
-  }
-
-  confirmDelete(item: any) {
-    this.confirmationService.confirm({
-      message: `Deseja realmente excluir o item "${item.NomeMunicipio || item.Id}"?`,
-      header: 'Confirmação',
-      icon: 'pi pi-exclamation-triangle',
-      acceptLabel: 'Sim',
-      rejectLabel: 'Cancelar',
-      acceptButtonStyleClass: 'p-button-danger',
-      rejectButtonStyleClass: 'p-button-text',
-      accept: () => this.onExcluirItem(item)
-    });
-  }
-
-  onExcluirItem(item: any) {
-    this.nestedService.delete(this.endpoint, item.Id).subscribe({
-      next: () => {
-        this.messageService.add({ severity: 'success', summary: 'Sucesso', detail: 'Item excluído com sucesso!' });
-        this.carregarItens();
+  loadMunicipios() {
+    this.municipioService.getMunicipios().subscribe({
+      next: (data) => {
+        this.municipios = data;
       },
-      error: () => {
-        this.messageService.add({ severity: 'error', summary: 'Erro', detail: 'Erro ao excluir o item. Tente novamente.' });
+      error: (error) => {
+        this.messageService.add({ severity: 'error', summary: 'Erro', detail: 'Erro ao carregar municípios' });
+        console.error('Erro ao carregar municípios:', error);
       }
     });
   }
 
-  onFormHide(event: any) {
-    this.isFormVisible = false;
-    this.itemId = null;
-    this.itemSelecionado = null;
-    this.carregarItens();
+  loadEstados() {
+    this.estadoService.getEstados().subscribe({
+      next: (data) => {
+        this.estados = data;
+      },
+      error: (error) => {
+        this.messageService.add({ severity: 'error', summary: 'Erro', detail: 'Erro ao carregar estados' });
+        console.error('Erro ao carregar estados:', error);
+      }
+    });
+  }
+
+  openNew() {
+    this.municipio = { Id: 0, NomeMunicipio: '', IdEstado: null };
+    this.submitted = false;
+    this.municipioDialog = true;
+  }
+
+  editMunicipio(municipio: Municipio) {
+    this.municipio = { ...municipio };
+    this.municipioDialog = true;
+  }
+
+  deleteMunicipio(municipio: Municipio) {
+    this.confirmationService.confirm({
+      message: 'Tem certeza que deseja deletar ' + municipio.NomeMunicipio + '?',
+      header: 'Confirmar',
+      icon: 'pi pi-exclamation-triangle',
+      accept: () => {
+        this.municipioService.deleteMunicipio(municipio.Id).subscribe({
+          next: () => {
+            this.municipios = this.municipios.filter(val => val.Id !== municipio.Id);
+            this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Município Deletado', life: 3000 });
+            this.loadMunicipios();
+          },
+          error: (error) => {
+            this.messageService.add({ severity: 'error', summary: 'Erro', detail: 'Erro ao deletar o município ' + municipio.NomeMunicipio, life: 3000 });
+            console.error('Erro ao deletar município:', error);
+          }
+        });
+      }
+    });
+  }
+
+  hideDialog() {
+    this.municipioDialog = false;
+    this.submitted = false;
+  }
+
+  saveMunicipio() {
+    this.submitted = true;
+
+    if (this.municipio.NomeMunicipio?.trim() && this.municipio.IdEstado) {
+      this.municipio.NomeMunicipio = this.municipio.NomeMunicipio.toUpperCase();
+
+      const estadoId = this.municipio.IdEstado == null ? 0 : this.municipio.IdEstado;
+
+      const municipioParaEnviar = {
+        ...this.municipio,
+        IdEstado: estadoId,
+      };
+
+      if (this.municipio.Id) {
+        this.municipioService.updateMunicipio(this.municipio.Id, this.municipio).subscribe({
+          next: () => {
+            this.municipios[this.findIndexById(this.municipio.Id)] = this.municipio;
+            this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Município Atualizado', life: 3000 });
+            this.loadMunicipios();
+          },
+          error: (error) => {
+            this.messageService.add({ severity: 'error', summary: 'Erro', detail: 'Erro ao atualizar o município ' + this.municipio.NomeMunicipio, life: 3000 });
+            console.error('Erro ao atualizar município:', error);
+          }
+        });
+      } else {
+        this.municipioService.addMunicipio(this.municipio).subscribe({
+          next: (data) => {
+            this.municipios.push(data);
+            this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Município Criado', life: 3000 });
+            this.loadMunicipios();
+          },
+          error: (error) => {
+            this.messageService.add({ severity: 'error', summary: 'Erro', detail: 'Erro ao criar o município ' + this.municipio.NomeMunicipio, life: 3000 });
+            console.error('Erro ao criar município:', error);
+          }
+        });
+      }
+
+      this.municipios = [...this.municipios];
+      this.municipioDialog = false;
+      this.municipio = { Id: 0, NomeMunicipio: '', IdEstado: 0 };
+    }
+  }
+
+  findIndexById(Id: number): number {
+    let index = -1;
+    for (let i = 0; i < this.municipios.length; i++) {
+      if (this.municipios[i].Id === Id) {
+        index = i;
+        break;
+      }
+    }
+    return index;
+  }
+
+  getEstadoSigla(idEstado: number): string {
+    const estado = this.estados.find(e => e.Id === idEstado);
+    return estado ? estado.Sigla : '';
   }
 }

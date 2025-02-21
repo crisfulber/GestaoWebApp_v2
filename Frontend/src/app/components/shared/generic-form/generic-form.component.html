@@ -1,61 +1,26 @@
 <p-toast></p-toast>
-<p-dialog
-    *ngIf="visible"
-    [visible]="visible"
-    [header]="showHeader ? 'Cadastro de ' + titulo: ''"
-    [modal]="true"
-    [style]="{width: '50vw'}"
-    [draggable]="false"
-    [resizable]="false"
-    (onHide)="onHide()"
->
+    <p-dialog
+        *ngIf="visible"
+        [visible]="visible"
+        [header]="showHeader ? 'Cadastro de ' + titulo : ''"
+        [modal]="true"
+        [style]="{width: '50vw'}"
+        [draggable]="false"
+        [resizable]="false"
+        (onHide)="onHide()"
+    >
 <form [formGroup]="form" (ngSubmit)="salvar()">
     <div class="form-group" *ngFor="let campo of campos">
-         <label [for]="campo.campo">{{ campo.label }}</label>
-         <p-autoComplete
-            *ngIf="campo.tipo === 'autocomplete'"
-            [formControlName]="campo.campo"
-            [id]="'id_' + campo.campo"
-            [name]="'name_' + campo.campo"
-            (completeMethod)="campo.suggestions ? campo.suggestions($event) : null"
-            [field]="campo.field"
-            [forceSelection]="true"
-            placeholder="Selecione"
-            (onSelect)="autoCompleteSelect.emit({ campo: campo.campo, valor: $event })"
-         >
-         </p-autoComplete>
-          <p-calendar
-             *ngIf="campo.tipo === 'date'"
-             [formControlName]="campo.campo"
-             [id]="'id_' + campo.campo"
-             [name]="'name_' + campo.campo"
-             [placeholder]="'Selecione ' + campo.label"
-             [showClear]="true" dateFormat="dd/mm/yy"
-             [monthNavigator]="true"
-             [yearNavigator]="true"
-             yearRange="1900:2050">
-       </p-calendar>
-       <input
-         pInputText
-         *ngIf="campo.tipo !== 'select' && campo.tipo !== 'dropdown' && campo.tipo !== 'date' && campo.tipo !== 'autocomplete'"
-         [formControlName]="campo.campo"
-         [id]="'id_' + campo.campo"
-         [name]="'name_' + campo.campo"
-         [type]="campo.tipo || 'text'" 
-         [readonly]="campo.readonly"
-         />
+        <label [for]="campo.campo">{{ campo.label }}</label>
+        <input
+        pInputText
+        *ngIf="campo.tipo !== 'select'"
+        [formControlName]="campo.campo"
+        [id]="'id_' + campo.campo"
+        [name]="'name_' + campo.campo"
+        [type]="campo.tipo || 'text'"
+        [readonly]="campo.readonly"
+    />
     </div>
 </form>
-    <ng-template pTemplate="footer">
-       <p-button
-          label="Salvar"
-          icon="pi pi-save"
-          (click)="salvar()">
-       </p-button>
-       <p-button
-          label="Cancelar"
-          icon="pi pi-times"
-          styleClass="p-button-secondary p-button-text"
-          (click)="cancelar()">
-       </p-button>
-    </ng-template>
+</p-dialog>

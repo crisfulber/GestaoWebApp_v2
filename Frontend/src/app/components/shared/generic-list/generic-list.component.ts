@@ -31,7 +31,7 @@ export class GenericListComponent {
   onEditarItem(item: any): void {
     this.editar.emit(item);
   }
-  
+
   onExcluirItem(item: any): void {
     this.excluir.emit(item);
   }
