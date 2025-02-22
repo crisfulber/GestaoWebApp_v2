@@ -4,16 +4,19 @@ using Backend.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace Backend.Migrations
+namespace Backend.Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250221222721_CreateEmpresaTable")]
+    partial class CreateEmpresaTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -22,27 +25,7 @@ namespace Backend.Migrations
 
             MySqlModelBuilderExtensions.AutoIncrementColumns(modelBuilder);
 
-            modelBuilder.Entity("Backend.Models.Contato", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Email")
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("Telefone")
-                        .HasMaxLength(14)
-                        .HasColumnType("varchar(14)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Contato");
-                });
-
-            modelBuilder.Entity("Backend.Models.Empresa", b =>
+            modelBuilder.Entity("Empresa", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -52,23 +35,16 @@ namespace Backend.Migrations
 
                     b.Property<string>("CNPJ_CEI")
                         .IsRequired()
-                        .HasMaxLength(18)
-                        .HasColumnType("varchar(18)");
-
-                    b.Property<int?>("IdContato")
-                        .HasColumnType("int");
+                        .HasColumnType("varchar(14)");
 
                     b.Property<int?>("IdEndereco")
                         .HasColumnType("int");
 
                     b.Property<string>("NomeEmpresa")
                         .IsRequired()
-                        .HasMaxLength(80)
-                        .HasColumnType("varchar(80)");
+                        .HasColumnType("longtext");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("IdContato");
 
                     b.HasIndex("IdEndereco");
 
@@ -159,19 +135,12 @@ namespace Backend.Migrations
                     b.ToTable("Municipios");
                 });
 
-            modelBuilder.Entity("Backend.Models.Empresa", b =>
+            modelBuilder.Entity("Empresa", b =>
                 {
-                    b.HasOne("Backend.Models.Contato", "Contato")
-                        .WithMany()
-                        .HasForeignKey("IdContato")
-                        .OnDelete(DeleteBehavior.SetNull);
-
                     b.HasOne("Endereco", "Endereco")
                         .WithMany()
                         .HasForeignKey("IdEndereco")
                         .OnDelete(DeleteBehavior.SetNull);
-
-                    b.Navigation("Contato");
 
                     b.Navigation("Endereco");
                 });

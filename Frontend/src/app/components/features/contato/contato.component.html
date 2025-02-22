@@ -2,10 +2,10 @@
 <p-confirmDialog [style]="{width: '50vw'}"></p-confirmDialog>
 
 <div class="card">
-    <p-table [value]="estados" dataKey="id" [rows]="10" [showCurrentPageReport]="true" [rowsPerPageOptions]="[10,25,50]"
+    <p-table [value]="contatos" dataKey="id" [rows]="10" [showCurrentPageReport]="true" [rowsPerPageOptions]="[10,25,50]"
         styleClass="p-datatable-gridlines" [paginator]="true"
-        currentPageReportTemplate="Mostrando {first} até {last} de {totalRecords} estados"
-        [globalFilterFields]="['NomeEstado','Sigla']" [rowHover]="true" #dt>
+        currentPageReportTemplate="Mostrando {first} até {last} de {totalRecords} contatos"
+        [globalFilterFields]="['Telefone','Email']" [rowHover]="true" #dt>
         <ng-template pTemplate="caption">
             <div class="flex align-items-center justify-content-between">
                 <button pButton pRipple label="Novo" icon="pi pi-plus" class="p-buttonenergi mr-2"
@@ -18,38 +18,38 @@
         </ng-template>
         <ng-template pTemplate="header">
             <tr>
-                <th pSortableColumn="NomeEstado">Nome<p-sortIcon field="NomeEstado"></p-sortIcon></th>
-                <th pSortableColumn="Sigla">Sigla<p-sortIcon field="Sigla"></p-sortIcon></th>
+                <th pSortableColumn="Telefone">Telefone<p-sortIcon field="Telefone"></p-sortIcon></th>
+                <th pSortableColumn="Email">Email<p-sortIcon field="Email"></p-sortIcon></th>
                 <th></th>
             </tr>
         </ng-template>
-        <ng-template pTemplate="body" let-estado>
+        <ng-template pTemplate="body" let-contato>
             <tr>
-                <td>{{estado.NomeEstado}}</td>
-                <td>{{estado.Sigla}}</td>
+                <td>{{contato.Telefone}}</td>
+                <td>{{contato.Email}}</td>
                 <td>
                     <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button mr-2"
-                        (click)="editEstado(estado)"></button>
+                        (click)="editContato(contato)"></button>
                     <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-danger"
-                        (click)="deleteEstado(estado)"></button>
+                        (click)="deleteContato(contato)"></button>
                 </td>
             </tr>
         </ng-template>
     </p-table>
 </div>
 
-<p-dialog [(visible)]="estadoDialog" [style]="{width: '450px'}" header="Detalhes do Estado" [modal]="true"
+<p-dialog [(visible)]="contatoDialog" [style]="{width: '450px'}" header="Detalhes do Contato" [modal]="true"
     styleClass="p-fluid">
     <ng-template pTemplate="content">
         <div class="field">
-            <label for="NomeEstado">Nome</label>
-            <input type="text" pInputText id="NomeEstado" [(ngModel)]="estado.NomeEstado" required autofocus />
-            <small class="p-error" *ngIf="submitted && !estado.NomeEstado">Nome é obrigatório.</small>
+            <label for="Telefone">Telefone</label>
+            <input type="text" pInputText id="Telefone" [(ngModel)]="contato.Telefone" required autofocus />
+            <small class="p-error" *ngIf="submitted && !contato.Telefone">Telefone é obrigatório.</small>
         </div>
         <div class="field">
-            <label for="Sigla">Sigla</label>
-            <input type="text" pInputText id="Sigla" [(ngModel)]="estado.Sigla" required />
-            <small class="p-error" *ngIf="submitted && !estado.Sigla">Sigla é obrigatória.</small>
+            <label for="Email">Email</label>
+            <input type="text" pInputText id="Email" [(ngModel)]="contato.Email" required />
+            <small class="p-error" *ngIf="submitted && !contato.Email">Email é obrigatória.</small>
         </div>
     </ng-template>
 
@@ -57,6 +57,6 @@
         <button pButton pRipple label="Cancelar" icon="pi pi-times" class="p-button-secondary" [raised]="true"
             (click)="hideDialog()"></button>
             <button pButton pRipple label="Salvar" icon="pi pi-check" class="p-button-energi" [raised]="true"
-        (click)="saveEstado()"></button>
+        (click)="saveContato()"></button>
     </ng-template>
 </p-dialog>

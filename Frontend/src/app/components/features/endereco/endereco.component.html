@@ -36,7 +36,7 @@
                 <td>{{getEstadoSigla(endereco.IdEstado)}}</td>
                 <td>{{endereco.CEP}}</td>
                 <td>
-                    <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button mr-2"
+                    <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-info mr-2"
                         (click)="editEndereco(endereco)"></button>
                     <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-danger"
                         (click)="deleteEndereco(endereco)"></button>
@@ -89,9 +89,9 @@
     </ng-template>
 
     <ng-template pTemplate="footer">
-        <button pButton pRipple label="Cancelar" icon="pi pi-times" class="p-button-text"
+        <button pButton pRipple label="Cancelar" icon="pi pi-times" class="p-button-secondary" [raised]="true"
             (click)="hideDialog()"></button>
-        <button pButton pRipple label="Salvar" icon="pi pi-check" class="p-button-text"
+            <button pButton pRipple label="Salvar" icon="pi pi-check" class="p-button-energi" [raised]="true"
             (click)="saveEndereco()"></button>
     </ng-template>
 </p-dialog>

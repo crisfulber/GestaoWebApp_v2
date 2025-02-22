@@ -4,16 +4,19 @@ using Backend.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace Backend.Migrations
+namespace Backend.Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250222200209_CreateContatoTable")]
+    partial class CreateContatoTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -55,9 +58,6 @@ namespace Backend.Migrations
                         .HasMaxLength(18)
                         .HasColumnType("varchar(18)");
 
-                    b.Property<int?>("IdContato")
-                        .HasColumnType("int");
-
                     b.Property<int?>("IdEndereco")
                         .HasColumnType("int");
 
@@ -67,8 +67,6 @@ namespace Backend.Migrations
                         .HasColumnType("varchar(80)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("IdContato");
 
                     b.HasIndex("IdEndereco");
 
@@ -161,17 +159,10 @@ namespace Backend.Migrations
 
             modelBuilder.Entity("Backend.Models.Empresa", b =>
                 {
-                    b.HasOne("Backend.Models.Contato", "Contato")
-                        .WithMany()
-                        .HasForeignKey("IdContato")
-                        .OnDelete(DeleteBehavior.SetNull);
-
                     b.HasOne("Endereco", "Endereco")
                         .WithMany()
                         .HasForeignKey("IdEndereco")
                         .OnDelete(DeleteBehavior.SetNull);
-
-                    b.Navigation("Contato");
 
                     b.Navigation("Endereco");
                 });

@@ -1,0 +1,132 @@
+<p-toast></p-toast>
+<p-confirmDialog [style]="{width: '50vw'}"></p-confirmDialog>
+
+<div class="card">
+    <p-table [value]="empresas" dataKey="id" [rows]="10" [showCurrentPageReport]="true"
+        [rowsPerPageOptions]="[10,25,50]" styleClass="p-datatable-gridlines" [paginator]="true"
+        currentPageReportTemplate="Mostrando {first} até {last} de {totalRecords} empresas"
+        [globalFilterFields]="['NomeEmpresa','CNPJ_CEI']" [rowHover]="true" #dt>
+        <ng-template pTemplate="caption">
+            <div class="flex align-items-center justify-content-between">
+                <button pButton pRipple label="Novo" icon="pi pi-plus" class="p-buttonenergi mr-2"
+                    (click)="openNew()"></button>
+                <span class="p-input-icon-left">
+                    <input pInputText type="text" (input)="dt.filterGlobal($any($event.target).value, 'contains')"
+                        placeholder="Pesquisar..." />
+                </span>
+            </div>
+        </ng-template>
+        <ng-template pTemplate="header">
+            <tr>
+                <th pSortableColumn="NomeEmpresa">Empresa<p-sortIcon field="NomeEmpresa"></p-sortIcon></th>
+                <th pSortableColumn="CNPJ_CEI">CNPJ/CEI<p-sortIcon field="CNPJ_CEI"></p-sortIcon></th>
+                <th></th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-empresa>
+            <tr>
+                <td>{{empresa.NomeEmpresa}}</td>
+                <td>{{empresa.CNPJ_CEI}}</td>
+                <td>
+                    <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-info mr-2"
+                        (click)="editEmpresa(empresa)"></button>
+                    <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-danger"
+                        (click)="deleteEmpresa(empresa)"></button>
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
+</div>
+
+<p-dialog [(visible)]="empresaDialog" [style]="{width: '70vw'}" header="Detalhes da Empresa" [modal]="true"
+    styleClass="p-fluid">
+    <ng-template pTemplate="content">
+        <p-steps [model]="steps" [(activeIndex)]="activeIndex" [readonly]="true"></p-steps>
+
+        <form [formGroup]="formSteps[activeIndex]">
+            <div [ngSwitch]="activeIndex">
+                <div *ngSwitchCase="0" class="p-fluid">
+                    <div class="field">
+                        <label for="NomeEmpresa">Nome da Empresa</label>
+                        <input type="text" pInputText id="NomeEmpresa" formControlName="NomeEmpresa" required
+                            autofocus />
+                        <small class="p-error" *ngIf="submitted && formSteps[0].controls['NomeEmpresa'].invalid">Nome é
+                            obrigatório.</small>
+                    </div>
+                    <div class="field">
+                        <label for="CNPJ_CEI">CNPJ / CEI</label>
+                        <p-inputMask mask="99.999.999/9999-99" placeholder="99.999.999/9999-99"
+                            formControlName="CNPJ_CEI"></p-inputMask>
+                        <small class="p-error" *ngIf="submitted && formSteps[0].controls['CNPJ_CEI'].invalid">CNPJ/CEI é
+                            obrigatório.</small>
+                    </div>
+                </div>
+                <div *ngSwitchCase="1" class="p-fluid">
+                    <div class="field">
+                        <label for="Rua">Rua</label>
+                        <input type="text" pInputText id="Rua" formControlName="Rua" required />
+                        <small class="p-error" *ngIf="submitted && formSteps[1].controls['Rua'].invalid">Rua é
+                            obrigatório.</small>
+                    </div>
+                    <div class="field">
+                        <label for="Numero">Número</label>
+                        <input type="number" pInputText id="Numero" formControlName="Numero" required />
+                        <small class="p-error" *ngIf="submitted && formSteps[1].controls['Numero'].invalid">Número é
+                            obrigatório.</small>
+                    </div>
+                    <div class="field">
+                        <label for="Complemento">Complemento</label>
+                        <input type="text" pInputText id="Complemento" formControlName="Complemento" />
+                    </div>
+                    <div class="field">
+                        <label for="Bairro">Bairro</label>
+                        <input type="text" pInputText id="Bairro" formControlName="Bairro" required />
+                        <small class="p-error" *ngIf="submitted && formSteps[1].controls['Bairro'].invalid">Bairro é
+                            obrigatório.</small>
+                    </div>
+                    <div class="field">
+                        <label for="CEP">CEP</label>
+                        <p-inputMask mask="99999-999" placeholder="99999-999" formControlName="CEP"></p-inputMask>
+                        <small class="p-error" *ngIf="submitted && formSteps[1].controls['CEP'].invalid">CEP é
+                            obrigatório.</small>
+                    </div>
+                    <div class="field">
+                        <label for="IdMunicipio">Município</label>
+                        <p-dropdown [options]="municipios" optionLabel="NomeMunicipio" optionValue="Id"
+                            placeholder="Selecione um Municipio" formControlName="IdMunicipio"></p-dropdown>
+                        <small class="p-error"
+                            *ngIf="submitted && formSteps[1].controls['IdMunicipio'].invalid">Município é
+                            obrigatório.</small>
+                    </div>
+                    <div class="field">
+                        <label for="IdEstado">Estado</label>
+                        <p-dropdown [options]="estados" optionLabel="NomeEstado" optionValue="Id"
+                            placeholder="Selecione um Estado" formControlName="IdEstado"></p-dropdown>
+                        <small class="p-error" *ngIf="submitted && formSteps[1].controls['IdEstado'].invalid">Estado é
+                            obrigatório.</small>
+                    </div>
+                </div>
+                <div *ngSwitchCase="2" class="p-fluid">
+                    <div class="field">
+                        <label for="Telefone">Telefone</label>
+                        <p-inputMask mask="(99) 99999-9999" placeholder="(99) 99999-9999"
+                            formControlName="Telefone"></p-inputMask>
+                    </div>
+                    <div class="field">
+                        <label for="Email">Email</label>
+                        <input type="email" pInputText id="Email" formControlName="Email" />
+                    </div>
+                </div>
+            </div>
+        </form>
+    </ng-template>
+
+    <ng-template pTemplate="footer">
+        <p-button icon="pi pi-angle-left" label="Voltar" (click)="prevPage()" styleClass="p-button-text"
+            *ngIf="activeIndex !== 0"></p-button>
+        <p-button icon="pi pi-angle-right" iconPos="right" label="Próximo" (click)="nextPage()"
+            *ngIf="activeIndex !== steps.length - 1"></p-button>
+        <p-button label="Salvar" icon="pi pi-check" (click)="saveEmpresa()"
+            *ngIf="activeIndex === steps.length - 1"></p-button>
+    </ng-template>
+</p-dialog>

@@ -10,7 +10,7 @@ import { ToastModule } from 'primeng/toast';
 import { TableModule } from 'primeng/table';
 import { ToolbarModule } from 'primeng/toolbar';
 import { CommonModule } from '@angular/common';
-import { Estado } from '../../interface/estado';
+import { Estado } from '../../interface/estado'
 
 @Component({
   selector: 'app-estado',

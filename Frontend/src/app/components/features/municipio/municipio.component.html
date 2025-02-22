@@ -28,7 +28,7 @@
                 <td>{{municipio.NomeMunicipio}}</td>
                 <td>{{getEstadoSigla(municipio.IdEstado)}}</td>
                 <td>
-                    <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button mr-2"
+                    <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-info mr-2"
                         (click)="editMunicipio(municipio)"></button>
                     <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-danger"
                         (click)="deleteMunicipio(municipio)"></button>
@@ -55,9 +55,9 @@
     </ng-template>
 
     <ng-template pTemplate="footer">
-        <button pButton pRipple label="Cancelar" icon="pi pi-times" class="p-button-text"
+        <button pButton pRipple label="Cancelar" icon="pi pi-times" class="p-button-secondary" [raised]="true"
             (click)="hideDialog()"></button>
-        <button pButton pRipple label="Salvar" icon="pi pi-check" class="p-button-text"
+        <button pButton pRipple label="Salvar" icon="pi pi-check" class="p-button-energi" [raised]="true"
             (click)="saveMunicipio()"></button>
     </ng-template>
 </p-dialog>
