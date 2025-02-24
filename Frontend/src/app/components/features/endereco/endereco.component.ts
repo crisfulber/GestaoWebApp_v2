@@ -77,7 +77,7 @@ export class EnderecoComponent implements OnInit {
     loadMunicipios() {
         this.municipioService.getMunicipios().subscribe({
             next: (data) => {
-                this.municipios = data; 
+                this.municipios = data;
             },
             error: (error) => {
                 this.messageService.add({ severity: 'error', summary: 'Erro', detail: 'Erro ao carregar municípios' });
@@ -202,7 +202,7 @@ export class EnderecoComponent implements OnInit {
         const estado = this.estados.find(e => e.Id === idEstado);
         return estado ? estado.Sigla : '';
     }
-    
+
     getMunicipioNome(idMunicipio: number): string {
         const municipio = this.municipios.find(m => m.Id === idMunicipio);
         return municipio ? municipio.NomeMunicipio : '';

@@ -1,0 +1,64 @@
+<p-toast></p-toast>
+<p-confirmDialog [style]="{width: '50vw'}"></p-confirmDialog>
+
+<div class="card">
+    <p-table [value]="setores" dataKey="id" [rows]="10" [showCurrentPageReport]="true"
+        [rowsPerPageOptions]="[10,25,50]" styleClass="p-datatable-gridlines" [paginator]="true"
+        currentPageReportTemplate="Mostrando {first} até {last} de {totalRecords} setores"
+        [globalFilterFields]="['NomeSetor', 'Unidade.NomeUnidade']" [rowHover]="true" #dt> 
+        <ng-template pTemplate="caption">
+            <div class="flex align-items-center justify-content-between">
+                <button pButton pRipple label="Novo" icon="pi pi-plus" class="p-buttonenergi mr-2"
+                    (click)="openNew()"></button>
+                    <span style="font-size: 1.2em; font-weight: bold;">Listagem de Setores</span>
+                <span class="p-input-icon-left">
+                    <input pInputText type="text" (input)="dt.filterGlobal($any($event.target).value, 'contains')"
+                        placeholder="Pesquisar..." />
+                </span>
+            </div>
+        </ng-template>
+        <ng-template pTemplate="header">
+            <tr>
+                <th pSortableColumn="NomeSetor">Setor<p-sortIcon field="NomeSetor"></p-sortIcon></th>
+                <th pSortableColumn="Unidade.NomeUnidade">Unidade<p-sortIcon field="Unidade.NomeUnidade"></p-sortIcon></th>
+                <th></th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-setor>
+            <tr>
+                <td>{{setor.NomeSetor}}</td>
+                <td>{{setor.Unidade?.NomeUnidade}}</td>
+                <td>
+                    <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-info mr-2"
+                        (click)="editSetor(setor)"></button>
+                    <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-danger"
+                        (click)="deleteSetor(setor)"></button>
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
+</div>
+
+<p-dialog [(visible)]="setorDialog" [style]="{width: '450px'}" header="Detalhes do Setor" [modal]="true"
+    styleClass="p-fluid">
+    <ng-template pTemplate="content">
+        <div class="field">
+            <label for="NomeSetor" class="block">Nome</label>
+            <input type="text" pInputText id="NomeSetor" [(ngModel)]="setor.NomeSetor" required autofocus />
+            <small class="p-error block" *ngIf="submitted && !setor.NomeSetor">Nome é obrigatório.</small>
+        </div>
+        <div class="field">
+            <label for="IdUnidade" class="block">Unidade</label>
+            <p-dropdown [options]="unidades" optionLabel="NomeUnidade" optionValue="Id"
+                placeholder="Selecione uma Unidade" [(ngModel)]="setor.IdUnidade" appendTo="body"></p-dropdown>
+            <small class="p-error block" *ngIf="submitted && !setor.IdUnidade">Unidade é obrigatória.</small>
+        </div>
+    </ng-template>
+
+    <ng-template pTemplate="footer">
+        <button pButton pRipple label="Cancelar" icon="pi pi-times" class="p-button-secondary" [raised]="true"
+            (click)="hideDialog()"></button>
+        <button pButton pRipple label="Salvar" icon="pi pi-check" class="p-button-energi" [raised]="true"
+            (click)="saveSetor()"></button>
+    </ng-template>
+</p-dialog>

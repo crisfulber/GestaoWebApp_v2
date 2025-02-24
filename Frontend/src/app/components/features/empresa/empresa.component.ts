@@ -85,7 +85,7 @@ export class EmpresaComponent implements OnInit {
         this.loadEstados();
 
         this.steps = [
-            { label: 'Informações da Empresa' },
+            { label: 'Empresa' },
             { label: 'Endereço' },
             { label: 'Contato' }
         ];
@@ -211,13 +211,13 @@ export class EmpresaComponent implements OnInit {
         if (this.formSteps.every(form => form.valid)) {
 
             const formData: EmpresaDto = {
-                NomeEmpresa: this.formSteps[0].get('NomeEmpresa')?.value,
+                NomeEmpresa: this.formSteps[0].get('NomeEmpresa')?.value.toUpperCase(),
                 CNPJ_CEI: this.formSteps[0].get('CNPJ_CEI')?.value,
-                Rua: this.formSteps[1].get('Rua')?.value,
+                Rua: this.formSteps[1].get('Rua')?.value.toUpperCase(),
                 Numero: this.formSteps[1].get('Numero')?.value,
-                Bairro: this.formSteps[1].get('Bairro')?.value,
+                Bairro: this.formSteps[1].get('Bairro')?.value.toUpperCase(),
                 CEP: this.formSteps[1].get('CEP')?.value,
-                Complemento: this.formSteps[1].get('Complemento')?.value,
+                Complemento: this.formSteps[1].get('Complemento')?.value.toUpperCase(),
                 IdMunicipio: this.formSteps[1].get('IdMunicipio')?.value,
                 IdEstado: this.formSteps[1].get('IdEstado')?.value,
                 Telefone: this.formSteps[2].get('Telefone')?.value,

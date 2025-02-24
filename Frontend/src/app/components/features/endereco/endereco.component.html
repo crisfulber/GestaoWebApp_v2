@@ -10,6 +10,7 @@
             <div class="flex align-items-center justify-content-between">
                 <button pButton pRipple label="Novo" icon="pi pi-plus" class="p-buttonenergi mr-2"
                     (click)="openNew()"></button>
+                    <span style="font-size: 1.2em; font-weight: bold;">Listagem de Endereços</span>
                 <span class="p-input-icon-left">
                     <input pInputText type="text" (input)="dt.filterGlobal($any($event.target).value, 'contains')"
                         placeholder="Pesquisar..." />
@@ -50,48 +51,52 @@
     styleClass="p-fluid">
     <ng-template pTemplate="content">
         <div class="field">
-            <label for="Rua">Rua</label>
-            <input type="text" pInputText id="Rua" [(ngModel)]="endereco.Rua" required autofocus />
-            <small class="p-error" *ngIf="submitted && !endereco.Rua">Rua é obrigatório.</small>
+            <label for="Rua" class="block">Rua</label>
+            <input type="text" pInputText id="Rua" [(ngModel)]="endereco.Rua" required autofocus
+                [ngClass]="{'ng-invalid ng-dirty': submitted && !endereco.Rua}" />
+            <small class="p-error block" *ngIf="submitted && !endereco.Rua">Rua é obrigatório.</small>
         </div>
         <div class="field">
-            <label for="Numero">Número</label>
-            <input type="number" pInputText id="Numero" [(ngModel)]="endereco.Numero" required />
-            <small class="p-error" *ngIf="submitted && !endereco.Numero">Número é obrigatório.</small>
+            <label for="Numero" class="block">Número</label>
+            <input type="number" pInputText id="Numero" [(ngModel)]="endereco.Numero" required
+                [ngClass]="{'ng-invalid ng-dirty': submitted && !endereco.Numero}" />
+            <small class="p-error block" *ngIf="submitted && !endereco.Numero">Número é obrigatório.</small>
         </div>
         <div class="field">
-            <label for="Complemento">Complemento</label>
+            <label for="Complemento" class="block">Complemento</label>
             <input type="text" pInputText id="Complemento" [(ngModel)]="endereco.Complemento" />
         </div>
         <div class="field">
-            <label for="Bairro">Bairro</label>
-            <input type="text" pInputText id="Bairro" [(ngModel)]="endereco.Bairro" required />
-            <small class="p-error" *ngIf="submitted && !endereco.Bairro">Bairro é obrigatório.</small>
+            <label for="Bairro" class="block">Bairro</label>
+            <input type="text" pInputText id="Bairro" [(ngModel)]="endereco.Bairro" required
+                [ngClass]="{'ng-invalid ng-dirty': submitted && !endereco.Bairro}" />
+            <small class="p-error block" *ngIf="submitted && !endereco.Bairro">Bairro é obrigatório.</small>
         </div>
         <div class="field">
-            <label for="IdMunicipio">Município</label>
+            <label for="IdMunicipio" class="block">Município</label>
             <p-dropdown [options]="municipios" [(ngModel)]="endereco.IdMunicipio" optionLabel="NomeMunicipio"
                 optionValue="Id" placeholder="Selecione um Município">
             </p-dropdown>
-            <small class="p-error" *ngIf="submitted && !endereco.IdMunicipio">Município é obrigatório.</small>
+            <small class="p-error block" *ngIf="submitted && !endereco.IdMunicipio">Município é obrigatório.</small>
         </div>
         <div class="field">
-            <label for="IdEstado">Estado</label>
+            <label for="IdEstado" class="block">Estado</label>
             <p-dropdown [options]="estados" [(ngModel)]="endereco.IdEstado" optionLabel="NomeEstado" optionValue="Id"
                 placeholder="Selecione um Estado"></p-dropdown>
-            <small class="p-error" *ngIf="submitted && !endereco.IdEstado">Estado é obrigatório.</small>
+            <small class="p-error block" *ngIf="submitted && !endereco.IdEstado">Estado é obrigatório.</small>
         </div>
         <div class="field">
-            <label for="CEP">CEP</label>
-            <input type="text" pInputText id="CEP" [(ngModel)]="endereco.CEP" required />
-            <small class="p-error" *ngIf="submitted && !endereco.CEP">CEP é obrigatório.</small>
+            <label for="CEP" class="block">CEP</label>
+            <input type="text" pInputText id="CEP" [(ngModel)]="endereco.CEP" required
+                [ngClass]="{'ng-invalid ng-dirty': submitted && !endereco.CEP}" />
+            <small class="p-error block" *ngIf="submitted && !endereco.CEP">CEP é obrigatório.</small>
         </div>
     </ng-template>
 
     <ng-template pTemplate="footer">
         <button pButton pRipple label="Cancelar" icon="pi pi-times" class="p-button-secondary" [raised]="true"
             (click)="hideDialog()"></button>
-            <button pButton pRipple label="Salvar" icon="pi pi-check" class="p-button-energi" [raised]="true"
+        <button pButton pRipple label="Salvar" icon="pi pi-check" class="p-button-energi" [raised]="true"
             (click)="saveEndereco()"></button>
     </ng-template>
 </p-dialog>

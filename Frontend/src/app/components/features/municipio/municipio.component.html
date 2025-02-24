@@ -10,6 +10,7 @@
             <div class="flex align-items-center justify-content-between">
                 <button pButton pRipple label="Novo" icon="pi pi-plus" class="p-buttonenergi mr-2"
                     (click)="openNew()"></button>
+                    <span style="font-size: 1.2em; font-weight: bold;">Listagem de Municípios</span>
                 <span class="p-input-icon-left">
                     <input pInputText type="text" (input)="dt.filterGlobal($any($event.target).value, 'contains')"
                         placeholder="Pesquisar..." />
@@ -42,15 +43,17 @@
     styleClass="p-fluid">
     <ng-template pTemplate="content">
         <div class="field">
-            <label for="NomeMunicipio">Nome</label>
-            <input type="text" pInputText id="NomeMunicipio" [(ngModel)]="municipio.NomeMunicipio" required autofocus />
-            <small class="p-error" *ngIf="submitted && !municipio.NomeMunicipio">Nome é obrigatório.</small>
+            <label for="NomeMunicipio" class="block">Município</label>
+            <input type="text" pInputText id="NomeMunicipio" [(ngModel)]="municipio.NomeMunicipio" required autofocus
+                [ngClass]="{'ng-invalid ng-dirty': submitted && !municipio.NomeMunicipio}" />
+            <small class="p-error block" *ngIf="submitted && !municipio.NomeMunicipio">Nome é obrigatório.</small>
         </div>
         <div class="field">
-            <label for="IdEstado">Estado</label>
+            <label for="IdEstado" class="block">Estado</label>
             <p-dropdown [options]="estados" [(ngModel)]="municipio.IdEstado" optionLabel="NomeEstado" optionValue="Id"
-                placeholder="Selecione um Estado" appendTo="body"></p-dropdown>
-            <small class="p-error" *ngIf="submitted && !municipio.IdEstado">Estado é obrigatório.</small>
+                placeholder="Selecione um Estado" appendTo="body"
+                [ngClass]="{'ng-invalid ng-dirty': submitted && !municipio.IdEstado}"></p-dropdown>
+            <small class="p-error block" *ngIf="submitted && !municipio.IdEstado">Estado é obrigatório.</small>
         </div>
     </ng-template>
 

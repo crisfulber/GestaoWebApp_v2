@@ -1,0 +1,63 @@
+<p-toast></p-toast>
+<p-confirmDialog [style]="{width: '50vw'}"></p-confirmDialog>
+
+<div class="card">
+    <p-table [value]="funcaoRegistros" dataKey="id" [rows]="10" [showCurrentPageReport]="true"
+        [rowsPerPageOptions]="[10,25,50]" styleClass="p-datatable-gridlines" [paginator]="true"
+        currentPageReportTemplate="Mostrando {first} até {last} de {totalRecords} registros de funções"
+        [globalFilterFields]="['Funcao', 'CBO']" [rowHover]="true" #dt>
+        <ng-template pTemplate="caption">
+            <div class="flex align-items-center justify-content-between">
+                <button pButton pRipple label="Novo" icon="pi pi-plus" class="p-buttonenergi mr-2"
+                    (click)="openNew()"></button>
+                    <span style="font-size: 1.2em; font-weight: bold;">Funções para Registro</span>
+                <span class="p-input-icon-left">
+                    <input pInputText type="text" (input)="dt.filterGlobal($any($event.target).value, 'contains')"
+                        placeholder="Pesquisar..." />
+                </span>
+            </div>
+        </ng-template>
+        <ng-template pTemplate="header">
+            <tr>
+                <th pSortableColumn="Funcao">Função<p-sortIcon field="Funcao"></p-sortIcon></th>
+                <th pSortableColumn="CBO">CBO<p-sortIcon field="CBO"></p-sortIcon></th>
+                <th></th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-funcaoRegistro>
+            <tr>
+                <td>{{funcaoRegistro.Funcao}}</td>
+                <td>{{funcaoRegistro.CBO}}</td>
+                <td>
+                    <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-info mr-2"
+                        (click)="editFuncaoRegistro(funcaoRegistro)"></button>
+                    <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-danger"
+                        (click)="deleteFuncaoRegistro(funcaoRegistro)"></button>
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
+</div>
+
+<p-dialog [(visible)]="funcaoRegistroDialog" [style]="{width: '450px'}" header="Detalhes do Registro de Função"
+    [modal]="true" styleClass="p-fluid">
+    <ng-template pTemplate="content">
+        <div class="field">
+            <label for="Funcao" class="block">Função</label>
+            <input type="text" pInputText id="Funcao" [(ngModel)]="funcaoRegistro.Funcao" required autofocus />
+            <small class="p-error block" *ngIf="submitted && !funcaoRegistro.Funcao">Função é obrigatória.</small>
+        </div>
+        <div class="field">
+            <label for="CBO" class="block">CBO</label>
+            <input type="number" pInputText id="CBO" [(ngModel)]="funcaoRegistro.CBO" required />
+            <small class="p-error block" *ngIf="submitted && !funcaoRegistro.CBO">CBO é obrigatório.</small>
+        </div>
+    </ng-template>
+
+    <ng-template pTemplate="footer">
+        <button pButton pRipple label="Cancelar" icon="pi pi-times" class="p-button-secondary" [raised]="true"
+            (click)="hideDialog()"></button>
+        <button pButton pRipple label="Salvar" icon="pi pi-check" class="p-button-energi" [raised]="true"
+            (click)="saveFuncaoRegistro()"></button>
+    </ng-template>
+</p-dialog>

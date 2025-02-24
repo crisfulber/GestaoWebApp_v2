@@ -2,14 +2,15 @@
 <p-confirmDialog [style]="{width: '50vw'}"></p-confirmDialog>
 
 <div class="card">
-    <p-table [value]="contatos" dataKey="id" [rows]="10" [showCurrentPageReport]="true" [rowsPerPageOptions]="[10,25,50]"
-        styleClass="p-datatable-gridlines" [paginator]="true"
+    <p-table [value]="contatos" dataKey="id" [rows]="10" [showCurrentPageReport]="true"
+        [rowsPerPageOptions]="[10,25,50]" styleClass="p-datatable-gridlines" [paginator]="true"
         currentPageReportTemplate="Mostrando {first} até {last} de {totalRecords} contatos"
         [globalFilterFields]="['Telefone','Email']" [rowHover]="true" #dt>
         <ng-template pTemplate="caption">
             <div class="flex align-items-center justify-content-between">
                 <button pButton pRipple label="Novo" icon="pi pi-plus" class="p-buttonenergi mr-2"
                     (click)="openNew()"></button>
+                    <span style="font-size: 1.2em; font-weight: bold;">Listagem de Contatos</span>
                 <span class="p-input-icon-left">
                     <input pInputText type="text" (input)="dt.filterGlobal($any($event.target).value, 'contains')"
                         placeholder="Pesquisar..." />
@@ -38,25 +39,32 @@
     </p-table>
 </div>
 
-<p-dialog [(visible)]="contatoDialog" [style]="{width: '450px'}" header="Detalhes do Contato" [modal]="true"
-    styleClass="p-fluid">
+<p-dialog [(visible)]="contatoDialog" [style]="{width: '450px'}" header="Detalhes do Contato" [modal]="true">
     <ng-template pTemplate="content">
-        <div class="field">
-            <label for="Telefone">Telefone</label>
-            <input type="text" pInputText id="Telefone" [(ngModel)]="contato.Telefone" required autofocus />
-            <small class="p-error" *ngIf="submitted && !contato.Telefone">Telefone é obrigatório.</small>
-        </div>
-        <div class="field">
-            <label for="Email">Email</label>
-            <input type="text" pInputText id="Email" [(ngModel)]="contato.Email" required />
-            <small class="p-error" *ngIf="submitted && !contato.Email">Email é obrigatória.</small>
-        </div>
+        <form [formGroup]="contatoForm">
+            <div class="field">
+                <label for="Telefone" class="block">Telefone</label>
+                <p-inputMask mask="(99) 99999-9999" placeholder="(99) 99999-9999" id="Telefone"
+                    formControlName="Telefone"
+                    [ngClass]="{'p-invalid': submitted && contatoForm.controls['Telefone'].invalid}"
+                    [required]="true"></p-inputMask>
+                <small class="p-error block" *ngIf="submitted && contatoForm.controls['Telefone'].invalid">Telefone é
+                    obrigatório.</small>
+            </div>
+            <div class="field">
+                <label for="Email" class="block">Email</label>
+                <input type="email" pInputText id="Email" formControlName="Email" required
+                    [ngClass]="{'p-invalid': submitted && contatoForm.controls['Email'].invalid}" />
+                <small class="p-error block" *ngIf="submitted && contatoForm.controls['Email'].invalid">Email é
+                    obrigatório.</small>
+            </div>
+        </form>
     </ng-template>
 
     <ng-template pTemplate="footer">
         <button pButton pRipple label="Cancelar" icon="pi pi-times" class="p-button-secondary" [raised]="true"
             (click)="hideDialog()"></button>
-            <button pButton pRipple label="Salvar" icon="pi pi-check" class="p-button-energi" [raised]="true"
-        (click)="saveContato()"></button>
+        <button pButton pRipple label="Salvar" icon="pi pi-check" class="p-button-energi" [raised]="true"
+            (click)="saveContato()"></button>
     </ng-template>
 </p-dialog>

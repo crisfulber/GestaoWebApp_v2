@@ -25,8 +25,8 @@ namespace Backend.Controllers
             try
             {
                 return await _context.Empresas
-                    .Include(e => e.Endereco) 
-                    .Include(e => e.Contato)  
+                    .Include(e => e.Endereco)
+                    .Include(e => e.Contato)
                     .ToListAsync();
             }
             catch (Exception ex)

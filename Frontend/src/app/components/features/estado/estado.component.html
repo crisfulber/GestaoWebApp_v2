@@ -10,6 +10,7 @@
             <div class="flex align-items-center justify-content-between">
                 <button pButton pRipple label="Novo" icon="pi pi-plus" class="p-buttonenergi mr-2"
                     (click)="openNew()"></button>
+                    <span style="font-size: 1.2em; font-weight: bold;">Listagem de Estados</span>
                 <span class="p-input-icon-left">
                     <input pInputText type="text" (input)="dt.filterGlobal($any($event.target).value, 'contains')"
                         placeholder="Pesquisar..." />
@@ -42,21 +43,23 @@
     styleClass="p-fluid">
     <ng-template pTemplate="content">
         <div class="field">
-            <label for="NomeEstado">Nome</label>
-            <input type="text" pInputText id="NomeEstado" [(ngModel)]="estado.NomeEstado" required autofocus />
-            <small class="p-error" *ngIf="submitted && !estado.NomeEstado">Nome é obrigatório.</small>
+            <label for="NomeEstado" class="block">Nome</label>
+            <input type="text" pInputText id="NomeEstado" [(ngModel)]="estado.NomeEstado" required autofocus
+                [ngClass]="{'ng-invalid ng-dirty': submitted && !estado.NomeEstado}" />
+            <small class="p-error block" *ngIf="submitted && !estado.NomeEstado">Nome é obrigatório.</small>
         </div>
         <div class="field">
-            <label for="Sigla">Sigla</label>
-            <input type="text" pInputText id="Sigla" [(ngModel)]="estado.Sigla" required />
-            <small class="p-error" *ngIf="submitted && !estado.Sigla">Sigla é obrigatória.</small>
+            <label for="Sigla" class="block">Sigla</label>
+            <input type="text" pInputText id="Sigla" [(ngModel)]="estado.Sigla" required
+                [ngClass]="{'ng-invalid ng-dirty': submitted && !estado.Sigla}" />
+            <small class="p-error block" *ngIf="submitted && !estado.Sigla">Sigla é obrigatória.</small>
         </div>
     </ng-template>
 
     <ng-template pTemplate="footer">
         <button pButton pRipple label="Cancelar" icon="pi pi-times" class="p-button-secondary" [raised]="true"
             (click)="hideDialog()"></button>
-            <button pButton pRipple label="Salvar" icon="pi pi-check" class="p-button-energi" [raised]="true"
-        (click)="saveEstado()"></button>
+        <button pButton pRipple label="Salvar" icon="pi pi-check" class="p-button-energi" [raised]="true"
+            (click)="saveEstado()"></button>
     </ng-template>
 </p-dialog>

@@ -1,0 +1,62 @@
+<p-toast></p-toast>
+<p-confirmDialog [style]="{width: '50vw'}"></p-confirmDialog>
+
+<div class="card">
+    <p-table [value]="escalas" dataKey="id" [rows]="10" [showCurrentPageReport]="true" [rowsPerPageOptions]="[10,25,50]"
+        styleClass="p-datatable-gridlines" [paginator]="true"
+        currentPageReportTemplate="Mostrando {first} até {last} de {totalRecords} escalas"
+        [globalFilterFields]="['NomeEscala', 'Descricao']" [rowHover]="true" #dt>
+        <ng-template pTemplate="caption">
+            <div class="flex align-items-center justify-content-between">
+                <button pButton pRipple label="Novo" icon="pi pi-plus" class="p-buttonenergi mr-2"
+                    (click)="openNew()"></button>
+                    <span style="font-size: 1.2em; font-weight: bold;">Escalas de Trabalho</span>
+                <span class="p-input-icon-left">
+                    <input pInputText type="text" (input)="dt.filterGlobal($any($event.target).value, 'contains')"
+                        placeholder="Pesquisar..." />
+                </span>
+            </div>
+        </ng-template>
+        <ng-template pTemplate="header">
+            <tr>
+                <th pSortableColumn="NomeEscala">Escala<p-sortIcon field="NomeEscala"></p-sortIcon></th>
+                <th pSortableColumn="Descricao">Descrição<p-sortIcon field="Descricao"></p-sortIcon></th>
+                <th></th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-escala>
+            <tr>
+                <td>{{escala.NomeEscala}}</td>
+                <td>{{escala.Descricao}}</td>
+                <td>
+                    <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-info mr-2"
+                        (click)="editEscala(escala)"></button>
+                    <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-danger"
+                        (click)="deleteEscala(escala)"></button>
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
+</div>
+
+<p-dialog [(visible)]="escalaDialog" [style]="{width: '450px'}" header="Detalhes da Escala" [modal]="true"
+    styleClass="p-fluid">
+    <ng-template pTemplate="content">
+        <div class="field">
+            <label for="NomeEscala" class="block">Nome</label>
+            <input type="text" pInputText id="NomeEscala" [(ngModel)]="escala.NomeEscala" required autofocus />
+            <small class="p-error block" *ngIf="submitted && !escala.NomeEscala">Nome é obrigatório.</small>
+        </div>
+        <div class="field">
+            <label for="Descricao" class="block">Descrição</label>
+            <input type="text" pInputText id="Descricao" [(ngModel)]="escala.Descricao" />
+        </div>
+    </ng-template>
+
+    <ng-template pTemplate="footer">
+        <button pButton pRipple label="Cancelar" icon="pi pi-times" class="p-button-secondary" [raised]="true"
+            (click)="hideDialog()"></button>
+        <button pButton pRipple label="Salvar" icon="pi pi-check" class="p-button-energi" [raised]="true"
+            (click)="saveEscala()"></button>
+    </ng-template>
+</p-dialog>
