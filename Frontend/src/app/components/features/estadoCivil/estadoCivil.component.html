@@ -1,0 +1,60 @@
+<p-toast></p-toast>
+<p-confirmDialog [style]="{width: '50vw'}"></p-confirmDialog>
+
+<div class="card">
+    <p-table [value]="estadoscivis" dataKey="id" [rows]="10" [showCurrentPageReport]="true"
+        [rowsPerPageOptions]="[10,25,50]" styleClass="p-datatable-gridlines" [paginator]="true"
+        currentPageReportTemplate="Mostrando {first} até {last} de {totalRecords} estadoscivis"
+        [globalFilterFields]="['SituacaoCivil']" [rowHover]="true" #dt>
+        <ng-template pTemplate="caption">
+            <div class="flex align-items-center justify-content-between">
+                <button pButton pRipple label="Novo" icon="pi pi-plus" class="p-buttonp-button-success mr-2"
+                    (click)="openNew()"></button>
+                    <span style="font-size: 1.2em; font-weight: bold;">Listagem de Estados Civis</span>
+                <span class="p-input-icon-left">
+                    <input pInputText type="text" (input)="dt.filterGlobal($any($event.target).value, 'contains')"
+                        placeholder="Pesquisar..." />
+                </span>
+            </div>
+        </ng-template>
+        <ng-template pTemplate="header">
+            <tr>
+                <th pSortableColumn="SituacaoCivil">Estado Civil<p-sortIcon field="SituacaoCivil"></p-sortIcon>
+                <th pSortableColumn="SituacaoCivil">Ações<p-sortIcon field="SituacaoCivil"></p-sortIcon>
+                </th>
+                <th></th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-estadocivil>
+            <tr>
+                <td>{{estadocivil.SituacaoCivil}}</td>
+                <td>
+                    <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-info mr-2"
+                        (click)="editEstadoCivil(estadocivil)"></button>
+                    <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-danger"
+                        (click)="deleteEstadoCivil(estadocivil)"></button>
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
+</div>
+
+<p-dialog [(visible)]="estadocivilDialog" [style]="{width: '450px'}" header="Detalhes do Estado Civil" [modal]="true"
+    styleClass="p-fluid">
+    <ng-template pTemplate="content">
+        <div class="field">
+            <label for="SituacaoCivil" class="block">Nome</label>
+            <input type="text" pInputText id="SituacaoCivil" [(ngModel)]="estadocivil.SituacaoCivil" required
+                autofocus />
+            <small class="p-error block" *ngIf="submitted && !estadocivil.SituacaoCivil">Estado Civil é
+                obrigatório.</small>
+        </div>
+    </ng-template>
+
+    <ng-template pTemplate="footer">
+        <button pButton pRipple label="Cancelar" icon="pi pi-times" class="p-button-secondary" [raised]="true"
+            (click)="hideDialog()"></button>
+        <button pButton pRipple label="Salvar" icon="pi pi-check" class="p-button" [raised]="true"
+            (click)="saveEstadoCivil()"></button>
+    </ng-template>
+</p-dialog>

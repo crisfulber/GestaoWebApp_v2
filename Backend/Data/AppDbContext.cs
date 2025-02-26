@@ -20,6 +20,10 @@ namespace Backend.Data
         public DbSet<FuncaoRegistro> FuncaoRegistros { get; set; }
         public DbSet<Escala> Escalas { get; set; }
         public DbSet<Escolaridade> Escolaridades { get; set; }
+        public DbSet<Documento> Documentos { get; set; }
+        public DbSet<Nacionalidade> Nacionalidades { get; set; }
+        public DbSet<EstadoCivil> EstadosCivis { get; set; }
+        public DbSet<Dependente> Dependentes { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

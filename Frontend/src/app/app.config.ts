@@ -12,6 +12,9 @@ import { ApiService } from './services/api.service';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { providePrimeNG } from 'primeng/config';
 import Aura from '@primeng/themes/aura';
+import Nora from '@primeng/themes/nora';
+import Material from '@primeng/themes/material';
+import Lara from '@primeng/themes/lara';
 
 registerLocaleData(localePt);
 
@@ -26,7 +29,7 @@ export const appConfig: ApplicationConfig = {
         provideAnimationsAsync(),
         providePrimeNG({
             theme: {
-                preset: Aura,
+                preset: Material,
                 options: {
                     prefix: 'p',
                     darkModeSelector: 'manual',

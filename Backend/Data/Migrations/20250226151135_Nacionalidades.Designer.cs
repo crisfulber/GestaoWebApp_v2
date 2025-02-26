@@ -4,16 +4,19 @@ using Backend.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace Backend.Migrations
+namespace Backend.Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250226151135_Nacionalidades")]
+    partial class Nacionalidades
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -40,30 +43,6 @@ namespace Backend.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Contatos");
-                });
-
-            modelBuilder.Entity("Backend.Models.Dependente", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("CPF")
-                        .IsRequired()
-                        .HasMaxLength(14)
-                        .HasColumnType("varchar(14)");
-
-                    b.Property<DateTime?>("DtNascimento")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<string>("NomeDependente")
-                        .HasColumnType("longtext");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Dependentes");
                 });
 
             modelBuilder.Entity("Backend.Models.Documento", b =>
@@ -225,23 +204,6 @@ namespace Backend.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Escolaridade");
-                });
-
-            modelBuilder.Entity("Backend.Models.EstadoCivil", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("SituacaoCivil")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("EstadoCivil");
                 });
 
             modelBuilder.Entity("Backend.Models.Funcao", b =>

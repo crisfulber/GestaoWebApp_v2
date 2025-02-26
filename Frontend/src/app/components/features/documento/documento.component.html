@@ -1,0 +1,115 @@
+<p-toast></p-toast>
+<p-confirmDialog [style]="{width: '50vw'}"></p-confirmDialog>
+
+<div class="card">
+    <p-table [value]="documentos" dataKey="id" [rows]="10" [showCurrentPageReport]="true"
+        [rowsPerPageOptions]="[10,25,50]" styleClass="p-datatable-gridlines" [paginator]="true"
+        currentPageReportTemplate="Mostrando {first} até {last} de {totalRecords} documentos"
+        [globalFilterFields]="['CPF', 'RG', 'CTPS', 'PIS']" [rowHover]="true" #dt>
+        <ng-template pTemplate="caption">
+            <div class="flex align-items-center justify-content-between">
+                <button pButton pRipple label="Novo" icon="pi pi-plus" class="p-buttonenergi mr-2"
+                    (click)="openNew()"></button>
+                <span style="font-size: 1.2em; font-weight: bold;">Listagem de Documentos</span>
+                <span class="p-input-icon-left">
+                    <input pInputText type="text" (input)="dt.filterGlobal($any($event.target).value, 'contains')"
+                        placeholder="Pesquisar..." />
+                </span>
+            </div>
+        </ng-template>
+        <ng-template pTemplate="header">
+            <tr>
+                <th pSortableColumn="CPF">CPF<p-sortIcon field="CPF"></p-sortIcon></th>
+                <th pSortableColumn="RG">RG<p-sortIcon field="RG"></p-sortIcon></th>
+                <th pSortableColumn="DtEmissaoRG">Data de Emissão<p-sortIcon field="DtEmissaoRG"></p-sortIcon></th>
+                <th pSortableColumn="OrgaoExpeditor">Órgão Expeditor<p-sortIcon field="OrgaoExpeditor"></p-sortIcon>
+                </th>
+                <th pSortableColumn="UF_RG">UF RG<p-sortIcon field="UF_RG"></p-sortIcon></th>
+                <th pSortableColumn="CTPS">CTPS<p-sortIcon field="CTPS"></p-sortIcon></th>
+                <th pSortableColumn="SerieCTPS">Série<p-sortIcon field="SerieCTPS"></p-sortIcon></th>
+                <th pSortableColumn="DtEmissaoCTPS">Data de Emissão<p-sortIcon field="DtEmissaoCTPS"></p-sortIcon></th>
+                <th pSortableColumn="UF_CTPS">UF CTPS<p-sortIcon field="UF_CTPS"></p-sortIcon></th>
+                <th pSortableColumn="PIS">PIS<p-sortIcon field="PIS"></p-sortIcon></th>
+                <th></th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-documento>
+            <tr>
+                <td>{{documento.CPF}}</td>
+                <td>{{documento.RG}}</td>
+                <td>{{formatarDataParaTela(documento.DtEmissaoRG)}}</td>
+                <td>{{documento.OrgaoExpeditor}}</td>
+                <td>{{documento.UF_RG}}</td>
+                <td>{{documento.CTPS}}</td>
+                <td>{{documento.SerieCTPS}}</td>
+                <td>{{formatarDataParaTela(documento.DtEmissaoCTPS)}}</td>
+                <td>{{documento.UF_CTPS}}</td>
+                <td>{{documento.PIS}}</td>
+                <td>
+                    <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-info mr-2"
+                        (click)="editDocumento(documento)"></button>
+                    <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-danger"
+                        (click)="deleteDocumento(documento)"></button>
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
+</div>
+
+<p-dialog [(visible)]="documentoDialog" [style]="{width: '450px'}" header="Detalhes dos Documentos" [modal]="true"
+    styleClass="p-fluid">
+    <ng-template pTemplate="content">
+        <div class="field">
+            <label for="CPF" class="block">CPF</label>
+            <p-inputmask mask="999.999.999-99" placeholder="999.999.999-99" id="CPF" [(ngModel)]="documento.CPF"
+                required autofocus [ngClass]="{'ng-invalid ng-dirty': submitted && !documento.CPF}" />
+            <small class="p-error block" *ngIf="submitted && !documento.CPF">CPF é obrigatório.</small>
+        </div>
+        <div class="field">
+            <label for="RG" class="block">RG</label>
+            <input type="text" pInputText id="RG" [(ngModel)]="documento.RG" />
+        </div>
+        <div class="field">
+            <label for="DtEmissaoRG" class="block">Data de Emissão RG</label>
+            <p-inputMask mask="99/99/9999" placeholder="dd/mm/aaaa" id="DtEmissaoRG"
+                [(ngModel)]="documento.DtEmissaoRG"></p-inputMask>
+        </div>
+        <div class="field">
+            <label for="OrgaoExpeditor" class="block">Órgão Expeditor</label>
+            <input type="text" pInputText id="OrgaoExpeditor" [(ngModel)]="documento.OrgaoExpeditor" />
+        </div>
+        <div class="field">
+            <label for="UF_RG" class="block">UF RG</label>
+            <input type="text" pInputText id="UF_RG" [(ngModel)]="documento.UF_RG" />
+        </div>
+        <div class="field">
+            <label for="CTPS" class="block">CTPS</label>
+            <input type="number" pInputText id="CTPS" [(ngModel)]="documento.CTPS" />
+        </div>
+        <div class="field">
+            <label for="SerieCTPS" class="block">Série CTPS</label>
+            <input type="number" pInputText id="SerieCTPS" [(ngModel)]="documento.SerieCTPS" />
+        </div>
+        <div class="field">
+            <label for="DtEmissaoCTPS" class="block">Data de Emissão CTPS</label>
+            <p-inputMask mask="99/99/9999" placeholder="dd/mm/aaaa" id="DtEmissaoCTPS"
+                [(ngModel)]="documento.DtEmissaoCTPS"></p-inputMask>
+        </div>
+        <div class="field">
+            <label for="UF_CTPS" class="block">UF CTPS</label>
+            <input type="text" pInputText id="UF_CTPS" [(ngModel)]="documento.UF_CTPS" />
+        </div>
+        <div class="field">
+            <label for="PIS" class="block">PIS</label>
+            <p-inputMask mask="999.99999.99-9" placeholder="999.99999.99-9" id="PIS"
+                [(ngModel)]="documento.PIS"></p-inputMask>
+        </div>
+    </ng-template>
+
+    <ng-template pTemplate="footer">
+        <button pButton pRipple label="Cancelar" icon="pi pi-times" class="p-button-secondary" [raised]="true"
+            (click)="hideDialog()"></button>
+        <button pButton pRipple label="Salvar" icon="pi pi-check" class="p-button-energi" [raised]="true"
+            (click)="saveDocumento()"></button>
+    </ng-template>
+</p-dialog>
