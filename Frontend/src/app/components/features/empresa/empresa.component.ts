@@ -177,7 +177,7 @@ export class EmpresaComponent implements OnInit {
                 this.empresaService.deleteEmpresa(empresa.Id).subscribe({
                     next: () => {
                         this.empresas = this.empresas.filter(val => val.Id !== empresa.Id);
-                        this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Empresa Deletada', life: 3000 });
+                        this.messageService.add({ severity: 'success', summary: 'Confirmado', detail: 'Empresa Deletada', life: 3000 });
                     },
                     error: (error) => {
                         this.messageService.add({ severity: 'error', summary: 'Erro', detail: 'Erro ao deletar a empresa ' + empresa.NomeEmpresa, life: 3000 });
@@ -227,7 +227,7 @@ export class EmpresaComponent implements OnInit {
             if (this.empresa.Id) {
                 this.empresaService.updateEmpresa(this.empresa.Id, formData).subscribe({
                     next: () => {
-                        this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Empresa Atualizada', life: 3000 });
+                        this.messageService.add({ severity: 'success', summary: 'Confirmado', detail: 'Empresa Atualizada', life: 3000 });
                         this.loadEmpresas();
                     },
                     error: (error) => {
@@ -239,7 +239,7 @@ export class EmpresaComponent implements OnInit {
                 this.empresaService.addEmpresa(formData).subscribe({
                     next: (data) => {
                         this.empresas.push(data);
-                        this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Empresa Criada', life: 3000 });
+                        this.messageService.add({ severity: 'success', summary: 'Confirmado', detail: 'Empresa Criada', life: 3000 });
                         this.loadEmpresas();
                     },
                     error: (error) => {

@@ -90,7 +90,7 @@ export class SetorComponent implements OnInit {
         this.setorService.deleteSetor(setor.Id).subscribe({
           next: () => {
             this.setores = this.setores.filter(val => val.Id !== setor.Id);
-            this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Setor Deletado', life: 3000 });
+            this.messageService.add({ severity: 'success', summary: 'Confirmado', detail: 'Setor Deletado', life: 3000 });
           },
           error: (error) => {
             this.messageService.add({ severity: 'error', summary: 'Erro', detail: 'Erro ao deletar o setor ' + setor.NomeSetor, life: 3000 });
@@ -116,7 +116,7 @@ export class SetorComponent implements OnInit {
         this.setorService.updateSetor(this.setor.Id, this.setor).subscribe({
           next: () => {
             this.setores[this.findIndexById(this.setor.Id)] = this.setor;
-            this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Setor Atualizado', life: 3000 });
+            this.messageService.add({ severity: 'success', summary: 'Confirmado', detail: 'Setor Atualizado', life: 3000 });
             this.loadSetores();
           },
           error: (error) => {
@@ -128,7 +128,7 @@ export class SetorComponent implements OnInit {
         this.setorService.addSetor(this.setor).subscribe({
           next: (data) => {
             this.setores.push(data);
-            this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Setor Criado', life: 3000 });
+            this.messageService.add({ severity: 'success', summary: 'Confirmado', detail: 'Setor Criado', life: 3000 });
             this.loadSetores();
           },
           error: (error) => {

@@ -72,7 +72,7 @@ export class FuncaoRegistroComponent implements OnInit {
                 this.funcaoRegistroService.deleteFuncaoRegistro(funcaoRegistro.Id).subscribe({
                     next: () => {
                         this.funcaoRegistros = this.funcaoRegistros.filter(val => val.Id !== funcaoRegistro.Id);
-                        this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Registro de Função Deletado', life: 3000 });
+                        this.messageService.add({ severity: 'success', summary: 'Confirmado', detail: 'Registro de Função Deletado', life: 3000 });
                     },
                     error: (error) => {
                         this.messageService.add({ severity: 'error', summary: 'Erro', detail: 'Erro ao deletar o registro de função ' + funcaoRegistro.Funcao, life: 3000 });
@@ -97,7 +97,7 @@ export class FuncaoRegistroComponent implements OnInit {
                 this.funcaoRegistroService.updateFuncaoRegistro(this.funcaoRegistro.Id, this.funcaoRegistro).subscribe({
                     next: () => {
                         this.funcaoRegistros[this.findIndexById(this.funcaoRegistro.Id)] = this.funcaoRegistro;
-                        this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Registro de Função Atualizado', life: 3000 });
+                        this.messageService.add({ severity: 'success', summary: 'Confirmado', detail: 'Registro de Função Atualizado', life: 3000 });
                         this.loadFuncaoRegistros();
                     },
                     error: (error) => {
@@ -109,7 +109,7 @@ export class FuncaoRegistroComponent implements OnInit {
                 this.funcaoRegistroService.addFuncaoRegistro(this.funcaoRegistro).subscribe({
                     next: (data) => {
                         this.funcaoRegistros.push(data);
-                        this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Registro de Função Criado', life: 3000 });
+                        this.messageService.add({ severity: 'success', summary: 'Confirmado', detail: 'Registro de Função Criado', life: 3000 });
                         this.loadFuncaoRegistros();
                     },
                     error: (error) => {

@@ -72,7 +72,7 @@ export class EstadoCivilComponent implements OnInit {
         this.estadocivilService.deleteEstadoCivil(estadocivil.Id).subscribe({
           next: () => {
             this.estadoscivis = this.estadoscivis.filter(val => val.Id !== estadocivil.Id);
-            this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'EstadoCivil Deletada', life: 3000 });
+            this.messageService.add({ severity: 'success', summary: 'Confirmado', detail: 'EstadoCivil Deletada', life: 3000 });
           },
           error: (error) => {
             this.messageService.add({ severity: 'error', summary: 'Erro', detail: 'Erro ao deletar a estadocivil ' + estadocivil.SituacaoCivil, life: 3000 });
@@ -97,7 +97,7 @@ export class EstadoCivilComponent implements OnInit {
         this.estadocivilService.updateEstadoCivil(this.estadocivil.Id, this.estadocivil).subscribe({
           next: () => {
             this.estadoscivis[this.findIndexById(this.estadocivil.Id)] = this.estadocivil;
-            this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'EstadoCivil Atualizada', life: 3000 });
+            this.messageService.add({ severity: 'success', summary: 'Confirmado', detail: 'EstadoCivil Atualizada', life: 3000 });
             this.loadEstadosCivis();
           },
           error: (error) => {
@@ -109,7 +109,7 @@ export class EstadoCivilComponent implements OnInit {
         this.estadocivilService.addEstadoCivil(this.estadocivil).subscribe({
           next: (data) => {
             this.estadoscivis.push(data);
-            this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'EstadoCivil Criada', life: 3000 });
+            this.messageService.add({ severity: 'success', summary: 'Confirmado', detail: 'EstadoCivil Criada', life: 3000 });
             this.loadEstadosCivis();
           },
           error: (error) => {

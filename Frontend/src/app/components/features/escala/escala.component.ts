@@ -72,7 +72,7 @@ export class EscalaComponent implements OnInit {
         this.escalaService.deleteEscala(escala.Id).subscribe({
           next: () => {
             this.escalas = this.escalas.filter(val => val.Id !== escala.Id);
-            this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Escala Deletada', life: 3000 });
+            this.messageService.add({ severity: 'success', summary: 'Confirmado', detail: 'Escala Deletada', life: 3000 });
           },
           error: (error) => {
             this.messageService.add({ severity: 'error', summary: 'Erro', detail: 'Erro ao deletar a escala ' + escala.NomeEscala, life: 3000 });
@@ -97,7 +97,7 @@ export class EscalaComponent implements OnInit {
         this.escalaService.updateEscala(this.escala.Id, this.escala).subscribe({
           next: () => {
             this.escalas[this.findIndexById(this.escala.Id)] = this.escala;
-            this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Escala Atualizada', life: 3000 });
+            this.messageService.add({ severity: 'success', summary: 'Confirmado', detail: 'Escala Atualizada', life: 3000 });
             this.loadEscalas();
           },
           error: (error) => {
@@ -109,7 +109,7 @@ export class EscalaComponent implements OnInit {
         this.escalaService.addEscala(this.escala).subscribe({
           next: (data) => {
             this.escalas.push(data);
-            this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Escala Criada', life: 3000 });
+            this.messageService.add({ severity: 'success', summary: 'Confirmado', detail: 'Escala Criada', life: 3000 });
             this.loadEscalas();
           },
           error: (error) => {

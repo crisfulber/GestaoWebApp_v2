@@ -1,0 +1,90 @@
+<p-toast></p-toast>
+<p-confirmDialog [style]="{ width: '50vw' }"></p-confirmDialog>
+
+<div class="card">
+    <p-table [value]="dadosPessoaisLista" dataKey="Id" [rows]="20"
+        styleClass="p-datatable-gridlines" [paginator]="true"
+        [globalFilterFields]="['NomePai', 'NomeMae', 'DtNascimento']" [rowHover]="true" #dt>
+        <ng-template pTemplate="caption">
+            <div class="flex align-items-center justify-content-between">
+                <button pButton pRipple label="Novo" icon="pi pi-plus" class="p-button mr-2"
+                    (click)="openNew()"></button>
+                <span style="font-size: 1.2em; font-weight: bold;">Listagem de Dados Pessoais</span>
+                <span class="p-input-icon-left">
+                    <input pInputText type="text" (input)="dt.filterGlobal($any($event.target).value, 'contains')"
+                        placeholder="Pesquisar..." />
+                </span>
+            </div>
+        </ng-template>
+        <ng-template pTemplate="header">
+            <tr>
+                <th pSortableColumn="NomePai">Nome do Pai <p-sortIcon field="NomePai"></p-sortIcon></th>
+                <th pSortableColumn="NomeMae">Nome da Mãe <p-sortIcon field="NomeMae"></p-sortIcon></th>
+                <th pSortableColumn="DtNascimento">Data de Nascimento <p-sortIcon field="DtNascimento"></p-sortIcon>
+                </th>
+                <th></th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-dadosPessoais>
+            <tr>
+                <td>{{dadosPessoais.NomePai}}</td>
+                <td>{{dadosPessoais.NomeMae}}</td>
+                <td>{{dadosPessoais.DtNascimento}}</td>
+                <td>
+                    <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-info mr-2"
+                        (click)="editDadosPessoais(dadosPessoais)"></button>
+                    <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-danger"
+                        (click)="deleteDadosPessoais(dadosPessoais)"></button>
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
+</div>
+
+<p-dialog [(visible)]="dadosPessoaisDialog" [style]="{width: '450px'}" header="Detalhes dos Dados Pessoais"
+    [modal]="true" styleClass="p-fluid">
+    <ng-template pTemplate="content">
+        <div class="field">
+            <label for="NomePai" class="block">Nome do Pai</label>
+            <input type="text" pInputText Id="NomePai" [(ngModel)]="dadosPessoais.NomePai" required autofocus/>
+        </div>
+        <div class="field">
+            <label for="NomeMae" class="block">Nome da Mãe</label>
+            <input type="text" pInputText Id="NomeMae" [(ngModel)]="dadosPessoais.NomeMae" required autofocus/>
+        </div>
+        <div class="field">
+            <label for="IdMunicipio" class="block">Naturalidade</label>
+            <p-dropdown [options]="municipios" [(ngModel)]="dadosPessoais.IdMunicipio" optionLabel="NomeMunicipio"
+                optionValue="Id" placeholder="Selecione um Municipio" appendTo="body"
+                [ngClass]="{'ng-invalid ng-dirty': submitted && !dadosPessoais.IdMunicipio}"></p-dropdown>
+        </div>
+        <div class="field">
+            <label for="IdNacionalidade" class="block">Nacionalidade</label>
+            <p-dropdown [options]="nacionalidades" [(ngModel)]="dadosPessoais.IdNacionalidade" optionLabel="NomeNacionalidade"
+                optionValue="Id" placeholder="Selecione uma Nacionalidade" appendTo="body"
+                [ngClass]="{'ng-invalid ng-dirty': submitted && !dadosPessoais.IdNacionalidade}"></p-dropdown>
+        </div>
+        <div class="field">
+            <label for="DtNascimento" class="block">Data de Nascimento</label>
+            <p-inputMask mask="99/99/9999" inputId="DtNascimento" [(ngModel)]="dadosPessoais.DtNascimento"
+                placeholder="dd/mm/aaaa"></p-inputMask>
+        </div>
+        <div class="field">
+            <label for="IdEstadoCivil" class="block">Estado Civil</label>
+            <p-dropdown [options]="estadosCivis" [(ngModel)]="dadosPessoais.IdEstadoCivil" optionLabel="SituacaoCivil"
+                optionValue="Id" placeholder="Selecione um Estado Civil" appendTo="body"
+                [ngClass]="{'ng-invalid ng-dirty': submitted && !dadosPessoais.IdEstadoCivil}"></p-dropdown>
+        </div>
+        <div class="field">
+            <label for="NomeConjuge" class="block">Nome do Cônjuge</label>
+            <input type="text" pInputText Id="NomeConjuge" [(ngModel)]="dadosPessoais.NomeConjuge" autofocus/>
+        </div>
+    </ng-template>
+
+    <ng-template pTemplate="footer">
+        <button pButton pRipple label="Cancelar" icon="pi pi-times" class="p-button-secondary"
+            (click)="hideDialog()"></button>
+        <button pButton pRipple label="Salvar" icon="pi pi-check" class="p-button"
+            (click)="saveDadosPessoais()"></button>
+    </ng-template>
+</p-dialog>

@@ -90,7 +90,7 @@ export class FuncaoComponent implements OnInit {
         this.funcaoService.deleteFuncao(funcao.Id).subscribe({
           next: () => {
             this.funcoes = this.funcoes.filter(val => val.Id !== funcao.Id);
-            this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Função Deletada', life: 3000 });
+            this.messageService.add({ severity: 'success', summary: 'Confirmado', detail: 'Função Deletada', life: 3000 });
           },
           error: (error) => {
             this.messageService.add({ severity: 'error', summary: 'Erro', detail: 'Erro ao deletar a função ' + funcao.NomeFuncao, life: 3000 });
@@ -114,11 +114,11 @@ export class FuncaoComponent implements OnInit {
         this.funcaoService.updateFuncao(this.funcao.Id, this.funcao).subscribe({
           next: () => {
             this.funcoes[this.findIndexById(this.funcao.Id)] = this.funcao;
-            this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Função Atualizada', life: 3000 });
+            this.messageService.add({ severity: 'success', summary: 'Confirmado', detail: 'Função Atualizada', life: 3000 });
             this.loadFuncoes();
           },
           error: (error) => {
-            this.messageService.add({ severity: 'error', summary: 'Successful', detail: 'Função Atualizada', life: 3000 });
+            this.messageService.add({ severity: 'error', summary: 'Confirmado', detail: 'Função Atualizada', life: 3000 });
             this.loadFuncoes();
           }
         });
@@ -126,7 +126,7 @@ export class FuncaoComponent implements OnInit {
         this.funcaoService.addFuncao(this.funcao).subscribe({
           next: (data) => {
             this.funcoes.push(data);
-            this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Função Criada', life: 3000 });
+            this.messageService.add({ severity: 'success', summary: 'Confirmado', detail: 'Função Criada', life: 3000 });
             this.loadFuncoes();
           },
           error: (error) => {

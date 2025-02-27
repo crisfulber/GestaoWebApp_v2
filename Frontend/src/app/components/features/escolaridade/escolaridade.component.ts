@@ -72,7 +72,7 @@ export class EscolaridadeComponent implements OnInit {
         this.escolaridadeService.deleteEscolaridade(escolaridade.Id).subscribe({
           next: () => {
             this.escolaridades = this.escolaridades.filter(val => val.Id !== escolaridade.Id);
-            this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Escolaridade Deletada', life: 3000 });
+            this.messageService.add({ severity: 'success', summary: 'Confirmado', detail: 'Escolaridade Deletada', life: 3000 });
           },
           error: (error) => {
             this.messageService.add({ severity: 'error', summary: 'Erro', detail: 'Erro ao deletar a escolaridade ' + escolaridade.NomeEscolaridade, life: 3000 });
@@ -97,7 +97,7 @@ export class EscolaridadeComponent implements OnInit {
         this.escolaridadeService.updateEscolaridade(this.escolaridade.Id, this.escolaridade).subscribe({
           next: () => {
             this.escolaridades[this.findIndexById(this.escolaridade.Id)] = this.escolaridade;
-            this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Escolaridade Atualizada', life: 3000 });
+            this.messageService.add({ severity: 'success', summary: 'Confirmado', detail: 'Escolaridade Atualizada', life: 3000 });
             this.loadEscolaridades();
           },
           error: (error) => {
@@ -109,7 +109,7 @@ export class EscolaridadeComponent implements OnInit {
         this.escolaridadeService.addEscolaridade(this.escolaridade).subscribe({
           next: (data) => {
             this.escolaridades.push(data);
-            this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Escolaridade Criada', life: 3000 });
+            this.messageService.add({ severity: 'success', summary: 'Confirmado', detail: 'Escolaridade Criada', life: 3000 });
             this.loadEscolaridades();
           },
           error: (error) => {

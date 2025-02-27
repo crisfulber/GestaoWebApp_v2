@@ -144,7 +144,7 @@ export class DocumentoComponent implements OnInit {
         this.documentoService.deleteDocumento(documento.Id).subscribe({
           next: () => {
             this.documentos = this.documentos.filter(val => val.Id !== documento.Id);
-            this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Documento Deletado', life: 3000 });
+            this.messageService.add({ severity: 'success', summary: 'Confirmado', detail: 'Documento Deletado', life: 3000 });
           },
           error: (error) => {
             this.messageService.add({ severity: 'error', summary: 'Erro', detail: 'Erro ao deletar o documento com CPF ' + documento.CPF, life: 3000 });

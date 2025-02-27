@@ -2,15 +2,14 @@
 <p-confirmDialog [style]="{width: '50vw'}"></p-confirmDialog>
 
 <div class="card">
-    <p-table [value]="nacionalidades" dataKey="id" [rows]="10" [showCurrentPageReport]="true" [rowsPerPageOptions]="[10,25,50]"
+    <p-table [value]="nacionalidades" dataKey="id" [rows]="20" 
         styleClass="p-datatable-gridlines" [paginator]="true"
-        currentPageReportTemplate="Mostrando {first} até {last} de {totalRecords} nacionalidades"
         [globalFilterFields]="['NomeNacionalidade']" [rowHover]="true" #dt>
         <ng-template pTemplate="caption">
             <div class="flex align-items-center justify-content-between">
-                <button pButton pRipple label="Novo" icon="pi pi-plus" class="p-buttonenergi mr-2"
+                <button pButton pRipple label="Novo" icon="pi pi-plus" class="p-button mr-2"
                     (click)="openNew()"></button>
-                    <span style="font-size: 1.2em; font-weight: bold;">Nacionalidades de Trabalho</span>
+                    <span style="font-size: 1.2em; font-weight: bold;">Listagem de Nacionalidades</span>
                 <span class="p-input-icon-left">
                     <input pInputText type="text" (input)="dt.filterGlobal($any($event.target).value, 'contains')"
                         placeholder="Pesquisar..." />
@@ -50,7 +49,7 @@
     <ng-template pTemplate="footer">
         <button pButton pRipple label="Cancelar" icon="pi pi-times" class="p-button-secondary" [raised]="true"
             (click)="hideDialog()"></button>
-        <button pButton pRipple label="Salvar" icon="pi pi-check" class="p-button-energi" [raised]="true"
+        <button pButton pRipple label="Salvar" icon="pi pi-check" class="p-button" [raised]="true"
             (click)="saveNacionalidade()"></button>
     </ng-template>
 </p-dialog>

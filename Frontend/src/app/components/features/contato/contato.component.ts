@@ -80,7 +80,7 @@ export class ContatoComponent implements OnInit {
         this.contatoService.deleteContato(contato.Id).subscribe({
           next: () => {
             this.contatos = this.contatos.filter(val => val.Id !== contato.Id);
-            this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Contato Deletado', life: 3000 });
+            this.messageService.add({ severity: 'success', summary: 'Confirmado', detail: 'Contato Deletado', life: 3000 });
             this.loadContatos();
           },
           error: (error) => {
@@ -110,7 +110,7 @@ export class ContatoComponent implements OnInit {
 
         this.contatoService.updateContato(contatoEditado.Id, contatoEditado).subscribe({
           next: () => {
-            this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Contato Atualizado', life: 3000 });
+            this.messageService.add({ severity: 'success', summary: 'Confirmado', detail: 'Contato Atualizado', life: 3000 });
             this.loadContatos();
           },
           error: (error) => {
@@ -123,7 +123,7 @@ export class ContatoComponent implements OnInit {
         this.contatoService.addContato(contatoFormValue).subscribe({
           next: (data) => {
             this.contatos.push(data);
-            this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Contato Criado', life: 3000 });
+            this.messageService.add({ severity: 'success', summary: 'Confirmado', detail: 'Contato Criado', life: 3000 });
             this.loadContatos();
           },
           error: (error) => {

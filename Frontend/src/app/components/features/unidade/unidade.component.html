@@ -2,13 +2,12 @@
 <p-confirmDialog [style]="{width: '50vw'}"></p-confirmDialog>
 
 <div class="card">
-    <p-table [value]="unidades" dataKey="id" [rows]="10" [showCurrentPageReport]="true"
-        [rowsPerPageOptions]="[10,25,50]" styleClass="p-datatable-gridlines" [paginator]="true"
-        currentPageReportTemplate="Mostrando {first} até {last} de {totalRecords} unidades"
+    <p-table [value]="unidades" dataKey="id" [rows]="20"
+        styleClass="p-datatable-gridlines" [paginator]="true"
         [globalFilterFields]="['NomeUnidade', 'Empresa.NomeEmpresa']" [rowHover]="true" #dt>
         <ng-template pTemplate="caption">
             <div class="flex align-items-center justify-content-between">
-                <button pButton pRipple label="Novo" icon="pi pi-plus" class="p-buttonenergi mr-2"
+                <button pButton pRipple label="Novo" icon="pi pi-plus" class="p-button mr-2"
                     (click)="openNew()"></button>
                     <span style="font-size: 1.2em; font-weight: bold;">Listagem de Unidades</span>
                 <span class="p-input-icon-left">

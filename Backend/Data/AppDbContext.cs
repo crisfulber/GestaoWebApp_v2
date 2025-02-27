@@ -24,6 +24,10 @@ namespace Backend.Data
         public DbSet<Nacionalidade> Nacionalidades { get; set; }
         public DbSet<EstadoCivil> EstadosCivis { get; set; }
         public DbSet<Dependente> Dependentes { get; set; }
+        public DbSet<Banco> Bancos { get; set; }
+        public DbSet<Conta> Contas { get; set; }
+        public DbSet<Salario> Salarios { get; set; }
+        public DbSet<DadosPessoais> DadosPessoais { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -53,7 +57,7 @@ namespace Backend.Data
                 .HasForeignKey(e => e.IdEndereco)
                 .OnDelete(DeleteBehavior.SetNull);
 
-            modelBuilder.Entity<Unidade>() 
+            modelBuilder.Entity<Unidade>()
                 .HasOne(u => u.Empresa)
                 .WithMany()
                 .HasForeignKey(u => u.IdEmpresa)
@@ -65,16 +69,22 @@ namespace Backend.Data
                 .HasForeignKey(u => u.IdEndereco)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            modelBuilder.Entity<Setor>() 
+            modelBuilder.Entity<Setor>()
                 .HasOne(s => s.Unidade)
                 .WithMany()
                 .HasForeignKey(s => s.IdUnidade)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            modelBuilder.Entity<Funcao>() 
+            modelBuilder.Entity<Funcao>()
                 .HasOne(f => f.Setor)
                 .WithMany()
                 .HasForeignKey(f => f.IdSetor)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Conta>()
+                .HasOne(cb => cb.Banco)
+                .WithMany()
+                .HasForeignKey(cb => cb.IdBanco)
                 .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<Estado>()

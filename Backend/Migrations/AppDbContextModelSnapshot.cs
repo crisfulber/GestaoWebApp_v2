@@ -22,6 +22,52 @@ namespace Backend.Migrations
 
             MySqlModelBuilderExtensions.AutoIncrementColumns(modelBuilder);
 
+            modelBuilder.Entity("Backend.Models.Banco", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("Codigo")
+                        .HasColumnType("int");
+
+                    b.Property<string>("NomeBanco")
+                        .HasColumnType("longtext");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Bancos");
+                });
+
+            modelBuilder.Entity("Backend.Models.Conta", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int?>("Agencia")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("IdBanco")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("NumConta")
+                        .HasColumnType("int");
+
+                    b.Property<string>("PIX")
+                        .HasColumnType("LONGTEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("IdBanco");
+
+                    b.ToTable("Contas");
+                });
+
             modelBuilder.Entity("Backend.Models.Contato", b =>
                 {
                     b.Property<int>("Id")
@@ -40,6 +86,42 @@ namespace Backend.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Contatos");
+                });
+
+            modelBuilder.Entity("Backend.Models.DadosPessoais", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("DtNascimento")
+                        .IsRequired()
+                        .HasColumnType("LONGTEXT");
+
+                    b.Property<int?>("IdEstadoCivil")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("IdMunicipio")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("IdNacionalidade")
+                        .HasColumnType("int");
+
+                    b.Property<string>("NomeConjuge")
+                        .HasColumnType("LONGTEXT");
+
+                    b.Property<string>("NomeMae")
+                        .IsRequired()
+                        .HasColumnType("LONGTEXT");
+
+                    b.Property<string>("NomePai")
+                        .HasColumnType("LONGTEXT");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("DadosPessoais");
                 });
 
             modelBuilder.Entity("Backend.Models.Dependente", b =>
@@ -303,6 +385,29 @@ namespace Backend.Migrations
                     b.ToTable("Nacionalidade");
                 });
 
+            modelBuilder.Entity("Backend.Models.Salario", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<bool>("Ativo")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<string>("DtAlteracao")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<decimal>("Valor")
+                        .HasColumnType("decimal(18, 2)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Salarios");
+                });
+
             modelBuilder.Entity("Backend.Models.Setor", b =>
                 {
                     b.Property<int>("Id")
@@ -393,6 +498,16 @@ namespace Backend.Migrations
                     b.HasIndex("IdEstado");
 
                     b.ToTable("Municipios");
+                });
+
+            modelBuilder.Entity("Backend.Models.Conta", b =>
+                {
+                    b.HasOne("Backend.Models.Banco", "Banco")
+                        .WithMany()
+                        .HasForeignKey("IdBanco")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.Navigation("Banco");
                 });
 
             modelBuilder.Entity("Backend.Models.Empresa", b =>

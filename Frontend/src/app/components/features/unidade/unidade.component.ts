@@ -187,7 +187,7 @@ export class UnidadeComponent implements OnInit {
         this.unidadeService.deleteUnidade(unidade.Id).subscribe({
           next: () => {
             this.unidades = this.unidades.filter(val => val.Id !== unidade.Id);
-            this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Unidade Deletada', life: 3000 });
+            this.messageService.add({ severity: 'success', summary: 'Confirmado', detail: 'Unidade Deletada', life: 3000 });
           },
           error: (error) => {
             this.messageService.add({ severity: 'error', summary: 'Erro', detail: 'Erro ao deletar a unidade ' + unidade.NomeUnidade, life: 3000 });
@@ -235,7 +235,7 @@ export class UnidadeComponent implements OnInit {
       if (this.unidade.Id) {
         this.unidadeService.updateUnidade(this.unidade.Id, formData).subscribe({
           next: () => {
-            this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Unidade Atualizada', life: 3000 });
+            this.messageService.add({ severity: 'success', summary: 'Confirmado', detail: 'Unidade Atualizada', life: 3000 });
             this.loadUnidades();
           },
           error: (error) => {
@@ -247,7 +247,7 @@ export class UnidadeComponent implements OnInit {
         this.unidadeService.addUnidade(formData).subscribe({
           next: (data) => {
             this.unidades.push(data);
-            this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Unidade Criada', life: 3000 });
+            this.messageService.add({ severity: 'success', summary: 'Confirmado', detail: 'Unidade Criada', life: 3000 });
             this.loadUnidades();
           },
           error: (error) => {

@@ -106,7 +106,7 @@ export class EnderecoComponent implements OnInit {
                 this.enderecoService.deleteEndereco(endereco.Id).subscribe({
                     next: () => {
                         this.enderecos = this.enderecos.filter(val => val.Id !== endereco.Id);
-                        this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Endereço Deletado', life: 3000 });
+                        this.messageService.add({ severity: 'success', summary: 'Confirmado', detail: 'Endereço Deletado', life: 3000 });
                         this.loadEnderecos();
                     },
                     error: (error) => {
@@ -160,7 +160,7 @@ export class EnderecoComponent implements OnInit {
             this.enderecoService.updateEndereco(this.endereco.Id, enderecoParaEnviar as Endereco).subscribe({
                 next: () => {
                     this.enderecos[this.findIndexById(this.endereco.Id)] = this.endereco;
-                    this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Endereço Atualizado', life: 3000 });
+                    this.messageService.add({ severity: 'success', summary: 'Confirmado', detail: 'Endereço Atualizado', life: 3000 });
                     this.loadEnderecos();
                 },
                 error: (error) => {
@@ -172,7 +172,7 @@ export class EnderecoComponent implements OnInit {
             this.enderecoService.addEndereco(enderecoParaEnviar as Endereco).subscribe({
                 next: (data) => {
                     this.enderecos.push(data);
-                    this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Endereço Criado', life: 3000 });
+                    this.messageService.add({ severity: 'success', summary: 'Confirmado', detail: 'Endereço Criado', life: 3000 });
                     this.loadEnderecos();
                 },
                 error: (error) => {

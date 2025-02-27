@@ -126,7 +126,7 @@ export class DependenteComponent implements OnInit {
         this.dependenteService.deleteDependente(dependente.Id).subscribe({
           next: () => {
             this.dependentes = this.dependentes.filter(val => val.Id !== dependente.Id);
-            this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Dependente Deletado', life: 3000 });
+            this.messageService.add({ severity: 'success', summary: 'Confirmado', detail: 'Dependente Deletado', life: 3000 });
           },
           error: (error) => {
             this.messageService.add({ severity: 'error', summary: 'Erro', detail: 'Erro ao deletar o dependente com CPF ' + dependente.CPF, life: 3000 });
@@ -144,6 +144,9 @@ export class DependenteComponent implements OnInit {
 
   saveDependente() {
     if (this.dependente) {
+
+      this.dependente.NomeDependente = this.dependente.NomeDependente.toUpperCase();
+      
       this.dependente.DtNascimento = this.formatarDataParaBanco(this.dependente.DtNascimento);
 
       if (this.dependente.Id) {

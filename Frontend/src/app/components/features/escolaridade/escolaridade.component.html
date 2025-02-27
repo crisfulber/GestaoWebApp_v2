@@ -2,9 +2,8 @@
 <p-confirmDialog [style]="{width: '50vw'}"></p-confirmDialog>
 
 <div class="card">
-    <p-table [value]="escolaridades" dataKey="id" [rows]="10" [showCurrentPageReport]="true"
-        [rowsPerPageOptions]="[10,25,50]" styleClass="p-datatable-gridlines" [paginator]="true"
-        currentPageReportTemplate="Mostrando {first} até {last} de {totalRecords} escolaridades"
+    <p-table [value]="escolaridades" dataKey="id" [rows]="20" 
+        styleClass="p-datatable-gridlines" [paginator]="true"
         [globalFilterFields]="['NomeEscolaridade']" [rowHover]="true" #dt>
         <ng-template pTemplate="caption">
             <div class="flex align-items-center justify-content-between">

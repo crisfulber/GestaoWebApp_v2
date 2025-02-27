@@ -1,0 +1,61 @@
+<p-toast></p-toast>
+<p-confirmDialog [style]="{width: '50vw'}"></p-confirmDialog>
+
+<div class="card">
+    <p-table [value]="bancos" dataKey="id" [rows]="20"  styleClass="p-datatable-gridlines" [paginator]="true"
+        [globalFilterFields]="['Codigo', 'NomeBanco']" [rowHover]="true" #dt>
+        <ng-template pTemplate="caption">
+            <div class="flex align-items-center justify-content-between">
+                <button pButton pRipple label="Novo" icon="pi pi-plus" class="p-button mr-2"
+                    (click)="openNew()"></button>
+                <span style="font-size: 1.2em; font-weight: bold;">Listagem de Bancos</span>
+                <span class="p-input-icon-left">
+                    <input pInputText type="text" (input)="dt.filterGlobal($any($event.target).value, 'contains')"
+                        placeholder="Pesquisar..." />
+                </span>
+            </div>
+        </ng-template>
+        <ng-template pTemplate="header">
+            <tr>
+                <th pSortableColumn="NomeBanco">Nome<p-sortIcon field="NomeBanco"></p-sortIcon></th>
+                <th pSortableColumn="Codigo">Codigo<p-sortIcon field="Codigo"></p-sortIcon></th>
+                <th></th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-banco>
+            <tr>
+                <td>{{banco.NomeBanco}}</td>
+                <td>{{banco.Codigo}}</td>
+                <td>
+                    <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-info mr-2"
+                        (click)="editBanco(banco)"></button>
+                    <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-danger"
+                        (click)="deleteBanco(banco)"></button>
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
+</div>
+
+<p-dialog [(visible)]="bancoDialog" [style]="{width: '450px'}" header="Detalhes dos Bancos" [modal]="true"
+    styleClass="p-fluid">
+    <ng-template pTemplate="content">
+        <div class="field">
+            <label for="NomeBanco" class="block">Nome</label>
+            <input type="text" pInputText id="NomeBanco" [(ngModel)]="banco.NomeBanco" />
+        </div>
+        <div class="field">
+            <label for="Codigo" class="block">Codigo</label>
+            <p-inputmask mask="999" placeholder="999" id="Codigo" [(ngModel)]="banco.Codigo"
+                required autofocus [ngClass]="{'ng-invalid ng-dirty': submitted && !banco.Codigo}" />
+            <small class="p-error block" *ngIf="submitted && !banco.Codigo">Codigo é obrigatório.</small>
+        </div>
+    </ng-template>
+
+    <ng-template pTemplate="footer">
+        <button pButton pRipple label="Cancelar" icon="pi pi-times" class="p-button-secondary" [raised]="true"
+            (click)="hideDialog()"></button>
+        <button pButton pRipple label="Salvar" icon="pi pi-check" class="p-button" [raised]="true"
+            (click)="saveBanco()"></button>
+    </ng-template>
+</p-dialog>

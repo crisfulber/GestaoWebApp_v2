@@ -1,0 +1,70 @@
+<p-toast></p-toast>
+<p-confirmDialog [style]="{ width: '50vw' }"></p-confirmDialog>
+
+<div class="card">
+    <p-table [value]="salarios" dataKey="Id" [rows]="20"
+        styleClass="p-datatable-gridlines" [paginator]="true"
+        [globalFilterFields]="['Valor', 'DtAlteracao', 'Ativo']" [rowHover]="true" #dt>
+        <ng-template pTemplate="caption">
+            <div class="flex align-items-center justify-content-between">
+                <button pButton pRipple label="Novo" icon="pi pi-plus" class="p-button mr-2"
+                    (click)="openNew()"></button>
+                <span style="font-size: 1.2em; font-weight: bold;">Listagem de Salários</span>
+                <span class="p-input-icon-left">
+                    <input pInputText type="text" (input)="dt.filterGlobal($any($event.target).value, 'contains')"
+                        placeholder="Pesquisar..." />
+                </span>
+            </div>
+        </ng-template>
+        <ng-template pTemplate="header">
+            <tr>
+                <th pSortableColumn="Valor">Valor <p-sortIcon field="Valor"></p-sortIcon></th>
+                <th pSortableColumn="DtAlteracao">Data de Alteração <p-sortIcon field="DtAlteracao"></p-sortIcon></th>
+                <th pSortableColumn="Ativo">Atual <p-sortIcon field="Ativo"></p-sortIcon></th>
+                <th></th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-salario>
+            <tr>
+                <td>{{formatarValor(salario.Valor)}}</td>
+                <td>{{formatarDataParaTela(salario.DtAlteracao)}}</td>
+                <td><i
+                        [className]="salario.Ativo ? 'pi pi-check-circle text-green' : 'pi pi-times-circle text-red'"></i>
+                </td>
+                <td>
+                    <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-info mr-2"
+                        (click)="editSalario(salario)"></button>
+                    <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-danger"
+                        (click)="deleteSalario(salario)"></button>
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
+</div>
+
+<p-dialog [(visible)]="salarioDialog" [style]="{width: '450px'}" header="Detalhes do Salário" [modal]="true"
+    styleClass="p-fluid">
+    <ng-template pTemplate="content">
+        <div class="field">
+            <label for="Valor" class="block">Valor</label>
+            <p-inputNumber inputId="Valor" [(ngModel)]="salario.Valor" mode="currency" currency="BRL"
+                locale="pt-BR"></p-inputNumber>
+        </div>
+        <div class="field">
+            <label for="DtAlteracao" class="block">Data de Alteração</label>
+            <p-inputMask mask="99/99/9999" placeholder="dd/mm/aaaa" id="DtAlteracao"
+                [(ngModel)]="salario.DtAlteracao"></p-inputMask>
+        </div>
+        <div class="field flex center">
+            <p-checkbox inputId="Ativo" [(ngModel)]="salario.Ativo" [binary]="true"></p-checkbox>
+            <label for="Ativo" class="flex ml-2">Ativo</label>
+        </div>
+    </ng-template>
+
+    <ng-template pTemplate="footer">
+        <button pButton pRipple label="Cancelar" icon="pi pi-times" class="p-button-secondary"
+            (click)="hideDialog()"></button>
+        <button pButton pRipple label="Salvar" icon="pi pi-check" class="p-button-rounded"
+            (click)="saveSalario()"></button>
+    </ng-template>
+</p-dialog>

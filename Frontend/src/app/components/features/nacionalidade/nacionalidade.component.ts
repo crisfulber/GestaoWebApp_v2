@@ -72,7 +72,7 @@ export class NacionalidadeComponent implements OnInit {
         this.nacionalidadeService.deleteNacionalidade(nacionalidade.Id).subscribe({
           next: () => {
             this.nacionalidades = this.nacionalidades.filter(val => val.Id !== nacionalidade.Id);
-            this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Nacionalidade Deletada', life: 3000 });
+            this.messageService.add({ severity: 'success', summary: 'Confirmado', detail: 'Nacionalidade Deletada', life: 3000 });
           },
           error: (error) => {
             this.messageService.add({ severity: 'error', summary: 'Erro', detail: 'Erro ao deletar a nacionalidade ' + nacionalidade.NomeNacionalidade, life: 3000 });
@@ -97,7 +97,7 @@ export class NacionalidadeComponent implements OnInit {
         this.nacionalidadeService.updateNacionalidade(this.nacionalidade.Id, this.nacionalidade).subscribe({
           next: () => {
             this.nacionalidades[this.findIndexById(this.nacionalidade.Id)] = this.nacionalidade;
-            this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Nacionalidade Atualizada', life: 3000 });
+            this.messageService.add({ severity: 'success', summary: 'Confirmado', detail: 'Nacionalidade Atualizada', life: 3000 });
             this.loadNacionalidades();
           },
           error: (error) => {
@@ -109,7 +109,7 @@ export class NacionalidadeComponent implements OnInit {
         this.nacionalidadeService.addNacionalidade(this.nacionalidade).subscribe({
           next: (data) => {
             this.nacionalidades.push(data);
-            this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Nacionalidade Criada', life: 3000 });
+            this.messageService.add({ severity: 'success', summary: 'Confirmado', detail: 'Nacionalidade Criada', life: 3000 });
             this.loadNacionalidades();
           },
           error: (error) => {

@@ -1,7 +1,10 @@
 import { Routes } from '@angular/router';
 
 export const routes: Routes = [
+    { path: 'banco', loadComponent: () => import('./components/features/banco/banco.component').then(m => m.BancoComponent) },
+    { path: 'conta', loadComponent: () => import('./components/features/conta/conta.component').then(m => m.ContaComponent) },
     { path: 'contato', loadComponent: () => import('./components/features/contato/contato.component').then(m => m.ContatoComponent) },
+    { path: 'dadospessoais', loadComponent: () => import('./components/features/dadospessoais/dadospessoais.component').then(m => m.DadosPessoaisComponent) },
     { path: 'documento', loadComponent: () => import('./components/features/documento/documento.component').then(m => m.DocumentoComponent) },
     { path: 'dependente', loadComponent: () => import('./components/features/dependente/dependente.component').then(m => m.DependenteComponent) },
     { path: 'empresa', loadComponent: () => import('./components/features/empresa/empresa.component').then(m => m.EmpresaComponent) },
@@ -14,6 +17,7 @@ export const routes: Routes = [
     { path: 'funcaoRegistro', loadComponent: () => import('./components/features/funcaoRegistro/funcaoRegistro.component').then(m => m.FuncaoRegistroComponent) },
     { path: 'municipio', loadComponent: () => import('./components/features/municipio/municipio.component').then(m => m.MunicipioComponent) },
     { path: 'nacionalidade', loadComponent: () => import('./components/features/nacionalidade/nacionalidade.component').then(m => m.NacionalidadeComponent) },
+    { path: 'salario', loadComponent: () => import('./components/features/salario/salario.component').then(m => m.SalarioComponent) },
     { path: 'setor', loadComponent: () => import('./components/features/setor/setor.component').then(m => m.SetorComponent) },
     { path: 'unidade', loadComponent: () => import('./components/features/unidade/unidade.component').then(m => m.UnidadeComponent) },
     { path: 'login', loadComponent: () => import('./components/login/login.component').then(m => m.LoginComponent) },

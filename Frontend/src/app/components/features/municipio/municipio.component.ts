@@ -90,7 +90,7 @@ export class MunicipioComponent implements OnInit {
         this.municipioService.deleteMunicipio(municipio.Id).subscribe({
           next: () => {
             this.municipios = this.municipios.filter(val => val.Id !== municipio.Id);
-            this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Município Deletado', life: 3000 });
+            this.messageService.add({ severity: 'success', summary: 'Confirmado', detail: 'Município Deletado', life: 3000 });
             this.loadMunicipios();
           },
           error: (error) => {
@@ -124,7 +124,7 @@ export class MunicipioComponent implements OnInit {
         this.municipioService.updateMunicipio(this.municipio.Id, this.municipio).subscribe({
           next: () => {
             this.municipios[this.findIndexById(this.municipio.Id)] = this.municipio;
-            this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Município Atualizado', life: 3000 });
+            this.messageService.add({ severity: 'success', summary: 'Confirmado', detail: 'Município Atualizado', life: 3000 });
             this.loadMunicipios();
           },
           error: (error) => {
@@ -136,7 +136,7 @@ export class MunicipioComponent implements OnInit {
         this.municipioService.addMunicipio(this.municipio).subscribe({
           next: (data) => {
             this.municipios.push(data);
-            this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Município Criado', life: 3000 });
+            this.messageService.add({ severity: 'success', summary: 'Confirmado', detail: 'Município Criado', life: 3000 });
             this.loadMunicipios();
           },
           error: (error) => {

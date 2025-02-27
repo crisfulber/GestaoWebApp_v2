@@ -2,13 +2,12 @@
 <p-confirmDialog [style]="{width: '50vw'}"></p-confirmDialog>
 
 <div class="card">
-    <p-table [value]="contatos" dataKey="id" [rows]="10" [showCurrentPageReport]="true"
-        [rowsPerPageOptions]="[10,25,50]" styleClass="p-datatable-gridlines" [paginator]="true"
-        currentPageReportTemplate="Mostrando {first} até {last} de {totalRecords} contatos"
+    <p-table [value]="contatos" dataKey="id" [rows]="20" [showCurrentPageReport]="true" 
+    styleClass="p-datatable-gridlines" [paginator]="true"
         [globalFilterFields]="['Telefone','Email']" [rowHover]="true" #dt>
         <ng-template pTemplate="caption">
             <div class="flex align-items-center justify-content-between">
-                <button pButton pRipple label="Novo" icon="pi pi-plus" class="p-buttonenergi mr-2"
+                <button pButton pRipple label="Novo" icon="pi pi-plus" class="p-button mr-2"
                     (click)="openNew()"></button>
                     <span style="font-size: 1.2em; font-weight: bold;">Listagem de Contatos</span>
                 <span class="p-input-icon-left">
@@ -29,7 +28,7 @@
                 <td>{{contato.Telefone}}</td>
                 <td>{{contato.Email}}</td>
                 <td>
-                    <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button mr-2"
+                    <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-info mr-2"
                         (click)="editContato(contato)"></button>
                     <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-danger"
                         (click)="deleteContato(contato)"></button>
@@ -64,7 +63,7 @@
     <ng-template pTemplate="footer">
         <button pButton pRipple label="Cancelar" icon="pi pi-times" class="p-button-secondary" [raised]="true"
             (click)="hideDialog()"></button>
-        <button pButton pRipple label="Salvar" icon="pi pi-check" class="p-button-energi" [raised]="true"
+        <button pButton pRipple label="Salvar" icon="pi pi-check" class="p-button" [raised]="true"
             (click)="saveContato()"></button>
     </ng-template>
 </p-dialog>
