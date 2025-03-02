@@ -119,6 +119,60 @@ namespace Backend.Data
                 .WithMany()
                 .HasForeignKey(e => e.IdContato)
                 .OnDelete(DeleteBehavior.SetNull);
+
+            modelBuilder.Entity<Pessoa>()
+                .HasOne(p => p.DadosPessoais) 
+                .WithOne()
+                .HasForeignKey<Pessoa>(p => p.IdDadosPessoais)
+                .OnDelete(DeleteBehavior.SetNull);
+
+            modelBuilder.Entity<Pessoa>()
+                .HasOne(p => p.Documento) 
+                .WithOne()
+                .HasForeignKey<Pessoa>(p => p.IdDocumentos)
+                .OnDelete(DeleteBehavior.SetNull);
+
+            modelBuilder.Entity<Pessoa>()
+                .HasOne(p => p.Dependente) 
+                .WithOne()
+                .HasForeignKey<Pessoa>(p => p.IdDependentes)
+                .OnDelete(DeleteBehavior.SetNull);
+
+            modelBuilder.Entity<Pessoa>()
+                .HasOne(p => p.Endereco) 
+                .WithOne()
+                .HasForeignKey<Pessoa>(p => p.IdEnderecos)
+                .OnDelete(DeleteBehavior.SetNull);
+
+            modelBuilder.Entity<Pessoa>()
+                .HasOne(p => p.Contato) 
+                .WithOne()
+                .HasForeignKey<Pessoa>(p => p.IdContatos)
+                .OnDelete(DeleteBehavior.SetNull);
+
+            modelBuilder.Entity<Pessoa>()
+                .HasOne(p => p.DadosTrabalho) 
+                .WithOne()
+                .HasForeignKey<Pessoa>(p => p.IdDadosTrabalho)
+                .OnDelete(DeleteBehavior.SetNull);
+
+            modelBuilder.Entity<Pessoa>()
+                .HasOne(p => p.Funcao) 
+                .WithOne()
+                .HasForeignKey<Pessoa>(p => p.IdFuncoes)
+                .OnDelete(DeleteBehavior.SetNull);
+
+            modelBuilder.Entity<Pessoa>()
+                .HasOne(p => p.Conta) 
+                .WithOne()
+                .HasForeignKey<Pessoa>(p => p.IdContas)
+                .OnDelete(DeleteBehavior.SetNull);
+
+            modelBuilder.Entity<Pessoa>()
+                .HasOne(p => p.Salario) 
+                .WithOne()
+                .HasForeignKey<Pessoa>(p => p.IdSalarios)
+                .OnDelete(DeleteBehavior.SetNull);
         }
     }
 }

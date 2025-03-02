@@ -1,0 +1,306 @@
+<p-toast></p-toast>
+<p-confirmDialog [style]="{ width: '50vw' }"></p-confirmDialog>
+
+<div class="card">
+    <p-table [value]="pessoas" dataKey="Id" [rows]="10" [showCurrentPageReport]="true" [rowsPerPageOptions]="[10,25,50]"
+        styleClass="p-datatable-gridlines" [paginator]="true"
+        currentPageReportTemplate="Mostrando {first} até {last} de {totalRecords} pessoas"
+        [globalFilterFields]="['NomePessoa']" [rowHover]="true" #dt>
+        <ng-template pTemplate="caption">
+            <div class="flex align-items-center justify-content-between">
+                <button pButton pRipple label="Novo" icon="pi pi-plus" class="p-button mr-2"
+                    (click)="openNew()"></button>
+                <span style="font-size: 1.2em; font-weight: bold;">Listagem de Pessoas</span>
+                <span class="p-input-icon-left">
+                    <input pInputText type="text" (input)="dt.filterGlobal($any($event.target).value, 'contains')"
+                        placeholder="Pesquisar..." />
+                </span>
+            </div>
+        </ng-template>
+        <ng-template pTemplate="header">
+            <tr>
+                <th pSortableColumn="NomePessoa">Nome <p-sortIcon field="NomePessoa"></p-sortIcon></th>
+                <th></th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-pessoa>
+            <tr>
+                <td>{{pessoa.NomePessoa}}</td>
+                <td>
+                    <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-info mr-2"
+                        (click)="editPessoa(pessoa)"></button>
+                    <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-danger"
+                        (click)="deletePessoa(pessoa)"></button>
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
+</div>
+
+<p-dialog [(visible)]="pessoaDialog" [style]="{ width: '70vw' }" header="Detalhes da Pessoa" [modal]="true"
+    styleClass="p-fluid">
+    <ng-template pTemplate="content">
+        <p-steps [model]="steps" [(activeIndex)]="activeIndex" [readonly]="true"></p-steps>
+
+        <form [formGroup]="pessoaForm" class="mt-3">
+            <div [ngSwitch]="activeIndex">
+
+                <div *ngSwitchCase="0" class="step-container">
+                    <div class="field">
+                        <label for="nomePessoa" class="block">Nome Completo</label>
+                        <input type="text" pInputText id="nomePessoa" formControlName="nomePessoa" />
+                    </div>
+                </div>
+
+                <div *ngSwitchCase="1" class="step-container">
+                    <div class="field">
+                        <label for="NomePai" class="block">Nome do Pai</label>
+                        <input type="text" pInputText id="NomePai" formControlName="NomePai" />
+                    </div>
+                    <div class="field">
+                        <label for="NomeMae" class="block">Nome da Mãe</label>
+                        <input type="text" pInputText id="NomeMae" formControlName="NomeMae" required />
+                    </div>
+                    <div class="field">
+                        <label for="IdMunicipio" class="block">Naturalidade</label>
+                        <p-dropdown [options]="municipios" formControlName="IdMunicipio" optionLabel="NomeMunicipio"
+                            optionValue="Id" placeholder="Selecione um Município" appendTo="body"></p-dropdown>
+                    </div>
+                    <div class="field">
+                        <label for="IdNacionalidade" class="block">Nacionalidade</label>
+                        <p-dropdown [options]="nacionalidades" formControlName="IdNacionalidade" optionLabel="Nome"
+                            optionValue="Id" placeholder="Selecione uma Nacionalidade" appendTo="body"></p-dropdown>
+                    </div>
+                    <div class="field">
+                        <label for="IdEscolaridade" class="block">Escolaridade</label>
+                        <p-dropdown [options]="escolaridades" formControlName="IdEscolaridade" optionLabel="Nome"
+                            optionValue="Id" placeholder="Selecione uma Escolaridade" appendTo="body"></p-dropdown>
+                    </div>
+                    <div class="field">
+                        <label for="DtNascimento" class="block">Data de Nascimento</label>
+                        <p-inputMask mask="99/99/9999" inputId="DtNascimento" formControlName="DtNascimento"
+                            placeholder="dd/mm/aaaa"></p-inputMask>
+                    </div>
+                    <div class="field">
+                        <label for="IdEstadoCivil" class="block">Estado Civil</label>
+                        <p-dropdown [options]="estadosCivis" formControlName="IdEstadoCivil" optionLabel="Nome"
+                            optionValue="Id" placeholder="Selecione um Estado Civil" appendTo="body"></p-dropdown>
+                    </div>
+                    <div class="field">
+                        <label for="NomeConjuge" class="block">Nome do Cônjuge</label>
+                        <input type="text" pInputText id="NomeConjuge" formControlName="NomeConjuge" />
+                    </div>
+                </div>
+
+                <div *ngSwitchCase="2" class="step-container">
+                    <div class="field">
+                        <label for="CPF" class="block">CPF</label>
+                        <p-inputMask mask="999.999.999-99" inputId="CPF" formControlName="CPF"
+                            placeholder="999.999.999-99"></p-inputMask>
+                    </div>
+                    <div class="field">
+                        <label for="RG" class="block">N° RG</label>
+                        <input type="text" pInputText id="RG" formControlName="RG" required />
+                    </div>
+                    <div class="field">
+                        <label for="DtEmissaoRG" class="block">Data de Emissão</label>
+                        <p-inputMask mask="99/99/9999" inputId="DtEmissaoRG" formControlName="DtEmissaoRG"
+                            placeholder="dd/mm/aaaa"></p-inputMask>
+                    </div>
+                    <div class="field">
+                        <label for="OrgaoExpeditor" class="block">Órgão Expeditor</label>
+                        <input type="text" pInputText id="OrgaoExpeditor" formControlName="OrgaoExpeditor" required />
+                    </div>
+                    <div class="field">
+                        <label for="IdEstado" class="block">UF RG</label>
+                        <p-dropdown [options]="estados" formControlName="IdEstado" optionLabel="Sigla" optionValue="Id"
+                            placeholder="Selecione um Estado" appendTo="body"></p-dropdown>
+                    </div>
+                    <div class="field">
+                        <label for="CTPS" class="block">N° CTPS</label>
+                        <input type="text" pInputText id="CTPS" formControlName="CTPS" required />
+                    </div>
+                    <div class="field">
+                        <label for="SerieCTPS" class="block">Série</label>
+                        <input type="text" pInputText id="SerieCTPS" formControlName="SerieCTPS" required />
+                    </div>
+                    <div class="field">
+                        <label for="DtEmissaoCTPS" class="block">Data de Emissão</label>
+                        <p-inputMask mask="99/99/9999" inputId="DtEmissaoCTPS" formControlName="DtEmissaoCTPS"
+                            placeholder="dd/mm/aaaa"></p-inputMask>
+                    </div>
+                    <div class="field">
+                        <label for="IdEstado" class="block">UF CTPS</label>
+                        <p-dropdown [options]="estados" formControlName="IdEstado" optionLabel="Sigla" optionValue="Id"
+                            placeholder="Selecione um Estado" appendTo="body"></p-dropdown>
+                    </div>
+                    <div class="field">
+                        <label for="PIS" class="block">N° PIS</label>
+                        <p-inputMask mask="999.99999.99-9" inputId="PIS" formControlName="PIS"
+                            placeholder="999.99999.99-9"></p-inputMask>
+                    </div>
+                </div>
+
+                <div *ngSwitchCase="3" class="step-container">
+                    <div class="field">
+                        <label for="NomeDependente" class="block">Nome do Dependente</label>
+                        <input type="text" pInputText id="NomeDependente" formControlName="NomeDependente" required />
+                    </div>
+                    <div class="field">
+                        <label for="CPF" class="block">CPF</label>
+                        <p-inputMask mask="999.999.999-99" inputId="CPF" formControlName="CPF"
+                            placeholder="999.999.999-99"></p-inputMask>
+                    </div>
+                    <div class="field">
+                        <label for="DtNascimento" class="block">Data de Nascimento</label>
+                        <p-inputMask mask="99/99/9999" inputId="DtNascimento" formControlName="DtNascimento"
+                            placeholder="dd/mm/aaaa"></p-inputMask>
+                    </div>
+                </div>
+
+                <div *ngSwitchCase="4" class="step-container">
+                    <div class="field">
+                        <label for="Rua" class="block">Rua</label>
+                        <input type="text" pInputText id="Rua" formControlName="Rua" required />
+                    </div>
+                    <div class="field">
+                        <label for="Numero" class="block">Número</label>
+                        <input type="text" pInputText id="Numero" formControlName="Numero" required />
+                    </div>
+                    <div class="field">
+                        <label for="Complemento" class="block">Complemento</label>
+                        <input type="text" pInputText id="Complemento" formControlName="Complemento" required />
+                    </div>
+                    <div class="field">
+                        <label for="Bairro" class="block">Bairro</label>
+                        <input type="text" pInputText id="Bairro" formControlName="Bairro" required />
+                    </div>
+                    <div class="field">
+                        <label for="IdMunicipio" class="block">Município</label>
+                        <p-dropdown [options]="municipios" formControlName="NomeMunicipio" optionLabel="NomeMunicipio"
+                            optionValue="Id" placeholder="Selecione um Municipio" appendTo="body"></p-dropdown>
+                    </div>
+                    <div class="field">
+                        <label for="IdEstado" class="block">Estado</label>
+                        <p-dropdown [options]="estados" formControlName="NomeEstado" optionLabel="NomeEstado"
+                            optionValue="Id" placeholder="Selecione um Estado" appendTo="body"></p-dropdown>
+                    </div>
+                    <div class="field">
+                        <label for="CEP" class="block">CEP</label>
+                        <p-inputMask mask="99.999-999" inputId="CEP" formControlName="CEP"
+                            placeholder="99.999-999"></p-inputMask>
+                    </div>
+                </div>
+
+                <div *ngSwitchCase="5" class="step-container">
+                    <div class="field">
+                        <label for="Telefone" class="block">Telefone</label>
+                        <p-inputMask mask="99 9 9999-9999" inputId="Telefone" formControlName="Telefone"
+                            placeholder="99 9 9999-9999"></p-inputMask>
+                    </div>
+                    <div class="field">
+                        <label for="Email" class="block">Email</label>
+                        <p-inputMask mask="exemplo@email.com" inputId="Email" formControlName="Email"
+                            placeholder="exemplo@email.com"></p-inputMask>
+                    </div>
+                </div>
+
+                <div *ngSwitchCase="6" class="step-container">
+                    <div class="field">
+                        <label for="NumRegistro" class="block">N° da Folha</label>
+                        <input type="text" pInputText id="NumRegistro" formControlName="NumRegistro" required />
+                    </div>
+                    <div class="field">
+                        <label for="DtInicio" class="block">Data de Início</label>
+                        <p-inputMask mask="99/99/9999" inputId="DtInicio" formControlName="DtInicio"
+                            placeholder="dd/mm/aaaa"></p-inputMask>
+                    </div>
+                    <div class="field">
+                        <label for="DtRegistro" class="block">Data de Registro</label>
+                        <p-inputMask mask="99/99/9999" inputId="DtRegistro" formControlName="DtRegistro"
+                            placeholder="dd/mm/aaaa"></p-inputMask>
+                    </div>
+                    <div class="field flex center">
+                        <p-checkbox inputId="Ativo" formControlName="Ativo"></p-checkbox>
+                        <label for="Ativo" class="flex ml-2">Ativo</label>
+                    </div>
+                    <div class="field flex center">
+                        <p-checkbox inputId="Almoco" formControlName="Almoco"></p-checkbox>
+                        <label for="Almoco" class="flex ml-2">Almoço</label>
+                    </div>
+                    <div class="field flex center">
+                        <p-checkbox inputId="Adiantamento" formControlName="Adiantamento"></p-checkbox>
+                        <label for="Adiantamento" class="flex ml-2">Adiantamento</label>
+                    </div>
+                    <div class="field flex center">
+                        <p-checkbox inputId="ValeTransporte" formControlName="ValeTransporte"></p-checkbox>
+                        <label for="ValeTransporte" class="flex ml-2">Vale Transporte</label>
+                    </div>
+                    <div class="field flex center">
+                        <p-checkbox inputId="Bonifica" formControlName="Bonifica"></p-checkbox>
+                        <label for="Bonifica" class="flex ml-2">Bonificação</label>
+                    </div>
+                </div>
+
+                <div *ngSwitchCase="7" class="step-container">
+                    <div class="field">
+                        <label for="IdFuncao" class="block">Função</label>
+                        <p-dropdown [options]="funcoes" formControlName="NomeFuncao" optionLabel="NomeFuncao"
+                            optionValue="Id" placeholder="Selecione uma Função" appendTo="body"></p-dropdown>
+                    </div>
+                    <div class="field">
+                        <label for="IdSetor" class="block">Setor</label>
+                        <p-dropdown [options]="setores" formControlName="NomeSetor" optionLabel="NomeSetor"
+                            optionValue="Id" placeholder="Selecione um Setor" appendTo="body"></p-dropdown>
+                    </div>
+                </div>
+
+                <div *ngSwitchCase="8" class="step-container">
+                    <div class="field">
+                        <label for="IdBanco" class="block">Banco</label>
+                        <p-dropdown [options]="funcoes" formControlName="NomeBanco" optionLabel="NomeBanco"
+                            optionValue="Id" placeholder="Selecione um Banco" appendTo="body"></p-dropdown>
+                    </div>
+                    <div class="field">
+                        <label for="Agencia" class="block">N° da Agência</label>
+                        <input type="text" pInputText id="Agencia" formControlName="Agencia" />
+                    </div>
+                    <div class="field">
+                        <label for="NumConta" class="block">N° da Conta</label>
+                        <input type="text" pInputText id="NumConta" formControlName="NumConta" />
+                    </div>
+                    <div class="field">
+                        <label for="PIX" class="block">Chave PIX</label>
+                        <input type="text" pInputText id="PIX" formControlName="PIX" />
+                    </div>
+                </div>
+
+                <div *ngSwitchCase="9" class="step-container">
+                    <div class="field">
+                        <label for="Valor" class="block">Salário</label>
+                        <input type="text" pInputText id="Valor" formControlName="Valor" />
+                    </div>
+                    <div class="field">
+                        <label for="DtAlteracao" class="block">Data de Alteração</label>
+                        <p-inputMask mask="99/99/9999" inputId="DtAlteracao" formControlName="DtAlteracao"
+                            placeholder="dd/mm/aaaa"></p-inputMask>
+                    </div>
+                    <div class="field flex center">
+                        <p-checkbox inputId="SalarioAtivo" formControlName="SalarioAtivo"></p-checkbox>
+                        <label for="SalarioAtivo" class="flex ml-2">Ativo</label>
+                    </div>
+                </div>
+
+            </div>
+        </form>
+    </ng-template>
+
+    <ng-template pTemplate="footer">
+        <p-button icon="pi pi-angle-left" label="Voltar" (click)="prevPage()" styleClass="p-button-text"
+            *ngIf="activeIndex !== 0"></p-button>
+        <p-button icon="pi pi-angle-right" iconPos="right" label="Próximo" (click)="nextPage()"
+            *ngIf="activeIndex !== steps.length - 1"></p-button>
+        <p-button label="Salvar" icon="pi pi-check" (click)="savePessoa()"
+            *ngIf="activeIndex === steps.length - 1"></p-button>
+    </ng-template>
+</p-dialog>

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { DadosPessoaisService } from '../../../services/dadosPessoais';
+import { DadosPessoaisService } from '../../../services/dadosPessoais.service';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { FormsModule } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
