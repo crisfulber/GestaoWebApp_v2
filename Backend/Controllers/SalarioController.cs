@@ -99,7 +99,7 @@ namespace Backend.Controllers
 
                 salarioExistente.Valor = salarioAtualizado.Valor;
                 salarioExistente.DtAlteracao = salarioAtualizado.DtAlteracao;
-                salarioExistente.Ativo = salarioAtualizado.Ativo;
+                salarioExistente.SalarioAtivo = salarioAtualizado.SalarioAtivo;
 
                 await _context.SaveChangesAsync();
 

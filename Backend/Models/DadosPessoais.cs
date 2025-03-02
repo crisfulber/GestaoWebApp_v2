@@ -27,5 +27,8 @@ namespace Backend.Models
 
         [Column(TypeName = "LONGTEXT")]
         public string? NomeConjuge { get; set; }
+
+        public int? IdEscolaridade { get; set; }
+
     }
 }

@@ -1,0 +1,88 @@
+<p-toast></p-toast>
+<p-confirmDialog [style]="{ width: '50vw' }"></p-confirmDialog>
+
+<div class="card">
+    <p-table [value]="dadosTrabalhoLista" dataKey="Id" [rows]="20" styleClass="p-datatable-gridlines" [paginator]="true"
+        [globalFilterFields]="['NumRegistro']" [rowHover]="true" #dt>
+        <ng-template pTemplate="caption">
+            <div class="flex align-items-center justify-content-between">
+                <button pButton pRipple label="Novo" icon="pi pi-plus" class="p-button mr-2"
+                    (click)="openNew()"></button>
+                <span style="font-size: 1.2em; font-weight: bold;">Listagem de Dados Trabalho</span>
+                <span class="p-input-icon-left">
+                    <input pInputText type="text" (input)="dt.filterGlobal($any($event.target).value, 'contains')"
+                        placeholder="Pesquisar..." />
+                </span>
+            </div>
+        </ng-template>
+        <ng-template pTemplate="header">
+            <tr>
+                <th pSortableColumn="NumRegistro">Número do Registro <p-sortIcon field="NumRegistro"></p-sortIcon></th>
+                <th pSortableColumn="DtInicio">Data de Início <p-sortIcon field="DtInicio"></p-sortIcon></th>
+                <th pSortableColumn="DtRegistro">Data de Registro <p-sortIcon field="DtRegistro"></p-sortIcon>
+                </th>
+                <th></th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-dadosTrabalho>
+            <tr>
+                <td>{{dadosTrabalho.NumRegistro}}</td>
+                <td>{{dadosTrabalho.DtInicio}}</td>
+                <td>{{dadosTrabalho.DtRegistro}}</td>
+                <td>
+                    <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-info mr-2"
+                        (click)="editDadosTrabalho(dadosTrabalho)"></button>
+                    <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-danger"
+                        (click)="deleteDadosTrabalho(dadosTrabalho)"></button>
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
+</div>
+
+<p-dialog [(visible)]="dadosTrabalhoDialog" [style]="{width: '450px'}" header="Detalhes dos Dados Trabalho"
+    [modal]="true" styleClass="p-fluid">
+    <ng-template pTemplate="content">
+        <div class="field">
+            <label for="NumRegistro" class="block">Número do Registro</label>
+            <input type="text" pInputText id="NumRegistro" [(ngModel)]="dadosTrabalho.NumRegistro" />
+        </div>
+        <div class="field">
+            <label for="DtInicio" class="block">Data de Início</label>
+            <p-inputMask mask="99/99/9999" inputId="DtInicio" [(ngModel)]="dadosTrabalho.DtInicio"
+                placeholder="dd/mm/aaaa"></p-inputMask>
+        </div>
+        <div class="field">
+            <label for="DtRegistro" class="block">Data de Registro</label>
+            <p-inputMask mask="99/99/9999" inputId="DtRegistro" [(ngModel)]="dadosTrabalho.DtRegistro"
+                placeholder="dd/mm/aaaa"></p-inputMask>
+        </div>
+        <div class="field flex center">
+            <p-checkbox inputId="Ativo" [(ngModel)]="dadosTrabalho.Ativo" [binary]="true"></p-checkbox>
+            <label for="Ativo" class="flex ml-2">Ativo </label>
+        </div>
+        <div class="field flex center">
+            <p-checkbox inputId="Almoco" [(ngModel)]="dadosTrabalho.Almoco" [binary]="true"></p-checkbox>
+            <label for="Almoco" class="flex ml-2">Almoco</label>
+        </div>
+        <div class="field flex center">
+            <p-checkbox inputId="Adiantamento" [(ngModel)]="dadosTrabalho.Adiantamento" [binary]="true"></p-checkbox>
+            <label for="Adiantamento" class="flex ml-2">Adiantamento</label>
+        </div>
+        <div class="field flex center">
+            <p-checkbox inputId="ValeTransporte" [(ngModel)]="dadosTrabalho.ValeTransporte" [binary]="true"></p-checkbox>
+            <label for="ValeTransporte" class="flex ml-2">Vale Transporte</label>
+        </div>
+        <div class="field flex center">
+            <p-checkbox inputId="Bonifica" [(ngModel)]="dadosTrabalho.Bonifica" [binary]="true"></p-checkbox>
+            <label for="Bonifica" class="flex ml-2">Bonificação</label>
+        </div>
+    </ng-template>
+
+    <ng-template pTemplate="footer">
+        <button pButton pRipple label="Cancelar" icon="pi pi-times" class="p-button-secondary" [raised]="true"
+            (click)="hideDialog()"></button>
+        <button pButton pRipple label="Salvar" icon="pi pi-check" class="p-button" [raised]="true"
+            (click)="saveDadosTrabalho()"></button>
+    </ng-template>
+</p-dialog>

@@ -2,14 +2,13 @@
 <p-confirmDialog [style]="{width: '50vw'}"></p-confirmDialog>
 
 <div class="card">
-    <p-table [value]="empresas" dataKey="id" [rows]="20"
-        styleClass="p-datatable-gridlines" [paginator]="true"
+    <p-table [value]="empresas" dataKey="id" [rows]="20" styleClass="p-datatable-gridlines" [paginator]="true"
         [globalFilterFields]="['NomeEmpresa','CNPJ_CEI']" [rowHover]="true" #dt>
         <ng-template pTemplate="caption">
             <div class="flex align-items-center justify-content-between">
                 <button pButton pRipple label="Novo" icon="pi pi-plus" class="p-button mr-2"
                     (click)="openNew()"></button>
-                    <span style="font-size: 1.2em; font-weight: bold;">Empresas Cadastradas</span>
+                <span style="font-size: 1.2em; font-weight: bold;">Empresas Cadastradas</span>
                 <span class="p-input-icon-left">
                     <input pInputText type="text" (input)="dt.filterGlobal($any($event.target).value, 'contains')"
                         placeholder="Pesquisar..." />

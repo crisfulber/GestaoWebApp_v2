@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { SalarioService } from '../../../services/salario.service';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { FormsModule } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
@@ -10,10 +9,11 @@ import { ToastModule } from 'primeng/toast';
 import { TableModule } from 'primeng/table';
 import { ToolbarModule } from 'primeng/toolbar';
 import { CommonModule } from '@angular/common';
-import { Salario } from '../../interface/salario';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { CheckboxModule } from 'primeng/checkbox';
 import { InputMaskModule } from 'primeng/inputmask';
+import { SalarioService } from '../../../services/salario.service';
+import { Salario } from '../../interface/salario';
 
 @Component({
   selector: 'app-salario',
@@ -28,7 +28,7 @@ export class SalarioComponent implements OnInit {
 
   salarios: Salario[] = [];
   salarioDialog: boolean = false;
-  salario: Salario = { Id: 0, Valor: 0, DtAlteracao: '', Ativo: false };
+  salario: Salario = { Id: 0, Valor: 0, DtAlteracao: '', SalarioAtivo: false };
   submitted: boolean = false;
 
   constructor(
@@ -61,7 +61,7 @@ export class SalarioComponent implements OnInit {
   }
 
   openNew() {
-    this.salario = { Id: 0, Valor: 0, DtAlteracao: '', Ativo: false };
+    this.salario = { Id: 0, Valor: 0, DtAlteracao: '', SalarioAtivo: false };
     this.submitted = false;
     this.salarioDialog = true;
   }

@@ -105,7 +105,6 @@ export class ContatoComponent implements OnInit {
       const contatoFormValue = this.contatoForm.value as Contato;
 
       if (this.selectedContato) {
-        // Edição
         const contatoEditado: Contato = { ...this.selectedContato, ...contatoFormValue };
 
         this.contatoService.updateContato(contatoEditado.Id, contatoEditado).subscribe({
@@ -119,7 +118,6 @@ export class ContatoComponent implements OnInit {
           }
         });
       } else {
-        // Criação
         this.contatoService.addContato(contatoFormValue).subscribe({
           next: (data) => {
             this.contatos.push(data);

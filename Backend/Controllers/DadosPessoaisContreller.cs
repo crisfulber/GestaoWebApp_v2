@@ -105,6 +105,7 @@ namespace Backend.Controllers
                 dadosPessoaisExistente.IdNacionalidade = dadosPessoaisAtualizados.IdNacionalidade;
                 dadosPessoaisExistente.DtNascimento = dadosPessoaisAtualizados.DtNascimento;
                 dadosPessoaisExistente.IdEstadoCivil = dadosPessoaisAtualizados.IdEstadoCivil;
+                dadosPessoaisExistente.IdEscolaridade = dadosPessoaisAtualizados.IdEscolaridade;
                 dadosPessoaisExistente.NomeConjuge = dadosPessoaisAtualizados.NomeConjuge;
 
                 await _context.SaveChangesAsync();

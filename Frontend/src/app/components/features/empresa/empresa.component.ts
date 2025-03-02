@@ -35,7 +35,7 @@ export class EmpresaComponent implements OnInit {
 
     empresas: Empresa[] = [];
     empresaDialog: boolean = false;
-    empresa: Empresa = { 
+    empresa: Empresa = {
         Id: 1,
         NomeEmpresa: '',
         CNPJ_CEI: '',
@@ -137,7 +137,7 @@ export class EmpresaComponent implements OnInit {
         };
         this.submitted = false;
         this.empresaDialog = true;
-        this.formSteps.forEach(form => form.reset()); 
+        this.formSteps.forEach(form => form.reset());
         this.activeIndex = 0;
     }
 

@@ -59,6 +59,12 @@
                 [ngClass]="{'ng-invalid ng-dirty': submitted && !dadosPessoais.IdMunicipio}"></p-dropdown>
         </div>
         <div class="field">
+            <label for="IdEscolaridade" class="block">Escolaridade</label>
+            <p-dropdown [options]="escolaridades" [(ngModel)]="dadosPessoais.IdEscolaridade" optionLabel="NomeEscolaridade"
+                optionValue="Id" placeholder="Selecione uma Escolaridade" appendTo="body"
+                [ngClass]="{'ng-invalid ng-dirty': submitted && !dadosPessoais.IdEscolaridade}"></p-dropdown>
+        </div>
+        <div class="field">
             <label for="IdNacionalidade" class="block">Nacionalidade</label>
             <p-dropdown [options]="nacionalidades" [(ngModel)]="dadosPessoais.IdNacionalidade" optionLabel="NomeNacionalidade"
                 optionValue="Id" placeholder="Selecione uma Nacionalidade" appendTo="body"

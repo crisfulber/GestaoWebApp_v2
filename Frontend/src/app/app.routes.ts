@@ -5,6 +5,7 @@ export const routes: Routes = [
     { path: 'conta', loadComponent: () => import('./components/features/conta/conta.component').then(m => m.ContaComponent) },
     { path: 'contato', loadComponent: () => import('./components/features/contato/contato.component').then(m => m.ContatoComponent) },
     { path: 'dadospessoais', loadComponent: () => import('./components/features/dadospessoais/dadospessoais.component').then(m => m.DadosPessoaisComponent) },
+    { path: 'dadostrabalho', loadComponent: () => import('./components/features/dadostrabalho/dadostrabalho.component').then(m => m.DadosTrabalhoComponent) },
     { path: 'documento', loadComponent: () => import('./components/features/documento/documento.component').then(m => m.DocumentoComponent) },
     { path: 'dependente', loadComponent: () => import('./components/features/dependente/dependente.component').then(m => m.DependenteComponent) },
     { path: 'empresa', loadComponent: () => import('./components/features/empresa/empresa.component').then(m => m.EmpresaComponent) },

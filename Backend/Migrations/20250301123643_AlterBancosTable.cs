@@ -2,10 +2,10 @@
 
 #nullable disable
 
-namespace Backend.Data.Migrations
+namespace Backend.Migrations
 {
     /// <inheritdoc />
-    public partial class ChangeDadosPessoaisTable4 : Migration
+    public partial class AlterBancosTable : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

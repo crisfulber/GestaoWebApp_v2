@@ -15,6 +15,6 @@ namespace Backend.Models
         public required string DtAlteracao { get; set; }
 
         [Required]
-        public bool Ativo { get; set; }
+        public bool SalarioAtivo { get; set; }
     }
 }

@@ -124,6 +124,53 @@ namespace Backend.Migrations
                     b.ToTable("DadosPessoais");
                 });
 
+            modelBuilder.Entity("Backend.Models.DadosTrabalho", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<bool>("Adiantamento")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<bool>("Almoco")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<bool>("Ativo")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<bool>("Bonifica")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<string>("DtInicio")
+                        .IsRequired()
+                        .HasColumnType("LONGTEXT");
+
+                    b.Property<string>("DtRegistro")
+                        .HasColumnType("LONGTEXT");
+
+                    b.Property<int?>("IdConta")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("IdFuncao")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("IdSalario")
+                        .HasColumnType("int");
+
+                    b.Property<string>("NumRegistro")
+                        .HasColumnType("LONGTEXT");
+
+                    b.Property<bool>("ValeTransporte")
+                        .HasColumnType("tinyint(1)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("DadosTrabalho");
+                });
+
             modelBuilder.Entity("Backend.Models.Dependente", b =>
                 {
                     b.Property<int>("Id")

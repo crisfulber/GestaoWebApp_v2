@@ -15,9 +15,11 @@ import { DropdownModule } from 'primeng/dropdown';
 import { InputMaskModule } from 'primeng/inputmask';
 import { Municipio } from '../../interface/municipio';
 import { Nacionalidade } from '../../interface/nacionalidade';
+import { Escolaridade } from '../../interface/escolaridade';
 import { EstadoCivil } from '../../interface/estadoCivil';
 import { MunicipioService } from '../../../services/municipio.service';
 import { NacionalidadeService } from '../../../services/nacionalidade.service';
+import { EscolaridadeService } from '../../../services/escolaridade.service';
 import { EstadoCivilService } from '../../../services/estadoCivil';
 
 @Component({
@@ -39,12 +41,14 @@ export class DadosPessoaisComponent implements OnInit {
     NomeMae: '',
     IdMunicipio: null,
     IdNacionalidade: null,
+    IdEscolaridade: null,
     DtNascimento: '',
     IdEstadoCivil: null,
     NomeConjuge: ''
   };
   municipios: Municipio[] = [];
   nacionalidades: Nacionalidade[] = [];
+  escolaridades: Escolaridade[] = [];
   estadosCivis: EstadoCivil[] = [];
 
   submitted: boolean = false;
@@ -55,6 +59,7 @@ export class DadosPessoaisComponent implements OnInit {
     private confirmationService: ConfirmationService,
     private municipioService: MunicipioService,
     private nacionalidadeService: NacionalidadeService,
+    private escolaridadeService: EscolaridadeService,
     private estadoCivilService: EstadoCivilService
   ) { }
 
@@ -63,6 +68,7 @@ export class DadosPessoaisComponent implements OnInit {
     this.loadMunicipios();
     this.loadNacionalidades();
     this.loadEstadosCivis();
+    this.loadEscolaridades();
   }
 
   loadDadosPessoais() {
@@ -101,6 +107,18 @@ export class DadosPessoaisComponent implements OnInit {
     });
   }
 
+  loadEscolaridades() {
+    this.escolaridadeService.getEscolaridades().subscribe({
+      next: (data) => {
+        this.escolaridades = data;
+      },
+      error: (error) => {
+        this.messageService.add({ severity: 'error', summary: 'Erro', detail: 'Erro ao carregar escolaridades' });
+        console.error('Erro ao carregar escolaridades:', error);
+      }
+    });
+  }
+
   loadEstadosCivis() {
     this.estadoCivilService.getEstadosCivis().subscribe({
       next: (data) => {
@@ -120,6 +138,7 @@ export class DadosPessoaisComponent implements OnInit {
       NomeMae: '',
       IdMunicipio: null,
       IdNacionalidade: null,
+      IdEscolaridade: null,
       DtNascimento: '',
       IdEstadoCivil: null,
       NomeConjuge: ''

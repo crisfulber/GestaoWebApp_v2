@@ -157,7 +157,7 @@ export class ContaComponent implements OnInit {
     }
     const numContaStr = numConta.toString();
     if (numContaStr.length <= 1) {
-      return numContaStr; // Não há nada para separar
+      return numContaStr; 
     }
     const parteInicial = numContaStr.slice(0, -1);
     const ultimoDigito = numContaStr.slice(-1);

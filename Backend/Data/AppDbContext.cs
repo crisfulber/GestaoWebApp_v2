@@ -28,6 +28,8 @@ namespace Backend.Data
         public DbSet<Conta> Contas { get; set; }
         public DbSet<Salario> Salarios { get; set; }
         public DbSet<DadosPessoais> DadosPessoais { get; set; }
+        public DbSet<DadosTrabalho> DadosTrabalho { get; set; } 
+         public DbSet<Pessoa> Pessoas { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

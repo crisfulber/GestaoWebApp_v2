@@ -9,11 +9,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace Backend.Data.Migrations
+namespace Backend.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250227164904_ChangeDtAlteracaoColumnType")]
-    partial class ChangeDtAlteracaoColumnType
+    [Migration("20250301122135_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -89,6 +89,89 @@ namespace Backend.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Contatos");
+                });
+
+            modelBuilder.Entity("Backend.Models.DadosPessoais", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("DtNascimento")
+                        .IsRequired()
+                        .HasColumnType("LONGTEXT");
+
+                    b.Property<int?>("IdEstadoCivil")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("IdMunicipio")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("IdNacionalidade")
+                        .HasColumnType("int");
+
+                    b.Property<string>("NomeConjuge")
+                        .HasColumnType("LONGTEXT");
+
+                    b.Property<string>("NomeMae")
+                        .IsRequired()
+                        .HasColumnType("LONGTEXT");
+
+                    b.Property<string>("NomePai")
+                        .HasColumnType("LONGTEXT");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("DadosPessoais");
+                });
+
+            modelBuilder.Entity("Backend.Models.DadosTrabalho", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<bool>("Adiantamento")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<bool>("Almoco")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<bool>("Ativo")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<bool>("Bonifica")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<string>("DtInicio")
+                        .IsRequired()
+                        .HasColumnType("LONGTEXT");
+
+                    b.Property<string>("DtRegistro")
+                        .HasColumnType("LONGTEXT");
+
+                    b.Property<int?>("IdConta")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("IdFuncao")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("IdSalario")
+                        .HasColumnType("int");
+
+                    b.Property<string>("NumRegistro")
+                        .HasColumnType("LONGTEXT");
+
+                    b.Property<bool>("ValeTransporte")
+                        .HasColumnType("tinyint(1)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("DadosTrabalho");
                 });
 
             modelBuilder.Entity("Backend.Models.Dependente", b =>
