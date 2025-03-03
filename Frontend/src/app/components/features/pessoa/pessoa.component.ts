@@ -202,7 +202,7 @@ export class PessoaComponent implements OnInit {
       IdSetor: ['', Validators.required],
     });
     this.step9Form = this.fb.group({
-      IdBanco: [''],
+      IdBanco: ['', Validators.required],
       Agencia: [''],
       NumConta: [''],
       PIX: [''],
@@ -480,10 +480,9 @@ export class PessoaComponent implements OnInit {
     this.activeIndex = 0;
   }
 
-  // Função para mapear o objeto do formulário para o tipo Endereco
   mapFormToEndereco(formValue: any): Endereco {
     return {
-      Id: 0, // Ou o valor correto, se você já tiver um ID existente
+      Id: 0,
       Rua: this.titleCase(formValue.Rua),
       Numero: this.titleCase(formValue.Numero),
       Complemento: this.titleCase(formValue.Complemento),
@@ -498,15 +497,28 @@ export class PessoaComponent implements OnInit {
     console.log('savePessoa() foi chamado!');
     this.submitted = true;
 
-    const formIsValid = this.step1Form.valid &&
-      this.step2Form.valid &&
-      this.step3Form.valid &&
-      this.step4Form.valid &&
-      this.step5Form.valid &&
-      this.step6Form.valid &&
-      this.step7Form.valid &&
-      this.step8Form.valid &&
-      this.step9Form.valid;
+    const step1Valid = this.step1Form.valid;
+    const step2Valid = this.step2Form.valid;
+    const step3Valid = this.step3Form.valid;
+    const step4Valid = this.step4Form.valid;
+    const step5Valid = this.step5Form.valid;
+    const step6Valid = this.step6Form.valid;
+    const step7Valid = this.step7Form.valid;
+    const step8Valid = this.step8Form.valid;
+    const step9Valid = this.step9Form.valid;
+
+    console.log('step1Form Validação:', step1Valid);
+    console.log('step2Form Validação:', step2Valid);
+    console.log('step3Form Validação:', step3Valid);
+    console.log('step4Form Validação:', step4Valid);
+    console.log('step5Form Validação:', step5Valid);
+    console.log('step6Form Validação:', step6Valid);
+    console.log('step7Form Validação:', step7Valid);
+    console.log('step8Form Validação:', step8Valid);
+    console.log('step9Form Validação:', step9Valid);
+
+
+    const formIsValid = step1Valid && step2Valid && step3Valid && step4Valid && step5Valid && step6Valid && step7Valid && step8Valid && step9Valid;
 
     console.log('Formulário é válido:', formIsValid);
 
@@ -526,7 +538,6 @@ export class PessoaComponent implements OnInit {
       const documentos = this.step3Form.value;
       const dependentes = this.step4Form.value;
 
-      //Formatando Endereço
       const enderecos = this.step5Form.value;
       const enderecosFormatados: Endereco = this.mapFormToEndereco(enderecos);
       console.log('enderecosFormatados:', enderecosFormatados);
@@ -739,12 +750,7 @@ export class PessoaComponent implements OnInit {
         currentFormValid = this.step9Form.valid;
         break;
     }
-    console.log('is currenct form valid:' + currentFormValid)
-    if (currentFormValid) {
-      this.activeIndex++;
-    } else {
-      this.messageService.add({ severity: 'warn', summary: 'Atenção', detail: 'Preencha todos os campos corretamente', life: 3000 });
-    }
+    this.activeIndex++;
   }
 
   prevPage() {
