@@ -1,7 +1,7 @@
 export interface Endereco {
   Id: number;
   Rua: string;
-  Numero: number;
+  Numero: string | null; 
   Complemento?: string;
   Bairro: string;
   IdMunicipio: number | null; 

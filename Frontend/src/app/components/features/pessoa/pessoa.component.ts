@@ -16,6 +16,7 @@ import { ToolbarModule } from 'primeng/toolbar';
 import { CommonModule } from '@angular/common';
 import { Pessoa } from '../../interface/pessoa';
 import { DropdownModule } from 'primeng/dropdown';
+import { CheckboxModule } from 'primeng/checkbox';
 
 import { DadosPessoais } from '../../interface/dadosPessoais';
 import { DadosPessoaisService } from '../../../services/dadosPessoais.service';
@@ -53,7 +54,7 @@ import { BancoService } from '../../../services/banco.service';
 @Component({
   selector: 'app-pessoa',
   standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule, InputTextModule, ButtonModule,
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, InputTextModule, ButtonModule, CheckboxModule,
     InputMaskModule, ToastModule, ConfirmDialogModule, TableModule, ToolbarModule, StepsModule,
     DialogModule, DropdownModule],
   templateUrl: './pessoa.component.html',
@@ -65,9 +66,19 @@ export class PessoaComponent implements OnInit {
   pessoas: Pessoa[] = [];
   pessoaLista: Pessoa[] = [];
   pessoaDialog: boolean = false;
-  pessoaForm!: FormGroup;
   submitted: boolean = false;
   dadosTrabalhoDialog: boolean = false;
+
+  step1Form!: FormGroup;
+  step2Form!: FormGroup;
+  step3Form!: FormGroup;
+  step4Form!: FormGroup;
+  step5Form!: FormGroup;
+  step6Form!: FormGroup;
+  step7Form!: FormGroup;
+  step8Form!: FormGroup;
+  step9Form!: FormGroup;
+
   pessoa: Pessoa = {
     Id: 0,
     NomePessoa: '',
@@ -84,7 +95,6 @@ export class PessoaComponent implements OnInit {
 
   steps: MenuItem[] = [];
   activeIndex: number = 0;
-  formSteps: FormGroup[] = [];
 
   municipios: Municipio[] = [];
   nacionalidades: Nacionalidade[] = [];
@@ -134,76 +144,72 @@ export class PessoaComponent implements OnInit {
     private confirmationService: ConfirmationService,
     private fb: FormBuilder
   ) {
-    this.formSteps = [
-      this.fb.group({
-        nomePessoa: ['', Validators.required]
-      }),
-      this.fb.group({
-        NomePai: [''],
-        NomeMae: ['', Validators.required],
-        IdMunicipio: [''],
-        IdNacionalidade: ['', Validators.required],
-        IdEscolaridade: [''],
-        DtNascimento: ['', Validators.required],
-        IdEstadoCivil: [''],
-        NomeConjuge: ['']
-      }),
-      this.fb.group({
-        CPF: ['', Validators.required],
-        RG: [''],
-        DtEmissaoRG: [''],
-        OrgaoExpeditor: [''],
-        UF_RG: [''],
-        CTPS: [''],
-        SerieCTPS: [''],
-        DtEmissaoCTPS: [''],
-        UF_CTPS: [''],
-        PIS: ['']
-      }),
-      this.fb.group({
-        NomeDependente: [''],
-        CPF: [''],
-        DtNascimento: ['']
-      }),
-      this.fb.group({
-        Rua: ['', Validators.required],
-        Numero: ['', Validators.required],
-        Complemento: [''],
-        Bairro: ['', Validators.required],
-        IdMunicipio: ['', Validators.required],
-        IdEstado: ['', Validators.required],
-        CEP: ['']
-      }),
-      this.fb.group({
-        Telefone: [''],
-        Email: ['']
-      }),
-      this.fb.group({
-        NumRegistro: [''],
-        Dtinicio: ['', Validators.required],
-        DtRegistro: [''],
-        Ativo: ['', Validators.required],
-        Almoco: ['', Validators.required],
-        Adiantamento: ['', Validators.required],
-        ValeTransporte: ['', Validators.required],
-        Bonifica: ['', Validators.required],
-      }),
-      this.fb.group({
-        IdFuncao: ['', Validators.required],
-        IdSetor: ['', Validators.required],
-      }),
-      this.fb.group({
-        IdBanco: [''],
-        Agencia: [''],
-        NumConta: [''],
-        PIX: ['']
-      }),
-      this.fb.group({
-        Valor: ['', Validators.required],
-        DtAlteracao: ['', Validators.required],
-        SalarioAtivo: ['', Validators.required],
-      }),
-    ];
+    this.step1Form = this.fb.group({
+      nomePessoa: ['', Validators.required]
+    });
+    this.step2Form = this.fb.group({
+      NomePai: [''],
+      NomeMae: ['', Validators.required],
+      IdMunicipio: [''],
+      IdNacionalidade: [''],
+      IdEscolaridade: [''],
+      DtNascimento: ['', Validators.required],
+      IdEstadoCivil: [''],
+      NomeConjuge: ['']
+    });
+    this.step3Form = this.fb.group({
+      CPF: ['', Validators.required],
+      RG: [''],
+      DtEmissaoRG: [''],
+      OrgaoExpeditor: [''],
+      UF_RG: [''],
+      CTPS: [''],
+      SerieCTPS: [''],
+      DtEmissaoCTPS: [''],
+      UF_CTPS: [''],
+      PIS: ['']
+    });
+    this.step4Form = this.fb.group({
+      NomeDependente: [''],
+      CPF_Dependente: [''],
+      DtNascimento_Dependente: ['']
+    });
+    this.step5Form = this.fb.group({
+      Rua: ['', Validators.required],
+      Numero: ['', Validators.required],
+      Complemento: [''],
+      Bairro: ['', Validators.required],
+      IdMunicipio_Endereco: ['', Validators.required],
+      IdEstado_Endereco: ['', Validators.required],
+      CEP: ['']
+    });
+    this.step6Form = this.fb.group({
+      Telefone: [''],
+      Email: ['']
+    });
+    this.step7Form = this.fb.group({
+      NumRegistro: [''],
+      DtInicio: ['', Validators.required],
+      DtRegistro: [''],
+      Ativo: [false],
+      Almoco: [false],
+      Adiantamento: [false],
+      ValeTransporte: [false],
+      Bonifica: [false]
+    });
+    this.step8Form = this.fb.group({
+      IdFuncao: ['', Validators.required],
+      IdSetor: ['', Validators.required],
+    });
+    this.step9Form = this.fb.group({
+      IdBanco: [''],
+      Agencia: [''],
+      NumConta: [''],
+      PIX: [''],
+      Valor: ['', Validators.required],
+      DtAlteracao: ['', Validators.required],
+      SalarioAtivo: [false]
+    });
   }
 
   ngOnInit() {
@@ -224,6 +230,9 @@ export class PessoaComponent implements OnInit {
     this.loadNacionalidades();
     this.loadEscolaridades();
     this.loadEstadosCivis();
+    this.loadEstados();
+    this.loadSetores();
+    this.loadBancos();
     this.steps = [
       { label: 'Dados Pessoais' },
       { label: 'Documentos' },
@@ -237,14 +246,29 @@ export class PessoaComponent implements OnInit {
     ];
   }
 
+  titleCase(str: string): string {
+    if (!str) {
+      return '';
+    }
+    return str.replace(/\w\S*/g, (txt) => {
+      return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
+    });
+  }
+
   loadPessoas() {
     this.pessoaService.getPessoas().subscribe({
       next: (data) => {
         this.pessoas = data;
       },
       error: (error) => {
-        this.messageService.add({ severity: 'error', summary: 'Erro', detail: 'Erro ao carregar dados' });
         console.error('Erro ao carregar pessoas:', error);
+
+        let errorMessage = 'Erro ao carregar dados';
+        if (error.error && error.error.message) {
+          errorMessage = error.error.message;
+        }
+
+        this.messageService.add({ severity: 'error', summary: 'Erro', detail: errorMessage });
       }
     });
   }
@@ -442,62 +466,133 @@ export class PessoaComponent implements OnInit {
   }
 
   openNew() {
-    this.pessoaForm.reset();
+    this.step1Form.reset();
+    this.step2Form.reset();
+    this.step3Form.reset();
+    this.step4Form.reset();
+    this.step5Form.reset();
+    this.step6Form.reset();
+    this.step7Form.reset();
+    this.step8Form.reset();
+    this.step9Form.reset();
     this.submitted = false;
     this.pessoaDialog = true;
+    this.activeIndex = 0;
+  }
+
+  // Função para mapear o objeto do formulário para o tipo Endereco
+  mapFormToEndereco(formValue: any): Endereco {
+    return {
+      Id: 0, // Ou o valor correto, se você já tiver um ID existente
+      Rua: this.titleCase(formValue.Rua),
+      Numero: this.titleCase(formValue.Numero),
+      Complemento: this.titleCase(formValue.Complemento),
+      Bairro: this.titleCase(formValue.Bairro),
+      IdMunicipio: formValue.IdMunicipio_Endereco,
+      IdEstado: formValue.IdEstado_Endereco,
+      CEP: formValue.CEP
+    };
   }
 
   savePessoa() {
+    console.log('savePessoa() foi chamado!');
     this.submitted = true;
 
-    if (this.formSteps.every(form => form.valid)) {
+    const formIsValid = this.step1Form.valid &&
+      this.step2Form.valid &&
+      this.step3Form.valid &&
+      this.step4Form.valid &&
+      this.step5Form.valid &&
+      this.step6Form.valid &&
+      this.step7Form.valid &&
+      this.step8Form.valid &&
+      this.step9Form.valid;
+
+    console.log('Formulário é válido:', formIsValid);
+
+    if (formIsValid) {
+      console.log('step1Form:', this.step1Form.value);
+      console.log('step2Form:', this.step2Form.value);
+      console.log('step3Form:', this.step3Form.value);
+      console.log('step4Form:', this.step4Form.value);
+      console.log('step5Form:', this.step5Form.value);
+      console.log('step6Form:', this.step6Form.value);
+      console.log('step7Form:', this.step7Form.value);
+      console.log('step8Form:', this.step8Form.value);
+      console.log('step9Form:', this.step9Form.value);
+
+      const nomePessoa = this.titleCase(this.step1Form.get('nomePessoa')?.value);
+      const dadosPessoais = this.step2Form.value;
+      const documentos = this.step3Form.value;
+      const dependentes = this.step4Form.value;
+
+      //Formatando Endereço
+      const enderecos = this.step5Form.value;
+      const enderecosFormatados: Endereco = this.mapFormToEndereco(enderecos);
+      console.log('enderecosFormatados:', enderecosFormatados);
+
+      const contatos = this.step6Form.value;
+      const dadosTrabalho = this.step7Form.value;
+      const funcoes = this.step8Form.value;
+      const contas = this.step9Form.value;
+      const salarios = this.step9Form.value;
+
       const pessoaData = {
-        NomePessoa: this.pessoaForm.get('NomePessoa')?.value,
-        DadosPessoais: this.formSteps[0].value,
-        Documentos: this.formSteps[1].value,
-        Dependentes: this.formSteps[2].value,
-        Enderecos: this.formSteps[3].value,
-        Contatos: this.formSteps[4].value,
-        DadosTrabalho: this.formSteps[5].value,
-        Funcoes: this.formSteps[6].value,
-        Contas: this.formSteps[7].value,
-        Salarios: this.formSteps[8].value
+        NomePessoa: nomePessoa,
+        DadosPessoais: dadosPessoais,
+        Documentos: documentos,
+        Dependentes: dependentes,
+        Enderecos: enderecosFormatados,
+        Contatos: contatos,
+        DadosTrabalho: dadosTrabalho,
+        Funcoes: funcoes,
+        Contas: contas,
+        Salarios: salarios
       };
 
       this.dadosPessoaisService.addDadosPessoais(pessoaData.DadosPessoais).subscribe({
         next: (dadosPessoaisResponse) => {
+          console.log('dadosPessoaisService.addDadosPessoais() chamado com sucesso:', dadosPessoaisResponse);
           const idDadosPessoais = dadosPessoaisResponse.Id;
 
           this.documentoService.addDocumento(pessoaData.Documentos).subscribe({
             next: (documentoResponse) => {
+              console.log('documentoService.addDocumento() chamado com sucesso:', documentoResponse);
               const idDocumentos = documentoResponse.Id;
 
               this.dependenteService.addDependente(pessoaData.Dependentes).subscribe({
                 next: (dependenteResponse) => {
+                  console.log('dependenteService.addDependente() chamado com sucesso:', dependenteResponse);
                   const idDependentes = dependenteResponse.Id;
 
                   this.enderecoService.addEndereco(pessoaData.Enderecos).subscribe({
                     next: (enderecoResponse) => {
+                      console.log('enderecoService.addEndereco() chamado com sucesso:', enderecoResponse);
                       const idEnderecos = enderecoResponse.Id;
 
                       this.contatoService.addContato(pessoaData.Contatos).subscribe({
                         next: (contatoResponse) => {
+                          console.log('contatoService.addContato() chamado com sucesso:', contatoResponse);
                           const idContatos = contatoResponse.Id;
 
                           this.dadosTrabalhoService.addDadosTrabalho(pessoaData.DadosTrabalho).subscribe({
                             next: (dadosTrabalhoResponse) => {
+                              console.log('dadosTrabalhoService.addDadosTrabalho() chamado com sucesso:', dadosTrabalhoResponse);
                               const idDadosTrabalho = dadosTrabalhoResponse.Id;
 
                               this.funcaoService.addFuncao(pessoaData.Funcoes).subscribe({
                                 next: (funcaoResponse) => {
+                                  console.log('funcaoService.addFuncao() chamado com sucesso:', funcaoResponse);
                                   const idFuncoes = funcaoResponse.Id;
 
                                   this.contaService.addConta(pessoaData.Contas).subscribe({
                                     next: (contaResponse) => {
+                                      console.log('contaService.addConta() chamado com sucesso:', contaResponse);
                                       const idContas = contaResponse.Id;
 
                                       this.salarioService.addSalario(pessoaData.Salarios).subscribe({
                                         next: (salarioResponse) => {
+                                          console.log('salarioService.addSalario() chamado com sucesso:', salarioResponse);
                                           const idSalarios = salarioResponse.Id;
 
                                           const pessoa: Pessoa = {
@@ -579,6 +674,8 @@ export class PessoaComponent implements OnInit {
           this.messageService.add({ severity: 'error', summary: 'Erro', detail: 'Erro ao criar dados pessoais' });
         }
       });
+    } else {
+      this.messageService.add({ severity: 'warn', summary: 'Atenção', detail: 'Preencha todos os campos corretamente', life: 3000 });
     }
 
     this.dadosTrabalhoDialog = false;
@@ -611,11 +708,42 @@ export class PessoaComponent implements OnInit {
   }
 
   nextPage() {
-    if (this.formSteps[this.activeIndex].valid) {
-      this.activeIndex = this.activeIndex + 1;
+    let currentFormValid = false;
+
+    switch (this.activeIndex) {
+      case 0:
+        currentFormValid = this.step1Form.valid;
+        break;
+      case 1:
+        currentFormValid = this.step2Form.valid;
+        break;
+      case 2:
+        currentFormValid = this.step3Form.valid;
+        break;
+      case 3:
+        currentFormValid = this.step4Form.valid;
+        break;
+      case 4:
+        currentFormValid = this.step5Form.valid;
+        break;
+      case 5:
+        currentFormValid = this.step6Form.valid;
+        break;
+      case 6:
+        currentFormValid = this.step7Form.valid;
+        break;
+      case 7:
+        currentFormValid = this.step8Form.valid;
+        break;
+      case 8:
+        currentFormValid = this.step9Form.valid;
+        break;
     }
-    else {
-      this.messageService.add({ severity: 'warn', summary: 'Warn', detail: 'Preencha todos os campos corretamente', life: 3000 });
+    console.log('is currenct form valid:' + currentFormValid)
+    if (currentFormValid) {
+      this.activeIndex++;
+    } else {
+      this.messageService.add({ severity: 'warn', summary: 'Atenção', detail: 'Preencha todos os campos corretamente', life: 3000 });
     }
   }
 

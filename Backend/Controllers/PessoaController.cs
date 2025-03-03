@@ -31,7 +31,7 @@ namespace Backend.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Erro ao obter a lista de Pessoas.");
-                return StatusCode(500, "Erro ao obter a lista de Pessoas.");
+                return StatusCode(500, new { message = "Erro ao obter a lista de Pessoas.", error = ex.Message });
             }
         }
 
@@ -44,7 +44,7 @@ namespace Backend.Controllers
 
                 if (pessoa == null)
                 {
-                    return NotFound();
+                    return NotFound(new { message = "Pessoa não encontrada." }); 
                 }
 
                 return pessoa;
@@ -52,7 +52,7 @@ namespace Backend.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, $"Erro ao obter a pessoa com ID {id}.");
-                return StatusCode(500, "Erro ao obter a pessoa.");
+                return StatusCode(500, new { message = "Erro ao obter a pessoa.", error = ex.Message });
             }
         }
 
@@ -63,7 +63,7 @@ namespace Backend.Controllers
             {
                 if (!ModelState.IsValid)
                 {
-                    return BadRequest(ModelState);
+                    return BadRequest(ModelState); 
                 }
 
                 _context.Pessoas.Add(pessoa);
@@ -74,7 +74,7 @@ namespace Backend.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Erro ao criar uma nova pessoa.");
-                return StatusCode(500, "Erro ao criar uma nova pessoa.");
+                return StatusCode(500, new { message = "Erro ao criar uma nova pessoa.", error = ex.Message });
             }
         }
 
@@ -83,7 +83,7 @@ namespace Backend.Controllers
         {
             if (id != pessoaAtualizada.Id)
             {
-                return BadRequest("O ID na rota não corresponde ao ID no corpo da requisição.");
+                return BadRequest(new { message = "O ID na rota não corresponde ao ID no corpo da requisição." });
             }
 
             if (!ModelState.IsValid)
@@ -96,7 +96,7 @@ namespace Backend.Controllers
                 var pessoaExistente = await _context.Pessoas.FindAsync(id);
                 if (pessoaExistente == null)
                 {
-                    return NotFound();
+                    return NotFound(new { message = "Pessoa não encontrada." });
                 }
 
                 pessoaExistente.NomePessoa = pessoaAtualizada.NomePessoa;
@@ -118,18 +118,18 @@ namespace Backend.Controllers
             {
                 if (!PessoaExists(id))
                 {
-                    return NotFound();
+                    return NotFound(new { message = "Pessoa não encontrada." });
                 }
                 else
                 {
                     _logger.LogError(ex, $"Erro de concorrência ao atualizar a pessoa com ID {id}.");
-                    return StatusCode(500, "Erro de concorrência ao atualizar a pessoa.");
+                    return StatusCode(500, new { message = "Erro de concorrência ao atualizar a pessoa.", error = ex.Message });
                 }
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, $"Erro ao atualizar a pessoa com ID {id}.");
-                return StatusCode(500, "Erro ao atualizar a pessoa.");
+                return StatusCode(500, new { message = "Erro ao atualizar a pessoa.", error = ex.Message });
             }
         }
 
@@ -141,7 +141,7 @@ namespace Backend.Controllers
                 var pessoa = await _context.Pessoas.FindAsync(id);
                 if (pessoa == null)
                 {
-                    return NotFound();
+                    return NotFound(new { message = "Pessoa não encontrada." });
                 }
 
                 _context.Pessoas.Remove(pessoa);
@@ -152,7 +152,7 @@ namespace Backend.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, $"Erro ao excluir a pessoa com ID {id}.");
-                return StatusCode(500, "Erro ao excluir a pessoa.");
+                return StatusCode(500, new { message = "Erro ao excluir a pessoa.", error = ex.Message });
             }
         }
 

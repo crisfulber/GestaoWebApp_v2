@@ -33,7 +33,7 @@ export class EnderecoComponent implements OnInit {
     estados: Estado[] = [];
     municipios: Municipio[] = [];
     enderecoDialog: boolean = false;
-    endereco: Endereco = { Id: 0, Rua: '', Numero: 0, Bairro: '', IdMunicipio: null, IdEstado: null, CEP: '' };
+    endereco: Endereco = { Id: 0, Rua: '', Numero: '', Bairro: '', IdMunicipio: null, IdEstado: null, CEP: '' };
     submitted: boolean = false;
 
     constructor(
@@ -87,7 +87,7 @@ export class EnderecoComponent implements OnInit {
     }
 
     openNew() {
-        this.endereco = { Id: 0, Rua: '', Numero: 0, Bairro: '', IdMunicipio: null, IdEstado: null, CEP: '' };
+        this.endereco = { Id: 0, Rua: '', Numero: '', Bairro: '', IdMunicipio: null, IdEstado: null, CEP: '' };
         this.submitted = false;
         this.enderecoDialog = true;
     }
@@ -184,7 +184,7 @@ export class EnderecoComponent implements OnInit {
 
         this.enderecos = [...this.enderecos];
         this.enderecoDialog = false;
-        this.endereco = { Id: 0, Rua: '', Numero: 0, Bairro: '', IdMunicipio: null, IdEstado: null, CEP: '' };
+        this.endereco = { Id: 0, Rua: '', Numero: '', Bairro: '', IdMunicipio: null, IdEstado: null, CEP: '' };
     }
 
     findIndexById(Id: number): number {
