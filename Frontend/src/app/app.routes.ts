@@ -6,6 +6,7 @@ export const routes: Routes = [
     { path: 'contato', loadComponent: () => import('./components/features/contato/contato.component').then(m => m.ContatoComponent) },
     { path: 'dadospessoais', loadComponent: () => import('./components/features/dadospessoais/dadospessoais.component').then(m => m.DadosPessoaisComponent) },
     { path: 'dadostrabalho', loadComponent: () => import('./components/features/dadostrabalho/dadostrabalho.component').then(m => m.DadosTrabalhoComponent) },
+    { path: 'dashboard', loadComponent: () => import('./components/dashboard/dashboard.component').then(m => m.DashboardComponent) },
     { path: 'documento', loadComponent: () => import('./components/features/documento/documento.component').then(m => m.DocumentoComponent) },
     { path: 'dependente', loadComponent: () => import('./components/features/dependente/dependente.component').then(m => m.DependenteComponent) },
     { path: 'empresa', loadComponent: () => import('./components/features/empresa/empresa.component').then(m => m.EmpresaComponent) },
@@ -23,6 +24,6 @@ export const routes: Routes = [
     { path: 'setor', loadComponent: () => import('./components/features/setor/setor.component').then(m => m.SetorComponent) },
     { path: 'unidade', loadComponent: () => import('./components/features/unidade/unidade.component').then(m => m.UnidadeComponent) },
     { path: 'login', loadComponent: () => import('./components/login/login.component').then(m => m.LoginComponent) },
-    { path: '', redirectTo: 'empresa', pathMatch: 'full' },
-    { path: '**', redirectTo: 'empresa' },
+    { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
+    { path: '**', redirectTo: 'dashboard' },
 ];

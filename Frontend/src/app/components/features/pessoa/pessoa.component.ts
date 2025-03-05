@@ -102,6 +102,8 @@ export class PessoaComponent implements OnInit {
 
   steps: MenuItem[] = [];
   activeIndex: number = 0;
+  isSmallScreen: boolean = false;
+  isAnimating = false;
 
   municipios: Municipio[] = [];
   nacionalidades: Nacionalidade[] = [];
@@ -249,13 +251,13 @@ export class PessoaComponent implements OnInit {
     this.loadBancos();
     this.loadUnidades();
     this.steps = [
-      { label: 'Nome', key: 'nome' },
-      { label: 'Info Pessoal', key: 'infoPessoal' },
-      { label: 'Documentos', key: 'documentos' },
-      { label: 'Dependentes', key: 'dependentes' },
-      { label: 'Endereços', key: 'enderecos' },
-      { label: 'Contatos', key: 'contatos' },
-      { label: 'Info Trabalho', key: 'infoTrabalho' },
+      { label: 'Nome', key: 'nomeCompleto' },
+      { label: 'Info Pessoal', key: 'dadosPessoais' },
+      { label: 'Documento', key: 'documentos' },
+      { label: 'Dependente', key: 'dependentes' },
+      { label: 'Endereço', key: 'enderecos' },
+      { label: 'Contato', key: 'contatos' },
+      { label: 'Info Trabalho', key: 'dadosTrabalho' },
       { label: 'Funções', key: 'funcoes' },
       { label: 'Contas', key: 'contas' },
       { label: 'Salários', key: 'salarios' }
@@ -289,21 +291,41 @@ export class PessoaComponent implements OnInit {
       return null;
     }
 
-    const regexISO = /^\d{4}-\d{2}-\d{2}/;
-    if (regexISO.test(data)) {
-      const parts = data.split('-');
-      if (parts.length === 3) {
-        return `${parts[2]}/${parts[1]}/${parts[0]}`;
+    const isoRegex = /^(\d{4})-(\d{2})-(\d{2})(T(\d{2}):(\d{2}):(\d{2})(\.\d{3})?Z?)?$/;
+    const isoMatch = data.match(isoRegex);
+    if (isoMatch) {
+      const year = parseInt(isoMatch[1], 10);
+      const month = parseInt(isoMatch[2], 10);
+      const day = parseInt(isoMatch[3], 10);
+      if (!isNaN(year) && !isNaN(month) && !isNaN(day)) {
+        return `${this.padZero(day)}/${this.padZero(month)}/${year}`;
       }
     }
 
-    const regexDDMMYYYY = /^\d{2}\/\d{2}\/\d{4}$/;
-    if (regexDDMMYYYY.test(data)) {
+    const ddmmyyyyRegex = /^(\d{2})\/(\d{2})\/(\d{4})$/;
+    const ddmmyyyyMatch = data.match(ddmmyyyyRegex);
+    if (ddmmyyyyMatch) {
       return data;
+    }
+
+    const timestampRegex = /^\d+$/;
+    if (timestampRegex.test(data)) {
+      const timestamp = parseInt(data, 10);
+      if (!isNaN(timestamp)) {
+        const date = new Date(timestamp);
+        const day = this.padZero(date.getDate());
+        const month = this.padZero(date.getMonth() + 1);
+        const year = date.getFullYear();
+        return `${day}/${month}/${year}`;
+      }
     }
 
     console.error("Formato de data inválido:", data);
     return data;
+  }
+
+  padZero(num: number): string {
+    return num < 10 ? `0${num}` : num.toString();
   }
 
   formatarDataParaBanco(data: string | null | undefined): string | null {
@@ -564,7 +586,6 @@ export class PessoaComponent implements OnInit {
   }
 
   async savePessoa() {
-    console.log('ID da pessoa:', this.pessoa.Id);
     this.submitted = true;
 
     if (this.step1Form.valid && this.step2Form.valid && this.step3Form.valid && this.step4Form.valid && this.step5Form.valid && this.step6Form.valid && this.step7Form.valid && this.step8Form.valid && this.step9Form.valid && this.step10Form.valid) {
@@ -648,7 +669,6 @@ export class PessoaComponent implements OnInit {
 
       serviceCall.subscribe({
         next: (response: any) => {
-          console.log('Resposta de salvarDadosPessoais:', response);
           const id = idDadosPessoais || (response && response.Id);
           if (id) {
             resolve(id);
@@ -680,7 +700,6 @@ export class PessoaComponent implements OnInit {
 
       serviceCall.subscribe({
         next: (response: any) => {
-          console.log('Resposta de salvarDocumentos:', response);
           const id = idDocumentos || (response && response.Id);
           if (id) {
             resolve(id);
@@ -711,7 +730,6 @@ export class PessoaComponent implements OnInit {
 
       serviceCall.subscribe({
         next: (response: any) => {
-          console.log('Resposta de salvarDependentes:', response);
           const id = idDependentes || (response && response.Id);
           if (id) {
             resolve(id);
@@ -737,7 +755,6 @@ export class PessoaComponent implements OnInit {
 
       serviceCall.subscribe({
         next: (response: any) => {
-          console.log('Resposta de salvarEndereco:', response);
           const id = idEndereco || (response && response.Id);
           if (id) {
             resolve(id);
@@ -756,7 +773,7 @@ export class PessoaComponent implements OnInit {
   async salvarContatos(contatos: any, idContatos?: number): Promise<number> {
     const contatosFormatados = {
       ...contatos,
-      Id: idContatos // Adiciona o Id ao objeto contatos
+      Id: idContatos
     };
 
     return new Promise((resolve, reject) => {
@@ -766,7 +783,6 @@ export class PessoaComponent implements OnInit {
 
       serviceCall.subscribe({
         next: (response: any) => {
-          console.log('Resposta de salvarContatos:', response);
           const id = idContatos || (response && response.Id);
           if (id) {
             resolve(id);
@@ -797,7 +813,6 @@ export class PessoaComponent implements OnInit {
 
       serviceCall.subscribe({
         next: (response: any) => {
-          console.log('Resposta de salvarDadosTrabalho:', response);
           const id = idDadosTrabalho || (response && response.Id);
           if (id) {
             resolve(id);
@@ -816,7 +831,7 @@ export class PessoaComponent implements OnInit {
   async salvarContas(contas: any, idContas?: number): Promise<number> {
     const contasFormatadas = {
       ...contas,
-      Id: idContas // Adiciona o Id ao objeto contas
+      Id: idContas
     };
 
     return new Promise((resolve, reject) => {
@@ -826,7 +841,6 @@ export class PessoaComponent implements OnInit {
 
       serviceCall.subscribe({
         next: (response: any) => {
-          console.log('Resposta de salvarContas:', response);
           const id = idContas || (response && response.Id);
           if (id) {
             resolve(id);
@@ -856,7 +870,6 @@ export class PessoaComponent implements OnInit {
 
       serviceCall.subscribe({
         next: (response: any) => {
-          console.log('Resposta de salvarSalarios:', response);
           const id = idSalarios || (response && response.Id);
           if (id) {
             resolve(id);
@@ -873,7 +886,6 @@ export class PessoaComponent implements OnInit {
   }
 
   editPessoa(pessoa: Pessoa) {
-    console.log('ID da pessoa para edição:', pessoa.Id);
     this.pessoaDialog = true;
     this.pessoa = { ...pessoa };
 
@@ -897,7 +909,6 @@ export class PessoaComponent implements OnInit {
             IdEstadoCivil: dadosPessoais.IdEstadoCivil,
             IdEscolaridade: dadosPessoais.IdEscolaridade
           });
-          // Armazena o ID original
           this.pessoa.IdDadosPessoais = pessoa.IdDadosPessoais;
         },
         error: (err) => {
@@ -906,7 +917,6 @@ export class PessoaComponent implements OnInit {
       });
     }
 
-    // Repita o processo para as outras tabelas relacionadas...
     if (pessoa.IdDocumentos) {
       this.documentoService.getDocumentoById(pessoa.IdDocumentos).subscribe({
         next: (documentos) => {
@@ -922,7 +932,6 @@ export class PessoaComponent implements OnInit {
             SerieCTPS: documentos.SerieCTPS,
             PIS: documentos.PIS
           });
-          // Armazena o ID original
           this.pessoa.IdDocumentos = pessoa.IdDocumentos;
         },
         error: (err) => {
@@ -939,7 +948,6 @@ export class PessoaComponent implements OnInit {
             DtNascimento_Dependente: this.formatarDataParaTela(dependentes.DtNascimento_Dependente),
             CPF_Dependente: dependentes.CPF_Dependente
           });
-          // Armazena o ID original
           this.pessoa.IdDependentes = pessoa.IdDependentes;
         },
         error: (err) => {
@@ -960,7 +968,6 @@ export class PessoaComponent implements OnInit {
             Numero: endereco.Numero,
             CEP: endereco.CEP
           });
-          // Armazena o ID original
           this.pessoa.IdEnderecos = pessoa.IdEnderecos;
         },
         error: (err) => {
@@ -976,7 +983,6 @@ export class PessoaComponent implements OnInit {
             Telefone: contatos.Telefone,
             Email: contatos.Email
           });
-          // Armazena o ID original
           this.pessoa.IdContatos = pessoa.IdContatos;
         },
         error: (err) => {
@@ -998,7 +1004,6 @@ export class PessoaComponent implements OnInit {
             ValeTransporte: dadosTrabalho.ValeTransporte,
             Bonifica: dadosTrabalho.Bonifica
           });
-          // Armazena o ID original
           this.pessoa.IdDadosTrabalho = pessoa.IdDadosTrabalho;
         },
         error: (err) => {
@@ -1022,7 +1027,6 @@ export class PessoaComponent implements OnInit {
             IdBanco: contas.IdBanco,
             PIX: contas.PIX
           });
-          // Armazena o ID original
           this.pessoa.IdContas = pessoa.IdContas;
         },
         error: (err) => {
@@ -1039,7 +1043,6 @@ export class PessoaComponent implements OnInit {
             DtAlteracao: this.formatarDataParaTela(salarios.DtAlteracao),
             SalarioAtivo: salarios.SalarioAtivo
           });
-          // Armazena o ID original
           this.pessoa.IdSalarios = pessoa.IdSalarios;
         },
         error: (err) => {

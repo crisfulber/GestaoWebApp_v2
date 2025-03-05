@@ -26,8 +26,8 @@
             <tr>
                 <td>{{pessoa.NomePessoa}}</td>
                 <td>
-                    <i
-                        [className]="!pessoa.Ativo ? 'pi pi-check-circle text-green' : 'pi pi-times-circle text-red'"></i>
+                    <i [className]="!pessoa.Ativo ? 'pi pi-check-circle' : 'pi pi-times-circle'"
+                        [ngStyle]="{ color: !pessoa.Ativo ? 'green' : 'red' }"></i>
                 </td>
                 <td>
                     <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-info mr-2"
@@ -43,7 +43,8 @@
 <p-dialog [(visible)]="pessoaDialog" [style]="{ width: '80vw' }" header="Detalhes da Pessoa" [modal]="true"
     styleClass="p-fluid">
     <ng-template pTemplate="content">
-        <p-steps [model]="steps" [(activeIndex)]="activeIndex" [readonly]="true"></p-steps>
+        <p-steps [model]="steps" [(activeIndex)]="activeIndex" [readonly]="true"
+            styleClass="responsive-steps"></p-steps>
 
         <form class="mt-4">
             <div [ngSwitch]="activeIndex">
