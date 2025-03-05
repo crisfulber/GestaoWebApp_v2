@@ -16,7 +16,7 @@ export class ContaService {
     return this.apiService.getAll<Conta>(this.endpoint);
   }
 
-  getConta(id: number): Observable<Conta> {
+  getContaById(id: number): Observable<Conta> {
     return this.apiService.getById<Conta>(this.endpoint, id);
   }
 

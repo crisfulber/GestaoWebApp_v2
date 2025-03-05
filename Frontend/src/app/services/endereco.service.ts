@@ -16,7 +16,7 @@ export class EnderecoService {
     return this.apiService.getAll<Endereco>(this.endpoint);
   }
 
-  getEndereco(id: number): Observable<Endereco> {
+  getEnderecoById(id: number): Observable<Endereco> {
     return this.apiService.getById<Endereco>(this.endpoint, id);
   }
 

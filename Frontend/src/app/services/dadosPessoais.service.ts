@@ -16,7 +16,7 @@ export class DadosPessoaisService {
         return this.apiService.getAll<DadosPessoais>(this.endpoint);
     }
 
-    getDadosPessoaisAll(id: number): Observable<DadosPessoais> {
+    getDadosPessoaisById(id: number): Observable<DadosPessoais> {
         return this.apiService.getById<DadosPessoais>(this.endpoint, id);
     }
 

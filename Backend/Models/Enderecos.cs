@@ -23,7 +23,7 @@ namespace Backend.Models
         public required string Bairro { get; set; }
 
         [Required(ErrorMessage = "CEP é obrigatório")]
-        [StringLength(9)]
+        [StringLength(10)]
         public required string CEP { get; set; }
 
         [ForeignKey("Municipio")]

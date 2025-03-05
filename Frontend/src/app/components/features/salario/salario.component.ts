@@ -142,11 +142,10 @@ export class SalarioComponent implements OnInit {
 
   saveSalario() {
     this.submitted = true;
-    console.log('Salário a ser enviado:', this.salario); // Adicione este console.log
+    console.log('Salário a ser enviado:', this.salario); 
 
     if (this.salario.Valor && this.salario.DtAlteracao) {
-      // Formatando a data antes de enviar para o backend
-      this.salario.DtAlteracao = this.formatarDataParaBanco(this.salario.DtAlteracao); // Formata a data
+      this.salario.DtAlteracao = this.formatarDataParaBanco(this.salario.DtAlteracao); 
 
       if (this.salario.Id) {
         this.salarioService.updateSalario(this.salario.Id, this.salario).subscribe({

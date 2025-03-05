@@ -19,7 +19,7 @@
         <ng-template pTemplate="header">
             <tr>
                 <th pSortableColumn="NomeDependente">Nome<p-sortIcon field="NomeDependente"></p-sortIcon></th>
-                <th pSortableColumn="CPF">CPF<p-sortIcon field="CPF"></p-sortIcon></th>
+                <th pSortableColumn="CPF_Dependente">CPF<p-sortIcon field="CPF_Dependente"></p-sortIcon></th>
                 <th pSortableColumn="DtNascimento">Data de Nascimento<p-sortIcon field="DtNascimento"></p-sortIcon></th>
                 <th></th>
             </tr>
@@ -48,15 +48,15 @@
             <input type="text" pInputText id="NomeDependente" [(ngModel)]="dependente.NomeDependente" />
         </div>
         <div class="field">
-            <label for="CPF" class="block">CPF</label>
-            <p-inputmask mask="999.999.999-99" placeholder="999.999.999-99" id="CPF" [(ngModel)]="dependente.CPF"
-                required autofocus [ngClass]="{'ng-invalid ng-dirty': submitted && !dependente.CPF}" />
-            <small class="p-error block" *ngIf="submitted && !dependente.CPF">CPF é obrigatório.</small>
+            <label for="CPF_Dependente" class="block">CPF</label>
+            <p-inputmask mask="999.999.999-99" placeholder="999.999.999-99" id="CPF_Dependente" [(ngModel)]="dependente.CPF_Dependente"
+                required autofocus [ngClass]="{'ng-invalid ng-dirty': submitted && !dependente.CPF_Dependente}" />
+            <small class="p-error block" *ngIf="submitted && !dependente.CPF_Dependente">CPF é obrigatório.</small>
         </div>
         <div class="field">
-            <label for="DtNascimento" class="block">Data de Nascimento</label>
-            <p-inputMask mask="99/99/9999" placeholder="dd/mm/aaaa" id="DtNascimento"
-                [(ngModel)]="dependente.DtNascimento"></p-inputMask>
+            <label for="DtNascimento_Dependente" class="block">Data de Nascimento</label>
+            <p-inputMask mask="99/99/9999" placeholder="dd/mm/aaaa" id="DtNascimento_Dependente"
+                [(ngModel)]="dependente.DtNascimento_Dependente"></p-inputMask>
         </div>
     </ng-template>
 

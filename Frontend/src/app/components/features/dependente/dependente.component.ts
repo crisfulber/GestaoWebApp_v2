@@ -29,8 +29,8 @@ export class DependenteComponent implements OnInit {
   dependente: Dependente = {
     Id: 0,
     NomeDependente: '',
-    CPF: '',
-    DtNascimento: null
+    CPF_Dependente: '',
+    DtNascimento_Dependente: null
   };
   submitted: boolean = false;
 
@@ -48,7 +48,7 @@ export class DependenteComponent implements OnInit {
     this.dependenteService.getDependentes().subscribe({
       next: (data) => {
         data.forEach(x => {
-          x.DtNascimento = this.formatarDataParaTela(x.DtNascimento)
+          x.DtNascimento_Dependente = this.formatarDataParaTela(x.DtNascimento_Dependente)
         });
         this.dependentes = data;
       }
@@ -59,8 +59,8 @@ export class DependenteComponent implements OnInit {
     this.dependente = {
       Id: 0,
       NomeDependente: '',
-      CPF: '',
-      DtNascimento: null
+      CPF_Dependente: '',
+      DtNascimento_Dependente: null
     };
     this.submitted = false;
     this.dependenteDialog = true;
@@ -70,8 +70,8 @@ export class DependenteComponent implements OnInit {
     this.dependenteDialog = true;
     this.dependente = { ...dependente };
 
-    if (this.dependente.DtNascimento) {
-      this.dependente.DtNascimento = this.formatarDataParaTela(this.dependente.DtNascimento);
+    if (this.dependente.DtNascimento_Dependente) {
+      this.dependente.DtNascimento_Dependente = this.formatarDataParaTela(this.dependente.DtNascimento_Dependente);
     }
   }
 
@@ -119,7 +119,7 @@ export class DependenteComponent implements OnInit {
 
   deleteDependente(dependente: Dependente) {
     this.confirmationService.confirm({
-      message: 'Tem certeza que deseja deletar o dependente com CPF ' + dependente.CPF + '?',
+      message: 'Tem certeza que deseja deletar o dependente com CPF_Dependente ' + dependente.CPF_Dependente + '?',
       header: 'Confirmar',
       icon: 'pi pi-exclamation-triangle',
       accept: () => {
@@ -129,7 +129,7 @@ export class DependenteComponent implements OnInit {
             this.messageService.add({ severity: 'success', summary: 'Confirmado', detail: 'Dependente Deletado', life: 3000 });
           },
           error: (error) => {
-            this.messageService.add({ severity: 'error', summary: 'Erro', detail: 'Erro ao deletar o dependente com CPF ' + dependente.CPF, life: 3000 });
+            this.messageService.add({ severity: 'error', summary: 'Erro', detail: 'Erro ao deletar o dependente com CPF_Dependente ' + dependente.CPF_Dependente, life: 3000 });
             console.error('Erro ao deletar dependente:', error);
           }
         });
@@ -147,7 +147,7 @@ export class DependenteComponent implements OnInit {
 
       this.dependente.NomeDependente = this.dependente.NomeDependente.toUpperCase();
       
-      this.dependente.DtNascimento = this.formatarDataParaBanco(this.dependente.DtNascimento);
+      this.dependente.DtNascimento_Dependente = this.formatarDataParaBanco(this.dependente.DtNascimento_Dependente);
 
       if (this.dependente.Id) {
         this.dependenteService.updateDependente(this.dependente.Id, this.dependente).subscribe({

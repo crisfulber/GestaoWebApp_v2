@@ -20,19 +20,16 @@ namespace Backend.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Funcao>>> GetFuncoes()
+        public async Task<ActionResult<IEnumerable<Funcao>>> GetFuncaoes()
         {
             try
             {
-                return await _context.Funcoes
-                    .Include(f => f.Setor)  
-                    .ThenInclude(s => s.Unidade) 
-                    .ToListAsync();
+                return await _context.Funcoes.ToListAsync();
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Erro ao obter a lista de funções.");
-                return StatusCode(500, "Erro ao obter a lista de funções.");
+                _logger.LogError(ex, "Erro ao obter a lista de funcoes.");
+                return StatusCode(500, "Erro ao obter a lista de funcoes.");
             }
         }
 
@@ -41,10 +38,7 @@ namespace Backend.Controllers
         {
             try
             {
-                var funcao = await _context.Funcoes
-                    .Include(f => f.Setor)  
-                    .ThenInclude(s => s.Unidade) 
-                    .FirstOrDefaultAsync(f => f.Id == id);
+                var funcao = await _context.Funcoes.FindAsync(id);
 
                 if (funcao == null)
                 {
@@ -55,8 +49,8 @@ namespace Backend.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, $"Erro ao obter a função com ID {id}.");
-                return StatusCode(500, "Erro ao obter a função.");
+                _logger.LogError(ex, $"Erro ao obter o funcao com ID {id}.");
+                return StatusCode(500, "Erro ao obter o funcao.");
             }
         }
 
@@ -65,12 +59,6 @@ namespace Backend.Controllers
         {
             try
             {
-                if (!_context.Setores.Any(s => s.Id == funcao.IdSetor))
-                {
-                    return BadRequest("Setor inválido.");
-                }
-
-                funcao.NomeFuncao = funcao.NomeFuncao.ToUpper();
                 _context.Funcoes.Add(funcao);
                 await _context.SaveChangesAsync();
 
@@ -78,8 +66,8 @@ namespace Backend.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Erro ao criar uma nova função.");
-                return StatusCode(500, "Erro ao criar uma nova função.");
+                _logger.LogError(ex, "Erro ao criar um novo funcao.");
+                return StatusCode(500, "Erro ao criar um novo funcao.");
             }
         }
 
@@ -91,16 +79,10 @@ namespace Backend.Controllers
                 return BadRequest();
             }
 
-            if (!_context.Setores.Any(s => s.Id == funcao.IdSetor))
-            {
-                return BadRequest("Setor inválido.");
-            }
-
             _context.Entry(funcao).State = EntityState.Modified;
 
             try
             {
-                funcao.NomeFuncao = funcao.NomeFuncao.ToUpper();
                 await _context.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException ex)
@@ -111,14 +93,14 @@ namespace Backend.Controllers
                 }
                 else
                 {
-                    _logger.LogError(ex, $"Erro de concorrência ao atualizar a função com ID {id}.");
-                    return StatusCode(500, "Erro de concorrência ao atualizar a função.");
+                    _logger.LogError(ex, $"Erro de concorrência ao atualizar o funcao com ID {id}.");
+                    return StatusCode(500, "Erro de concorrência ao atualizar o funcao.");
                 }
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, $"Erro ao atualizar a função com ID {id}.");
-                return StatusCode(500, "Erro ao atualizar a função.");
+                _logger.LogError(ex, $"Erro ao atualizar o funcao com ID {id}.");
+                return StatusCode(500, "Erro ao atualizar o funcao.");
             }
 
             return NoContent();
@@ -142,8 +124,8 @@ namespace Backend.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, $"Erro ao excluir a função com ID {id}.");
-                return StatusCode(500, "Erro ao excluir a função.");
+                _logger.LogError(ex, $"Erro ao excluir o funcao com ID {id}.");
+                return StatusCode(500, "Erro ao excluir o funcao.");
             }
         }
 

@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { PessoaService } from '../../../services/pessoa.service';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MenuItem } from 'primeng/api';
@@ -14,9 +13,13 @@ import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { TableModule } from 'primeng/table';
 import { ToolbarModule } from 'primeng/toolbar';
 import { CommonModule } from '@angular/common';
-import { Pessoa } from '../../interface/pessoa';
 import { DropdownModule } from 'primeng/dropdown';
 import { CheckboxModule } from 'primeng/checkbox';
+import { SelectModule } from 'primeng/select';
+import { FindPipe } from './findPipe';
+
+import { Pessoa } from '../../interface/pessoa';
+import { PessoaService } from '../../../services/pessoa.service';
 
 import { DadosPessoais } from '../../interface/dadosPessoais';
 import { DadosPessoaisService } from '../../../services/dadosPessoais.service';
@@ -50,13 +53,15 @@ import { Setor } from '../../interface/setor';
 import { SetorService } from '../../../services/setor.service';
 import { Banco } from '../../interface/banco';
 import { BancoService } from '../../../services/banco.service';
+import { Unidade } from '../../interface/unidade';
+import { UnidadeService } from '../../../services/unidade.service';
 
 @Component({
   selector: 'app-pessoa',
   standalone: true,
   imports: [CommonModule, FormsModule, ReactiveFormsModule, InputTextModule, ButtonModule, CheckboxModule,
     InputMaskModule, ToastModule, ConfirmDialogModule, TableModule, ToolbarModule, StepsModule,
-    DialogModule, DropdownModule],
+    DialogModule, DropdownModule, SelectModule, FindPipe],
   templateUrl: './pessoa.component.html',
   styleUrls: ['./pessoa.component.scss'],
   providers: [MessageService, ConfirmationService]
@@ -78,6 +83,7 @@ export class PessoaComponent implements OnInit {
   step7Form!: FormGroup;
   step8Form!: FormGroup;
   step9Form!: FormGroup;
+  step10Form!: FormGroup;
 
   pessoa: Pessoa = {
     Id: 0,
@@ -89,6 +95,7 @@ export class PessoaComponent implements OnInit {
     IdContatos: null,
     IdDadosTrabalho: null,
     IdFuncoes: null,
+    IdSetores: null,
     IdContas: null,
     IdSalarios: null
   }
@@ -104,6 +111,7 @@ export class PessoaComponent implements OnInit {
   setores: Setor[] = [];
   bancos: Banco[] = [];
   funcoes: Funcao[] = [];
+  salarios: Salario[] = [];
 
   dadosPessoaisLista: DadosPessoais[] = [];
   documentosLista: Documento[] = [];
@@ -121,6 +129,7 @@ export class PessoaComponent implements OnInit {
   estadosLista: Estado[] = [];
   setoresLista: Setor[] = [];
   bancosLista: Banco[] = [];
+  unidadesLista: Unidade[] = [];
 
   constructor(
     private pessoaService: PessoaService,
@@ -140,6 +149,7 @@ export class PessoaComponent implements OnInit {
     private estadoService: EstadoService,
     private setorService: SetorService,
     private bancoService: BancoService,
+    private unidadeService: UnidadeService,
     private messageService: MessageService,
     private confirmationService: ConfirmationService,
     private fb: FormBuilder
@@ -153,34 +163,34 @@ export class PessoaComponent implements OnInit {
       IdMunicipio: [''],
       IdNacionalidade: [''],
       IdEscolaridade: [''],
-      DtNascimento: ['', Validators.required],
+      DtNascimento: ['', [Validators.required]],
       IdEstadoCivil: [''],
       NomeConjuge: ['']
     });
     this.step3Form = this.fb.group({
       CPF: ['', Validators.required],
       RG: [''],
-      DtEmissaoRG: [''],
+      DtEmissaoRG: ['', [Validators.required]],
       OrgaoExpeditor: [''],
-      UF_RG: [''],
+      UF_RG_IdEstado: [''],
       CTPS: [''],
       SerieCTPS: [''],
-      DtEmissaoCTPS: [''],
-      UF_CTPS: [''],
+      DtEmissaoCTPS: ['', [Validators.required]],
+      UF_CTPS_IdEstado: [''],
       PIS: ['']
     });
     this.step4Form = this.fb.group({
       NomeDependente: [''],
       CPF_Dependente: [''],
-      DtNascimento_Dependente: ['']
+      DtNascimento_Dependente: ['', [Validators.required]],
     });
     this.step5Form = this.fb.group({
       Rua: ['', Validators.required],
       Numero: ['', Validators.required],
       Complemento: [''],
       Bairro: ['', Validators.required],
-      IdMunicipio_Endereco: ['', Validators.required],
-      IdEstado_Endereco: ['', Validators.required],
+      IdMunicipio: ['', Validators.required],
+      IdEstado: ['', Validators.required],
       CEP: ['']
     });
     this.step6Form = this.fb.group({
@@ -189,7 +199,7 @@ export class PessoaComponent implements OnInit {
     });
     this.step7Form = this.fb.group({
       NumRegistro: [''],
-      DtInicio: ['', Validators.required],
+      DtInicio: ['', [Validators.required]],
       DtRegistro: [''],
       Ativo: [false],
       Almoco: [false],
@@ -200,14 +210,17 @@ export class PessoaComponent implements OnInit {
     this.step8Form = this.fb.group({
       IdFuncao: ['', Validators.required],
       IdSetor: ['', Validators.required],
+      IdUnidade: ['', Validators.required]
     });
     this.step9Form = this.fb.group({
       IdBanco: ['', Validators.required],
       Agencia: [''],
       NumConta: [''],
-      PIX: [''],
+      PIX: ['']
+    });
+    this.step10Form = this.fb.group({
       Valor: ['', Validators.required],
-      DtAlteracao: ['', Validators.required],
+      DtAlteracao: ['', [Validators.required]],
       SalarioAtivo: [false]
     });
   }
@@ -226,6 +239,7 @@ export class PessoaComponent implements OnInit {
     this.loadDadosTrabalho();
     this.loadFuncoes();
     this.loadContas();
+    this.loadSalarios();
     this.loadMunicipios();
     this.loadNacionalidades();
     this.loadEscolaridades();
@@ -233,26 +247,82 @@ export class PessoaComponent implements OnInit {
     this.loadEstados();
     this.loadSetores();
     this.loadBancos();
+    this.loadUnidades();
     this.steps = [
-      { label: 'Dados Pessoais' },
-      { label: 'Documentos' },
-      { label: 'Dependentes' },
-      { label: 'Endereços' },
-      { label: 'Contatos' },
-      { label: 'Dados Trabalho' },
-      { label: 'Funções' },
-      { label: 'Contas' },
-      { label: 'Salários' }
+      { label: 'Nome', key: 'nome' },
+      { label: 'Info Pessoal', key: 'infoPessoal' },
+      { label: 'Documentos', key: 'documentos' },
+      { label: 'Dependentes', key: 'dependentes' },
+      { label: 'Endereços', key: 'enderecos' },
+      { label: 'Contatos', key: 'contatos' },
+      { label: 'Info Trabalho', key: 'infoTrabalho' },
+      { label: 'Funções', key: 'funcoes' },
+      { label: 'Contas', key: 'contas' },
+      { label: 'Salários', key: 'salarios' }
     ];
+  }
+
+  mapFormToEndereco(formValue: any, idEndereco?: number): Endereco {
+    return {
+      Id: idEndereco || 0,
+      Rua: this.titleCase(formValue.Rua),
+      Numero: formValue.Numero,
+      Complemento: this.titleCase(formValue.Complemento),
+      Bairro: this.titleCase(formValue.Bairro),
+      IdMunicipio: formValue.IdMunicipio,
+      IdEstado: formValue.IdEstado,
+      CEP: formValue.CEP,
+      NomeMunicipio: '',
+      SiglaEstado: ''
+    };
   }
 
   titleCase(str: string): string {
     if (!str) {
       return '';
     }
-    return str.replace(/\w\S*/g, (txt) => {
-      return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
-    });
+    return str.toUpperCase();
+  }
+
+  formatarDataParaTela(data: string | null | undefined): string | null {
+    if (!data) {
+      return null;
+    }
+
+    const regexISO = /^\d{4}-\d{2}-\d{2}/;
+    if (regexISO.test(data)) {
+      const parts = data.split('-');
+      if (parts.length === 3) {
+        return `${parts[2]}/${parts[1]}/${parts[0]}`;
+      }
+    }
+
+    const regexDDMMYYYY = /^\d{2}\/\d{2}\/\d{4}$/;
+    if (regexDDMMYYYY.test(data)) {
+      return data;
+    }
+
+    console.error("Formato de data inválido:", data);
+    return data;
+  }
+
+  formatarDataParaBanco(data: string | null | undefined): string | null {
+    if (!data) {
+      return null;
+    }
+
+    const regexYYYYMMDD = /^\d{4}-\d{2}-\d{2}$/;
+    if (regexYYYYMMDD.test(data)) {
+      return data;
+    }
+
+    const parts = data.split('/');
+    if (parts.length === 3) {
+      return `${parts[2]}-${parts[1]}-${parts[0]}`;
+    }
+
+    console.error("Formato de data inválido para envio ao banco:", data);
+    return data;
   }
 
   loadPessoas() {
@@ -465,6 +535,18 @@ export class PessoaComponent implements OnInit {
     });
   }
 
+  loadUnidades() {
+    this.unidadeService.getUnidades().subscribe({
+      next: (data) => {
+        this.unidadesLista = data;
+      },
+      error: (error) => {
+        this.messageService.add({ severity: 'error', summary: 'Erro', detail: 'Erro ao carregar dados' });
+        console.error('Erro ao carregar dados:', error);
+      }
+    });
+  }
+
   openNew() {
     this.step1Form.reset();
     this.step2Form.reset();
@@ -475,227 +557,496 @@ export class PessoaComponent implements OnInit {
     this.step7Form.reset();
     this.step8Form.reset();
     this.step9Form.reset();
+    this.step10Form.reset();
     this.submitted = false;
     this.pessoaDialog = true;
     this.activeIndex = 0;
   }
 
-  mapFormToEndereco(formValue: any): Endereco {
-    return {
-      Id: 0,
-      Rua: this.titleCase(formValue.Rua),
-      Numero: this.titleCase(formValue.Numero),
-      Complemento: this.titleCase(formValue.Complemento),
-      Bairro: this.titleCase(formValue.Bairro),
-      IdMunicipio: formValue.IdMunicipio_Endereco,
-      IdEstado: formValue.IdEstado_Endereco,
-      CEP: formValue.CEP
-    };
-  }
-
-  savePessoa() {
-    console.log('savePessoa() foi chamado!');
+  async savePessoa() {
+    console.log('ID da pessoa:', this.pessoa.Id);
     this.submitted = true;
 
-    const step1Valid = this.step1Form.valid;
-    const step2Valid = this.step2Form.valid;
-    const step3Valid = this.step3Form.valid;
-    const step4Valid = this.step4Form.valid;
-    const step5Valid = this.step5Form.valid;
-    const step6Valid = this.step6Form.valid;
-    const step7Valid = this.step7Form.valid;
-    const step8Valid = this.step8Form.valid;
-    const step9Valid = this.step9Form.valid;
+    if (this.step1Form.valid && this.step2Form.valid && this.step3Form.valid && this.step4Form.valid && this.step5Form.valid && this.step6Form.valid && this.step7Form.valid && this.step8Form.valid && this.step9Form.valid && this.step10Form.valid) {
+      try {
+        const dadosPessoaisId = await this.salvarDadosPessoais(this.step2Form.value, this.pessoa.IdDadosPessoais as number | undefined);
+        const documentosId = await this.salvarDocumentos(this.step3Form.value, this.pessoa.IdDocumentos as number | undefined);
+        const dependentesId = await this.salvarDependentes(this.step4Form.value, this.pessoa.IdDependentes as number | undefined);
+        const enderecoId = await this.salvarEndereco(this.step5Form.value, this.pessoa.IdEnderecos as number | undefined);
+        const contatosId = await this.salvarContatos(this.step6Form.value, this.pessoa.IdContatos as number | undefined);
+        const dadosTrabalhoId = await this.salvarDadosTrabalho(this.step7Form.value, this.pessoa.IdDadosTrabalho as number | undefined);
+        const funcaoId = this.step8Form.get('IdFuncao')?.value;
+        const setorId = this.step8Form.get('IdSetor')?.value;
+        const unidadeId = this.step8Form.get('IdUnidade')?.value;
+        const contasId = await this.salvarContas(this.step9Form.value, this.pessoa.IdContas as number | undefined);
+        const salariosId = await this.salvarSalarios(this.step10Form.value, this.pessoa.IdSalarios as number | undefined);
 
-    console.log('step1Form Validação:', step1Valid);
-    console.log('step2Form Validação:', step2Valid);
-    console.log('step3Form Validação:', step3Valid);
-    console.log('step4Form Validação:', step4Valid);
-    console.log('step5Form Validação:', step5Valid);
-    console.log('step6Form Validação:', step6Valid);
-    console.log('step7Form Validação:', step7Valid);
-    console.log('step8Form Validação:', step8Valid);
-    console.log('step9Form Validação:', step9Valid);
+        const pessoaData: Pessoa = {
+          Id: this.pessoa.Id || 0,
+          NomePessoa: this.titleCase(this.step1Form.get('nomePessoa')?.value),
+          IdDadosPessoais: dadosPessoaisId,
+          IdDocumentos: documentosId,
+          IdDependentes: dependentesId,
+          IdEnderecos: enderecoId,
+          IdContatos: contatosId,
+          IdDadosTrabalho: dadosTrabalhoId,
+          IdFuncoes: funcaoId,
+          IdSetores: setorId,
+          IdUnidades: unidadeId,
+          IdContas: contasId,
+          IdSalarios: salariosId
+        };
 
-
-    const formIsValid = step1Valid && step2Valid && step3Valid && step4Valid && step5Valid && step6Valid && step7Valid && step8Valid && step9Valid;
-
-    console.log('Formulário é válido:', formIsValid);
-
-    if (formIsValid) {
-      console.log('step1Form:', this.step1Form.value);
-      console.log('step2Form:', this.step2Form.value);
-      console.log('step3Form:', this.step3Form.value);
-      console.log('step4Form:', this.step4Form.value);
-      console.log('step5Form:', this.step5Form.value);
-      console.log('step6Form:', this.step6Form.value);
-      console.log('step7Form:', this.step7Form.value);
-      console.log('step8Form:', this.step8Form.value);
-      console.log('step9Form:', this.step9Form.value);
-
-      const nomePessoa = this.titleCase(this.step1Form.get('nomePessoa')?.value);
-      const dadosPessoais = this.step2Form.value;
-      const documentos = this.step3Form.value;
-      const dependentes = this.step4Form.value;
-
-      const enderecos = this.step5Form.value;
-      const enderecosFormatados: Endereco = this.mapFormToEndereco(enderecos);
-      console.log('enderecosFormatados:', enderecosFormatados);
-
-      const contatos = this.step6Form.value;
-      const dadosTrabalho = this.step7Form.value;
-      const funcoes = this.step8Form.value;
-      const contas = this.step9Form.value;
-      const salarios = this.step9Form.value;
-
-      const pessoaData = {
-        NomePessoa: nomePessoa,
-        DadosPessoais: dadosPessoais,
-        Documentos: documentos,
-        Dependentes: dependentes,
-        Enderecos: enderecosFormatados,
-        Contatos: contatos,
-        DadosTrabalho: dadosTrabalho,
-        Funcoes: funcoes,
-        Contas: contas,
-        Salarios: salarios
-      };
-
-      this.dadosPessoaisService.addDadosPessoais(pessoaData.DadosPessoais).subscribe({
-        next: (dadosPessoaisResponse) => {
-          console.log('dadosPessoaisService.addDadosPessoais() chamado com sucesso:', dadosPessoaisResponse);
-          const idDadosPessoais = dadosPessoaisResponse.Id;
-
-          this.documentoService.addDocumento(pessoaData.Documentos).subscribe({
-            next: (documentoResponse) => {
-              console.log('documentoService.addDocumento() chamado com sucesso:', documentoResponse);
-              const idDocumentos = documentoResponse.Id;
-
-              this.dependenteService.addDependente(pessoaData.Dependentes).subscribe({
-                next: (dependenteResponse) => {
-                  console.log('dependenteService.addDependente() chamado com sucesso:', dependenteResponse);
-                  const idDependentes = dependenteResponse.Id;
-
-                  this.enderecoService.addEndereco(pessoaData.Enderecos).subscribe({
-                    next: (enderecoResponse) => {
-                      console.log('enderecoService.addEndereco() chamado com sucesso:', enderecoResponse);
-                      const idEnderecos = enderecoResponse.Id;
-
-                      this.contatoService.addContato(pessoaData.Contatos).subscribe({
-                        next: (contatoResponse) => {
-                          console.log('contatoService.addContato() chamado com sucesso:', contatoResponse);
-                          const idContatos = contatoResponse.Id;
-
-                          this.dadosTrabalhoService.addDadosTrabalho(pessoaData.DadosTrabalho).subscribe({
-                            next: (dadosTrabalhoResponse) => {
-                              console.log('dadosTrabalhoService.addDadosTrabalho() chamado com sucesso:', dadosTrabalhoResponse);
-                              const idDadosTrabalho = dadosTrabalhoResponse.Id;
-
-                              this.funcaoService.addFuncao(pessoaData.Funcoes).subscribe({
-                                next: (funcaoResponse) => {
-                                  console.log('funcaoService.addFuncao() chamado com sucesso:', funcaoResponse);
-                                  const idFuncoes = funcaoResponse.Id;
-
-                                  this.contaService.addConta(pessoaData.Contas).subscribe({
-                                    next: (contaResponse) => {
-                                      console.log('contaService.addConta() chamado com sucesso:', contaResponse);
-                                      const idContas = contaResponse.Id;
-
-                                      this.salarioService.addSalario(pessoaData.Salarios).subscribe({
-                                        next: (salarioResponse) => {
-                                          console.log('salarioService.addSalario() chamado com sucesso:', salarioResponse);
-                                          const idSalarios = salarioResponse.Id;
-
-                                          const pessoa: Pessoa = {
-                                            Id: 0,
-                                            NomePessoa: pessoaData.NomePessoa,
-                                            IdDadosPessoais: idDadosPessoais,
-                                            IdDocumentos: idDocumentos,
-                                            IdDependentes: idDependentes,
-                                            IdEnderecos: idEnderecos,
-                                            IdContatos: idContatos,
-                                            IdDadosTrabalho: idDadosTrabalho,
-                                            IdFuncoes: idFuncoes,
-                                            IdContas: idContas,
-                                            IdSalarios: idSalarios
-                                          };
-
-                                          this.pessoaService.addPessoa(pessoa).subscribe({
-                                            next: () => {
-                                              this.messageService.add({ severity: 'success', summary: 'Sucesso', detail: 'Pessoa criada com sucesso' });
-                                              this.loadPessoas();
-                                              this.pessoaDialog = false;
-                                            },
-                                            error: (err) => {
-                                              console.error('Erro ao criar pessoa:', err);
-                                              this.messageService.add({ severity: 'error', summary: 'Erro', detail: 'Erro ao criar pessoa' });
-                                            }
-                                          });
-                                        },
-                                        error: (err) => {
-                                          console.error('Erro ao criar salário:', err);
-                                          this.messageService.add({ severity: 'error', summary: 'Erro', detail: 'Erro ao criar salário' });
-                                        }
-                                      });
-                                    },
-                                    error: (err) => {
-                                      console.error('Erro ao criar conta:', err);
-                                      this.messageService.add({ severity: 'error', summary: 'Erro', detail: 'Erro ao criar conta' });
-                                    }
-                                  });
-                                },
-                                error: (err) => {
-                                  console.error('Erro ao criar função:', err);
-                                  this.messageService.add({ severity: 'error', summary: 'Erro', detail: 'Erro ao criar função' });
-                                }
-                              });
-                            },
-                            error: (err) => {
-                              console.error('Erro ao criar dadosTrabalho:', err);
-                              this.messageService.add({ severity: 'error', summary: 'Erro', detail: 'Erro ao criar dadosTrabalho' });
-                            }
-                          });
-                        },
-                        error: (err) => {
-                          console.error('Erro ao criar contato:', err);
-                          this.messageService.add({ severity: 'error', summary: 'Erro', detail: 'Erro ao criar contato' });
-                        }
-                      });
-                    },
-                    error: (err) => {
-                      console.error('Erro ao criar endereço:', err);
-                      this.messageService.add({ severity: 'error', summary: 'Erro', detail: 'Erro ao criar endereço' });
-                    }
-                  });
-                },
-                error: (err) => {
-                  console.error('Erro ao criar dependente:', err);
-                  this.messageService.add({ severity: 'error', summary: 'Erro', detail: 'Erro ao criar dependente' });
-                }
-              });
+        if (this.pessoa.Id) {
+          this.pessoaService.updatePessoa(this.pessoa.Id, pessoaData).subscribe({
+            next: () => {
+              this.messageService.add({ severity: 'success', summary: 'Sucesso', detail: 'Pessoa atualizada com sucesso' });
+              this.loadPessoas();
+              this.pessoaDialog = false;
             },
             error: (err) => {
-              console.error('Erro ao criar documento:', err);
-              this.messageService.add({ severity: 'error', summary: 'Erro', detail: 'Erro ao criar documento' });
+              console.error('Erro ao atualizar pessoa:', err);
+              this.messageService.add({ severity: 'error', summary: 'Erro', detail: 'Erro ao atualizar pessoa' });
             }
           });
-        },
-        error: (err) => {
-          console.error('Erro ao criar dados pessoais:', err);
-          this.messageService.add({ severity: 'error', summary: 'Erro', detail: 'Erro ao criar dados pessoais' });
+        } else {
+          this.pessoaService.addPessoa(pessoaData).subscribe({
+            next: () => {
+              this.messageService.add({ severity: 'success', summary: 'Sucesso', detail: 'Pessoa criada com sucesso' });
+              this.loadPessoas();
+              this.pessoaDialog = false;
+            },
+            error: (err) => {
+              console.error('Erro ao criar pessoa:', err);
+              this.messageService.add({ severity: 'error', summary: 'Erro', detail: 'Erro ao criar pessoa' });
+            }
+          });
         }
-      });
+      } catch (error) {
+        console.error('Erro no salvamento:', error);
+        this.messageService.add({ severity: 'error', summary: 'Erro', detail: 'Erro ao salvar dados' });
+      }
     } else {
       this.messageService.add({ severity: 'warn', summary: 'Atenção', detail: 'Preencha todos os campos corretamente', life: 3000 });
     }
+  }
 
-    this.dadosTrabalhoDialog = false;
-    this.loadPessoas();
+  async salvarDadosPessoais(dados: any, idDadosPessoais?: number): Promise<number> {
+    const dadosFormatados = {
+      ...dados,
+      Id: idDadosPessoais,
+      NomePai: this.titleCase(dados.NomePai),
+      NomeMae: this.titleCase(dados.NomeMae),
+      NomeConjuge: this.titleCase(dados.NomeConjuge),
+      DtNascimento: this.formatarDataParaBanco(dados.DtNascimento)
+    };
+
+    return new Promise((resolve, reject) => {
+      const serviceCall = idDadosPessoais
+        ? this.dadosPessoaisService.updateDadosPessoais(idDadosPessoais, dadosFormatados)
+        : this.dadosPessoaisService.addDadosPessoais(dadosFormatados);
+
+      serviceCall.subscribe({
+        next: (response: any) => {
+          console.log('Resposta de salvarDadosPessoais:', response);
+          const id = idDadosPessoais || (response && response.Id);
+          if (id) {
+            resolve(id);
+          } else {
+            reject(new Error('ID não encontrado na resposta de salvarDadosPessoais'));
+          }
+        },
+        error: (err) => {
+          console.error('Erro em salvarDadosPessoais:', err);
+          reject(err);
+        }
+      });
+    });
+  }
+
+  async salvarDocumentos(documentos: any, idDocumentos?: number): Promise<number> {
+    const documentosFormatados = {
+      ...documentos,
+      Id: idDocumentos,
+      DtEmissaoRG: this.formatarDataParaBanco(documentos.DtEmissaoRG),
+      DtEmissaoCTPS: this.formatarDataParaBanco(documentos.DtEmissaoCTPS),
+      OrgaoExpeditor: this.titleCase(documentos.OrgaoExpeditor)
+    };
+
+    return new Promise((resolve, reject) => {
+      const serviceCall = idDocumentos
+        ? this.documentoService.updateDocumento(idDocumentos, documentosFormatados)
+        : this.documentoService.addDocumento(documentosFormatados);
+
+      serviceCall.subscribe({
+        next: (response: any) => {
+          console.log('Resposta de salvarDocumentos:', response);
+          const id = idDocumentos || (response && response.Id);
+          if (id) {
+            resolve(id);
+          } else {
+            reject(new Error('ID não encontrado na resposta de salvarDocumentos'));
+          }
+        },
+        error: (err) => {
+          console.error('Erro em salvarDocumentos:', err);
+          reject(err);
+        }
+      });
+    });
+  }
+
+  async salvarDependentes(dependentes: any, idDependentes?: number): Promise<number> {
+    const dependentesFormatados = {
+      ...dependentes,
+      Id: idDependentes,
+      NomeDependente: this.titleCase(dependentes.NomeDependente),
+      DtNascimento_Dependente: this.formatarDataParaBanco(dependentes.DtNascimento_Dependente)
+    };
+
+    return new Promise((resolve, reject) => {
+      const serviceCall = idDependentes
+        ? this.dependenteService.updateDependente(idDependentes, dependentesFormatados)
+        : this.dependenteService.addDependente(dependentesFormatados);
+
+      serviceCall.subscribe({
+        next: (response: any) => {
+          console.log('Resposta de salvarDependentes:', response);
+          const id = idDependentes || (response && response.Id);
+          if (id) {
+            resolve(id);
+          } else {
+            reject(new Error('ID não encontrado na resposta de salvarDependentes'));
+          }
+        },
+        error: (err) => {
+          console.error('Erro em salvarDependentes:', err);
+          reject(err);
+        }
+      });
+    });
+  }
+
+  async salvarEndereco(endereco: any, idEndereco?: number): Promise<number> {
+    const enderecoFormatado = this.mapFormToEndereco(endereco, idEndereco);
+
+    return new Promise((resolve, reject) => {
+      const serviceCall = idEndereco
+        ? this.enderecoService.updateEndereco(idEndereco, enderecoFormatado)
+        : this.enderecoService.addEndereco(enderecoFormatado);
+
+      serviceCall.subscribe({
+        next: (response: any) => {
+          console.log('Resposta de salvarEndereco:', response);
+          const id = idEndereco || (response && response.Id);
+          if (id) {
+            resolve(id);
+          } else {
+            reject(new Error('ID não encontrado na resposta de salvarEndereco'));
+          }
+        },
+        error: (err) => {
+          console.error('Erro em salvarEndereco:', err);
+          reject(err);
+        }
+      });
+    });
+  }
+
+  async salvarContatos(contatos: any, idContatos?: number): Promise<number> {
+    const contatosFormatados = {
+      ...contatos,
+      Id: idContatos // Adiciona o Id ao objeto contatos
+    };
+
+    return new Promise((resolve, reject) => {
+      const serviceCall = idContatos
+        ? this.contatoService.updateContato(idContatos, contatosFormatados)
+        : this.contatoService.addContato(contatosFormatados);
+
+      serviceCall.subscribe({
+        next: (response: any) => {
+          console.log('Resposta de salvarContatos:', response);
+          const id = idContatos || (response && response.Id);
+          if (id) {
+            resolve(id);
+          } else {
+            reject(new Error('ID não encontrado na resposta de salvarContatos'));
+          }
+        },
+        error: (err) => {
+          console.error('Erro em salvarContatos:', err);
+          reject(err);
+        }
+      });
+    });
+  }
+
+  async salvarDadosTrabalho(dadosTrabalho: any, idDadosTrabalho?: number): Promise<number> {
+    const dadosTrabalhoFormatados = {
+      ...dadosTrabalho,
+      Id: idDadosTrabalho,
+      DtInicio: this.formatarDataParaBanco(dadosTrabalho.DtInicio),
+      DtRegistro: this.formatarDataParaBanco(dadosTrabalho.DtRegistro)
+    };
+
+    return new Promise((resolve, reject) => {
+      const serviceCall = idDadosTrabalho
+        ? this.dadosTrabalhoService.updateDadosTrabalho(idDadosTrabalho, dadosTrabalhoFormatados)
+        : this.dadosTrabalhoService.addDadosTrabalho(dadosTrabalhoFormatados);
+
+      serviceCall.subscribe({
+        next: (response: any) => {
+          console.log('Resposta de salvarDadosTrabalho:', response);
+          const id = idDadosTrabalho || (response && response.Id);
+          if (id) {
+            resolve(id);
+          } else {
+            reject(new Error('ID não encontrado na resposta de salvarDadosTrabalho'));
+          }
+        },
+        error: (err) => {
+          console.error('Erro em salvarDadosTrabalho:', err);
+          reject(err);
+        }
+      });
+    });
+  }
+
+  async salvarContas(contas: any, idContas?: number): Promise<number> {
+    const contasFormatadas = {
+      ...contas,
+      Id: idContas // Adiciona o Id ao objeto contas
+    };
+
+    return new Promise((resolve, reject) => {
+      const serviceCall = idContas
+        ? this.contaService.updateConta(idContas, contasFormatadas)
+        : this.contaService.addConta(contasFormatadas);
+
+      serviceCall.subscribe({
+        next: (response: any) => {
+          console.log('Resposta de salvarContas:', response);
+          const id = idContas || (response && response.Id);
+          if (id) {
+            resolve(id);
+          } else {
+            reject(new Error('ID não encontrado na resposta de salvarContas'));
+          }
+        },
+        error: (err) => {
+          console.error('Erro em salvarContas:', err);
+          reject(err);
+        }
+      });
+    });
+  }
+
+  async salvarSalarios(salarios: any, idSalarios?: number): Promise<number> {
+    const salariosFormatados = {
+      ...salarios,
+      Id: idSalarios,
+      DtAlteracao: this.formatarDataParaBanco(salarios.DtAlteracao)
+    };
+
+    return new Promise((resolve, reject) => {
+      const serviceCall = idSalarios
+        ? this.salarioService.updateSalario(idSalarios, salariosFormatados)
+        : this.salarioService.addSalario(salariosFormatados);
+
+      serviceCall.subscribe({
+        next: (response: any) => {
+          console.log('Resposta de salvarSalarios:', response);
+          const id = idSalarios || (response && response.Id);
+          if (id) {
+            resolve(id);
+          } else {
+            reject(new Error('ID não encontrado na resposta de salvarSalarios'));
+          }
+        },
+        error: (err) => {
+          console.error('Erro em salvarSalarios:', err);
+          reject(err);
+        }
+      });
+    });
   }
 
   editPessoa(pessoa: Pessoa) {
+    console.log('ID da pessoa para edição:', pessoa.Id);
     this.pessoaDialog = true;
     this.pessoa = { ...pessoa };
+
+    this.step1Form.patchValue({
+      nomePessoa: pessoa.NomePessoa
+    });
+    this.carregarDadosDependente(pessoa);
+  }
+
+  async carregarDadosDependente(pessoa: Pessoa) {
+    if (pessoa.IdDadosPessoais) {
+      this.dadosPessoaisService.getDadosPessoaisById(pessoa.IdDadosPessoais).subscribe({
+        next: (dadosPessoais) => {
+          this.step2Form.patchValue({
+            NomePai: dadosPessoais.NomePai,
+            NomeMae: dadosPessoais.NomeMae,
+            NomeConjuge: dadosPessoais.NomeConjuge,
+            DtNascimento: this.formatarDataParaTela(dadosPessoais.DtNascimento),
+            IdMunicipio: dadosPessoais.IdMunicipio,
+            IdNacionalidade: dadosPessoais.IdNacionalidade,
+            IdEstadoCivil: dadosPessoais.IdEstadoCivil,
+            IdEscolaridade: dadosPessoais.IdEscolaridade
+          });
+          // Armazena o ID original
+          this.pessoa.IdDadosPessoais = pessoa.IdDadosPessoais;
+        },
+        error: (err) => {
+          console.error('Erro ao carregar Dados Pessoais:', err);
+        }
+      });
+    }
+
+    // Repita o processo para as outras tabelas relacionadas...
+    if (pessoa.IdDocumentos) {
+      this.documentoService.getDocumentoById(pessoa.IdDocumentos).subscribe({
+        next: (documentos) => {
+          this.step3Form.patchValue({
+            DtEmissaoRG: this.formatarDataParaTela(documentos.DtEmissaoRG),
+            DtEmissaoCTPS: this.formatarDataParaTela(documentos.DtEmissaoCTPS),
+            OrgaoExpeditor: documentos.OrgaoExpeditor,
+            CPF: documentos.CPF,
+            RG: documentos.RG,
+            UF_RG_IdEstado: documentos.UF_RG_IdEstado,
+            UF_CTPS_IdEstado: documentos.UF_CTPS_IdEstado,
+            CTPS: documentos.CTPS,
+            SerieCTPS: documentos.SerieCTPS,
+            PIS: documentos.PIS
+          });
+          // Armazena o ID original
+          this.pessoa.IdDocumentos = pessoa.IdDocumentos;
+        },
+        error: (err) => {
+          console.error('Erro ao carregar Documentos:', err);
+        }
+      });
+    }
+
+    if (pessoa.IdDependentes) {
+      this.dependenteService.getDependenteById(pessoa.IdDependentes).subscribe({
+        next: (dependentes) => {
+          this.step4Form.patchValue({
+            NomeDependente: dependentes.NomeDependente,
+            DtNascimento_Dependente: this.formatarDataParaTela(dependentes.DtNascimento_Dependente),
+            CPF_Dependente: dependentes.CPF_Dependente
+          });
+          // Armazena o ID original
+          this.pessoa.IdDependentes = pessoa.IdDependentes;
+        },
+        error: (err) => {
+          console.error('Erro ao carregar Dependentes:', err);
+        }
+      });
+    }
+
+    if (pessoa.IdEnderecos) {
+      this.enderecoService.getEnderecoById(pessoa.IdEnderecos).subscribe({
+        next: (endereco) => {
+          this.step5Form.patchValue({
+            Rua: endereco.Rua,
+            Complemento: endereco.Complemento,
+            Bairro: endereco.Bairro,
+            IdMunicipio: endereco.IdMunicipio,
+            IdEstado: endereco.IdEstado,
+            Numero: endereco.Numero,
+            CEP: endereco.CEP
+          });
+          // Armazena o ID original
+          this.pessoa.IdEnderecos = pessoa.IdEnderecos;
+        },
+        error: (err) => {
+          console.error('Erro ao carregar Endereço:', err);
+        }
+      });
+    }
+
+    if (pessoa.IdContatos) {
+      this.contatoService.getContatoById(pessoa.IdContatos).subscribe({
+        next: (contatos) => {
+          this.step6Form.patchValue({
+            Telefone: contatos.Telefone,
+            Email: contatos.Email
+          });
+          // Armazena o ID original
+          this.pessoa.IdContatos = pessoa.IdContatos;
+        },
+        error: (err) => {
+          console.error('Erro ao carregar Contatos:', err);
+        }
+      });
+    }
+
+    if (pessoa.IdDadosTrabalho) {
+      this.dadosTrabalhoService.getDadosTrabalhoById(pessoa.IdDadosTrabalho).subscribe({
+        next: (dadosTrabalho) => {
+          this.step7Form.patchValue({
+            DtInicio: this.formatarDataParaTela(dadosTrabalho.DtInicio),
+            DtRegistro: this.formatarDataParaTela(dadosTrabalho.DtRegistro),
+            NumRegistro: dadosTrabalho.NumRegistro,
+            Ativo: dadosTrabalho.Ativo,
+            Almoco: dadosTrabalho.Almoco,
+            Adiantamento: dadosTrabalho.Adiantamento,
+            ValeTransporte: dadosTrabalho.ValeTransporte,
+            Bonifica: dadosTrabalho.Bonifica
+          });
+          // Armazena o ID original
+          this.pessoa.IdDadosTrabalho = pessoa.IdDadosTrabalho;
+        },
+        error: (err) => {
+          console.error('Erro ao carregar Dados de Trabalho:', err);
+        }
+      });
+    }
+
+    this.step8Form.patchValue({
+      IdFuncao: pessoa.IdFuncoes,
+      IdSetor: pessoa.IdSetores,
+      IdUnidade: pessoa.IdUnidades
+    });
+
+    if (pessoa.IdContas) {
+      this.contaService.getContaById(pessoa.IdContas).subscribe({
+        next: (contas) => {
+          this.step9Form.patchValue({
+            Agencia: contas.Agencia,
+            NumConta: contas.NumConta,
+            IdBanco: contas.IdBanco,
+            PIX: contas.PIX
+          });
+          // Armazena o ID original
+          this.pessoa.IdContas = pessoa.IdContas;
+        },
+        error: (err) => {
+          console.error('Erro ao carregar Contas:', err);
+        }
+      });
+    }
+
+    if (pessoa.IdSalarios) {
+      this.salarioService.getSalarioById(pessoa.IdSalarios).subscribe({
+        next: (salarios) => {
+          this.step10Form.patchValue({
+            Valor: salarios.Valor,
+            DtAlteracao: this.formatarDataParaTela(salarios.DtAlteracao),
+            SalarioAtivo: salarios.SalarioAtivo
+          });
+          // Armazena o ID original
+          this.pessoa.IdSalarios = pessoa.IdSalarios;
+        },
+        error: (err) => {
+          console.error('Erro ao carregar Salários:', err);
+        }
+      });
+    }
   }
 
   deletePessoa(pessoa: Pessoa) {
@@ -748,6 +1099,9 @@ export class PessoaComponent implements OnInit {
         break;
       case 8:
         currentFormValid = this.step9Form.valid;
+        break;
+      case 9:
+        currentFormValid = this.step10Form.valid;
         break;
     }
     this.activeIndex++;

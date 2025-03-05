@@ -16,7 +16,7 @@ export class EstadoCivilService {
         return this.apiService.getAll<EstadoCivil>(this.endpoint);
     }
 
-    getEstadoCivil(id: number): Observable<EstadoCivil> {
+    getEstadoCivilById(id: number): Observable<EstadoCivil> {
         return this.apiService.getById<EstadoCivil>(this.endpoint, id);
     }
 

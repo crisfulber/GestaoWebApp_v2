@@ -61,7 +61,7 @@ export class ContaComponent implements OnInit {
     this.bancoService.getBancos().subscribe({
       next: (data) => {
         this.bancos = data;
-        console.log('Dados dos bancos:', this.bancos); // Adicione este console.log
+        console.log('Dados dos bancos:', this.bancos); 
       },
       error: (error) => {
         this.messageService.add({ severity: 'error', summary: 'Erro', detail: 'Erro ao carregar bancos' });

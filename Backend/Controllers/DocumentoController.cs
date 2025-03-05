@@ -24,7 +24,10 @@ namespace Backend.Controllers
         {
             try
             {
-                return await _context.Documentos.ToListAsync();
+                return await _context.Documentos
+                    .Include(d => d.UF_RG_Estado)
+                    .Include(d => d.UF_CTPS_Estado)
+                    .ToListAsync();
             }
             catch (Exception ex)
             {
@@ -38,7 +41,10 @@ namespace Backend.Controllers
         {
             try
             {
-                var documento = await _context.Documentos.FindAsync(id);
+                var documento = await _context.Documentos
+                    .Include(d => d.UF_RG_Estado)
+                    .Include(d => d.UF_CTPS_Estado)
+                    .FirstOrDefaultAsync(d => d.Id == id);
 
                 if (documento == null)
                 {
@@ -59,6 +65,17 @@ namespace Backend.Controllers
         {
             try
             {
+                // Verificar se os estados existem
+                if (documento.UF_RG_IdEstado.HasValue && !_context.Estados.Any(e => e.Id == documento.UF_RG_IdEstado.Value))
+                {
+                    return BadRequest("UF_RG_IdEstado inválido.");
+                }
+
+                if (documento.UF_CTPS_IdEstado.HasValue && !_context.Estados.Any(e => e.Id == documento.UF_CTPS_IdEstado.Value))
+                {
+                    return BadRequest("UF_CTPS_IdEstado inválido.");
+                }
+
                 _context.Documentos.Add(documento);
                 await _context.SaveChangesAsync();
 
@@ -88,6 +105,17 @@ namespace Backend.Controllers
 
             try
             {
+                // Verificar se os estados existem
+                if (documento.UF_RG_IdEstado.HasValue && !_context.Estados.Any(e => e.Id == documento.UF_RG_IdEstado.Value))
+                {
+                    return BadRequest("UF_RG_IdEstado inválido.");
+                }
+
+                if (documento.UF_CTPS_IdEstado.HasValue && !_context.Estados.Any(e => e.Id == documento.UF_CTPS_IdEstado.Value))
+                {
+                    return BadRequest("UF_CTPS_IdEstado inválido.");
+                }
+
                 await _context.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException ex)

@@ -8,6 +8,8 @@ export interface Pessoa {
     IdContatos?: number | null;
     IdDadosTrabalho?: number | null;
     IdFuncoes?: number | null;
+    IdSetores?: number | null;
+    IdUnidades?: number | null;
     IdContas?: number | null;
     IdSalarios?: number | null;
 }

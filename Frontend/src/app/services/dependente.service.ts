@@ -16,7 +16,7 @@ export class DependenteService {
         return this.apiService.getAll<Dependente>(this.endpoint);
     }
 
-    getDependente(id: number): Observable<Dependente> {
+    getDependenteById(id: number): Observable<Dependente> {
         return this.apiService.getById<Dependente>(this.endpoint, id);
     }
 

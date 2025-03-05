@@ -24,7 +24,7 @@ namespace Backend.Controllers
         {
             try
             {
-                return await _context.Setores.Include(s => s.Unidade).ToListAsync();
+                return await _context.Setores.ToListAsync();
             }
             catch (Exception ex)
             {
@@ -38,7 +38,7 @@ namespace Backend.Controllers
         {
             try
             {
-                var setor = await _context.Setores.Include(s => s.Unidade).FirstOrDefaultAsync(s => s.Id == id);
+                var setor = await _context.Setores.FindAsync(id);
 
                 if (setor == null)
                 {

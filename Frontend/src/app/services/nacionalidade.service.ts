@@ -16,7 +16,7 @@ export class NacionalidadeService {
         return this.apiService.getAll<Nacionalidade>(this.endpoint);
     }
 
-    getNacionalidade(id: number): Observable<Nacionalidade> {
+    getNacionalidadeById(id: number): Observable<Nacionalidade> {
         return this.apiService.getById<Nacionalidade>(this.endpoint, id);
     }
 

@@ -11,11 +11,10 @@ namespace Backend.Models
 
         public string? NomeDependente { get; set; }
 
-        [Required(ErrorMessage = "Por favor, insira o CPF")]
         [StringLength(14)]
-        public required string CPF { get; set; }
+        public string? CPF_Dependente { get; set; }
 
-        public DateTime? DtNascimento { get; set; }
+        public DateTime? DtNascimento_Dependente { get; set; }
 
     }
 }

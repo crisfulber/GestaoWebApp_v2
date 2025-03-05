@@ -32,11 +32,11 @@ export class DocumentoComponent implements OnInit {
     RG: 0,
     DtEmissaoRG: null,
     OrgaoExpeditor: '',
-    UF_RG: '',
+    UF_RG_IdEstado: '',
     CTPS: 0,
     SerieCTPS: 0,
     DtEmissaoCTPS: '',
-    UF_CTPS: '',
+    UF_CTPS_IdEstado: '',
     PIS: ''
   };
   submitted: boolean = false;
@@ -70,11 +70,11 @@ export class DocumentoComponent implements OnInit {
       RG: 0,
       DtEmissaoRG: null,
       OrgaoExpeditor: '',
-      UF_RG: '',
+      UF_RG_IdEstado: '',
       CTPS: 0,
       SerieCTPS: 0,
       DtEmissaoCTPS: '',
-      UF_CTPS: '',
+      UF_CTPS_IdEstado: '',
       PIS: ''
     };
     this.submitted = false;

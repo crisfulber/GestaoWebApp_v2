@@ -16,7 +16,7 @@ export class DadosTrabalhoService {
     return this.apiService.getAll(this.endpoint);
   }
 
-  getDadosTrabalho(id: number): Observable<DadosTrabalho> {
+  getDadosTrabalhoById(id: number): Observable<DadosTrabalho> {
     return this.apiService.getById(this.endpoint, id);
   }
 

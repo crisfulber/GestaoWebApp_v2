@@ -13,14 +13,16 @@ namespace Backend.Models
         [StringLength(14)]
         public required string CPF { get; set; }
 
-        [Required(ErrorMessage = "Por favor, insira o RG")]
-        public int RG { get; set; }
+        public int? RG { get; set; }
 
         public DateTime? DtEmissaoRG { get; set; }
 
         public string? OrgaoExpeditor { get; set; }
 
-        public string? UF_RG { get; set; }
+        public int? UF_RG_IdEstado { get; set; } 
+
+        [ForeignKey("UF_RG_IdEstado")] 
+        public Estado? UF_RG_Estado { get; set; } 
 
         public int? CTPS { get; set; }
 
@@ -28,7 +30,10 @@ namespace Backend.Models
 
         public DateTime? DtEmissaoCTPS { get; set; }
 
-        public string? UF_CTPS { get; set; }
+        public int? UF_CTPS_IdEstado { get; set; } 
+
+        [ForeignKey("UF_CTPS_IdEstado")] 
+        public Estado? UF_CTPS_Estado { get; set; } 
 
         [StringLength(14)]
         public string? PIS { get; set; }

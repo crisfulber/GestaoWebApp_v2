@@ -16,7 +16,7 @@ export class EscolaridadeService {
         return this.apiService.getAll<Escolaridade>(this.endpoint);
     }
 
-    getEscolaridade(id: number): Observable<Escolaridade> {
+    getEscolaridadeById(id: number): Observable<Escolaridade> {
         return this.apiService.getById<Escolaridade>(this.endpoint, id);
     }
 

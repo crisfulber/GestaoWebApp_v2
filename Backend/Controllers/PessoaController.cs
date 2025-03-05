@@ -107,6 +107,8 @@ namespace Backend.Controllers
                 pessoaExistente.IdContatos = pessoaAtualizada.IdContatos;
                 pessoaExistente.IdDadosTrabalho = pessoaAtualizada.IdDadosTrabalho;
                 pessoaExistente.IdFuncoes = pessoaAtualizada.IdFuncoes;
+                pessoaExistente.IdSetores = pessoaAtualizada.IdSetores;
+                pessoaExistente.IdUnidades = pessoaAtualizada.IdUnidades;
                 pessoaExistente.IdContas = pessoaAtualizada.IdContas;
                 pessoaExistente.IdSalarios = pessoaAtualizada.IdSalarios;
 

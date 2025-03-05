@@ -16,7 +16,7 @@ export class EstadoService {
         return this.apiService.getAll<Estado>(this.endpoint);
     }
 
-    getEstado(id: number): Observable<Estado> {
+    getEstadoById(id: number): Observable<Estado> {
         return this.apiService.getById<Estado>(this.endpoint, id);
     }
 

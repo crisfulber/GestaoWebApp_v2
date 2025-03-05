@@ -28,9 +28,7 @@
             <tr>
                 <td>{{formatarValor(salario.Valor)}}</td>
                 <td>{{formatarDataParaTela(salario.DtAlteracao)}}</td>
-                <td><i
-                        [className]="salario.Ativo ? 'pi pi-check-circle text-green' : 'pi pi-times-circle text-red'"></i>
-                </td>
+                <td><i [className]="salario.Ativo ? 'pi pi-check-circle text-green' : 'pi pi-times-circle text-red'"></i></td>
                 <td>
                     <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-info mr-2"
                         (click)="editSalario(salario)"></button>

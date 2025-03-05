@@ -16,7 +16,7 @@ export class DocumentoService {
         return this.apiService.getAll<Documento>(this.endpoint);
     }
 
-    getDocumento(id: number): Observable<Documento> {
+    getDocumentoById(id: number): Observable<Documento> {
         return this.apiService.getById<Documento>(this.endpoint, id);
     }
 

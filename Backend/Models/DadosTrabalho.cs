@@ -18,7 +18,6 @@ namespace Backend.Models
         [Column(TypeName = "LONGTEXT")]
         public string? DtRegistro { get; set; }
 
-        [Required]
         public bool Ativo { get; set; }
 
         public bool Almoco { get; set; }

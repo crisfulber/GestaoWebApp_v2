@@ -3,6 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Backend.Models
 {
+    [Table("Pessoas")]
     public class Pessoa
     {
         [Key]
@@ -29,12 +30,21 @@ namespace Backend.Models
         public int? IdDadosTrabalho { get; set; }
         public virtual DadosTrabalho? DadosTrabalho { get; set; }
 
+        [ForeignKey("Funcao")]
         public int? IdFuncoes { get; set; }
         public virtual Funcao? Funcao { get; set; }
 
-        public int? IdContas { get; set; } 
-        public virtual Conta? Conta { get; set; } 
-        
+        [ForeignKey("Setor")]
+        public int? IdSetores { get; set; }
+        public virtual Setor? Setor { get; set; }
+
+        [ForeignKey("Unidade")]
+        public int? IdUnidades { get; set; }
+        public virtual Unidade? Unidade { get; set; }
+
+        public int? IdContas { get; set; }
+        public virtual Conta? Conta { get; set; }
+
         public int? IdSalarios { get; set; }
         public virtual Salario? Salario { get; set; }
     }

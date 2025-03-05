@@ -71,18 +71,6 @@ namespace Backend.Data
                 .HasForeignKey(u => u.IdEndereco)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            modelBuilder.Entity<Setor>()
-                .HasOne(s => s.Unidade)
-                .WithMany()
-                .HasForeignKey(s => s.IdUnidade)
-                .OnDelete(DeleteBehavior.Restrict);
-
-            modelBuilder.Entity<Funcao>()
-                .HasOne(f => f.Setor)
-                .WithMany()
-                .HasForeignKey(f => f.IdSetor)
-                .OnDelete(DeleteBehavior.Restrict);
-
             modelBuilder.Entity<Conta>()
                 .HasOne(cb => cb.Banco)
                 .WithMany()

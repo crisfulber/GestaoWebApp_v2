@@ -16,7 +16,7 @@ export class SalarioService {
         return this.apiService.getAll<Salario>(this.endpoint);
     }
 
-    getSalario(id: number): Observable<Salario> {
+    getSalarioById(id: number): Observable<Salario> {
         return this.apiService.getById<Salario>(this.endpoint, id);
     }
 

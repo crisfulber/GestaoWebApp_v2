@@ -16,7 +16,7 @@ export class MunicipioService {
     return this.apiService.getAll<Municipio>(this.endpoint);
   }
 
-  getMunicipio(id: number): Observable<Municipio> {
+  getMunicipioById(id: number): Observable<Municipio> {
     return this.apiService.getById<Municipio>(this.endpoint, id);
   }
 
