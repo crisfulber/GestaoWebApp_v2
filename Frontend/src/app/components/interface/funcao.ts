@@ -3,6 +3,6 @@ import { Setor } from './setor';
 export interface Funcao {
     Id: number;
     NomeFuncao: string;
-    IdSetor: number;
+    IdSetor:  number | null;
     Setor?: Setor; 
 }

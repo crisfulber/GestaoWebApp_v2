@@ -12,15 +12,13 @@ import { ToolbarModule } from 'primeng/toolbar';
 import { CommonModule } from '@angular/common';
 import { Setor } from '../../interface/setor';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { DropdownModule } from 'primeng/dropdown'; 
-import { UnidadeService } from '../../../services/unidade.service'; 
-import { Unidade } from '../../interface/unidade'; 
+import { DropdownModule } from 'primeng/dropdown';
 
 @Component({
   selector: 'app-setor',
   standalone: true,
   imports: [CommonModule, FormsModule, ReactiveFormsModule, InputTextModule, ButtonModule,
-    ToastModule, ConfirmDialogModule, TableModule, ToolbarModule, DialogModule, DropdownModule], 
+    ToastModule, ConfirmDialogModule, TableModule, ToolbarModule, DialogModule, DropdownModule],
   templateUrl: './setor.component.html',
   styleUrls: ['./setor.component.scss'],
   providers: [MessageService, ConfirmationService]
@@ -29,21 +27,18 @@ export class SetorComponent implements OnInit {
 
   setores: Setor[] = [];
   setorDialog: boolean = false;
-  setor: Setor = { Id: 0, NomeSetor: '', IdUnidade: 0 };
+  setor: Setor = { Id: 0, NomeSetor: '' };
   submitted: boolean = false;
-  unidades: Unidade[] = []; 
 
   constructor(
     private setorService: SetorService,
     private messageService: MessageService,
     private confirmationService: ConfirmationService,
-    private fb: FormBuilder,
-    private unidadeService: UnidadeService 
+    private fb: FormBuilder
   ) { }
 
   ngOnInit() {
     this.loadSetores();
-    this.loadUnidades(); 
   }
 
   loadSetores() {
@@ -58,20 +53,8 @@ export class SetorComponent implements OnInit {
     });
   }
 
-  loadUnidades() {
-    this.unidadeService.getUnidades().subscribe({ 
-      next: (data) => {
-        this.unidades = data;
-      },
-      error: (error) => {
-        this.messageService.add({ severity: 'error', summary: 'Erro', detail: 'Erro ao carregar unidades' });
-        console.error('Erro ao carregar unidades:', error);
-      }
-    });
-  }
-
   openNew() {
-    this.setor = { Id: 0, NomeSetor: '', IdUnidade: 0 };
+    this.setor = { Id: 0, NomeSetor: '' };
     this.submitted = false;
     this.setorDialog = true;
   }
@@ -109,9 +92,9 @@ export class SetorComponent implements OnInit {
   saveSetor() {
     this.submitted = true;
 
-    if (this.setor.NomeSetor?.trim() && this.setor.IdUnidade) {
+    if (this.setor.NomeSetor?.trim()) {
       this.setor.NomeSetor = this.setor.NomeSetor.toUpperCase();
-      
+
       if (this.setor.Id) {
         this.setorService.updateSetor(this.setor.Id, this.setor).subscribe({
           next: () => {
@@ -140,7 +123,7 @@ export class SetorComponent implements OnInit {
 
       this.setores = [...this.setores];
       this.setorDialog = false;
-      this.setor = { Id: 0, NomeSetor: '', IdUnidade: 0 };
+      this.setor = { Id: 0, NomeSetor: '' };
     }
   }
 

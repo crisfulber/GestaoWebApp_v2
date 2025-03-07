@@ -29,7 +29,7 @@ export class FuncaoComponent implements OnInit {
 
   funcoes: Funcao[] = [];
   funcaoDialog: boolean = false;
-  funcao: Funcao = { Id: 0, NomeFuncao: '', IdSetor: 0 }; 
+  funcao: Funcao = { Id: 0, NomeFuncao: '', IdSetor: 0 };
   submitted: boolean = false;
   setores: Setor[] = [];
 
@@ -49,7 +49,10 @@ export class FuncaoComponent implements OnInit {
   loadFuncoes() {
     this.funcaoService.getFuncoes().subscribe({
       next: (data) => {
-        this.funcoes = data;
+        this.funcoes = data.map(funcao => {
+          const setor = this.setores.find(s => s.Id === funcao.IdSetor);
+          return { ...funcao, Setor: setor };
+        });
       },
       error: (error) => {
         this.messageService.add({ severity: 'error', summary: 'Erro', detail: 'Erro ao carregar funções' });
@@ -110,8 +113,11 @@ export class FuncaoComponent implements OnInit {
     this.submitted = true;
 
     if (this.funcao.NomeFuncao?.trim() && this.funcao.IdSetor) {
+      this.funcao.NomeFuncao = this.funcao.NomeFuncao.toUpperCase();
       if (this.funcao.Id) {
-        this.funcaoService.updateFuncao(this.funcao.Id, this.funcao).subscribe({
+        this.funcaoService.updateFuncao(this.funcao.Id, {
+          Id: this.funcao.Id, NomeFuncao: this.funcao.NomeFuncao, IdSetor: this.funcao.IdSetor
+        }).subscribe({
           next: () => {
             this.funcoes[this.findIndexById(this.funcao.Id)] = this.funcao;
             this.messageService.add({ severity: 'success', summary: 'Confirmado', detail: 'Função Atualizada', life: 3000 });
@@ -123,7 +129,10 @@ export class FuncaoComponent implements OnInit {
           }
         });
       } else {
-        this.funcaoService.addFuncao(this.funcao).subscribe({
+        this.funcaoService.addFuncao({
+          NomeFuncao: this.funcao.NomeFuncao, IdSetor: this.funcao.IdSetor,
+          Id: 0
+        }).subscribe({
           next: (data) => {
             this.funcoes.push(data);
             this.messageService.add({ severity: 'success', summary: 'Confirmado', detail: 'Função Criada', life: 3000 });

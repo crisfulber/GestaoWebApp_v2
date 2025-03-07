@@ -20,13 +20,14 @@ import { MunicipioService } from '../../../services/municipio.service';
 import { Municipio } from '../../interface/municipio';
 import { EstadoService } from '../../../services/estado.service';
 import { Estado } from '../../interface/estado';
+import { Select } from 'primeng/select';
 
 @Component({
     selector: 'app-empresa',
     standalone: true,
     imports: [CommonModule, FormsModule, ReactiveFormsModule, InputTextModule, ButtonModule,
         InputMaskModule, ToastModule, ConfirmDialogModule, TableModule, ToolbarModule, StepsModule,
-        DialogModule, DropdownModule],
+        DialogModule, DropdownModule, Select],
     templateUrl: './empresa.component.html',
     styleUrls: ['./empresa.component.scss'],
     providers: [MessageService, ConfirmationService]

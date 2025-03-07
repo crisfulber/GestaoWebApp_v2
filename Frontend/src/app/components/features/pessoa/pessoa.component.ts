@@ -16,7 +16,7 @@ import { CommonModule } from '@angular/common';
 import { DropdownModule } from 'primeng/dropdown';
 import { CheckboxModule } from 'primeng/checkbox';
 import { SelectModule } from 'primeng/select';
-import { FindPipe } from './findPipe';
+import { FindPipe } from '../../pipes/findPipe';
 
 import { Pessoa } from '../../interface/pessoa';
 import { PessoaService } from '../../../services/pessoa.service';

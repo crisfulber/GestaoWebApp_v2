@@ -2,13 +2,14 @@
 <p-confirmDialog [style]="{width: '50vw'}"></p-confirmDialog>
 
 <div class="card">
-    <p-table [value]="empresas" dataKey="id" [rows]="20" styleClass="p-datatable-gridlines" [paginator]="true"
-        [globalFilterFields]="['NomeEmpresa','CNPJ_CEI']" [rowHover]="true" #dt>
+    <span style="font-size: 1.5em; font-weight: 400;">Empresas</span>
+    <hr>
+    <p-table [value]="empresas" dataKey="id" [rows]="20" styleClass="p-datatable-gridlines p-datatable-striped"
+        [paginator]="true" [globalFilterFields]="['NomeEmpresa','CNPJ_CEI']" [rowHover]="true" #dt>
         <ng-template pTemplate="caption">
             <div class="flex align-items-center justify-content-between">
-                <button pButton pRipple label="Novo" icon="pi pi-plus" class="p-button mr-2"
+                <button pButton pRipple label="Novo" icon="pi pi-plus" class="p-button-outlined mb-2"
                     (click)="openNew()"></button>
-                <span style="font-size: 1.2em; font-weight: bold;">Empresas Cadastradas</span>
                 <span class="p-input-icon-left">
                     <input pInputText type="text" (input)="dt.filterGlobal($any($event.target).value, 'contains')"
                         placeholder="Pesquisar..." />
@@ -19,7 +20,7 @@
             <tr>
                 <th pSortableColumn="NomeEmpresa">Empresa<p-sortIcon field="NomeEmpresa"></p-sortIcon></th>
                 <th pSortableColumn="CNPJ_CEI">CNPJ/CEI<p-sortIcon field="CNPJ_CEI"></p-sortIcon></th>
-                <th></th>
+                <th>Ações</th>
             </tr>
         </ng-template>
         <ng-template pTemplate="body" let-empresa>
@@ -37,7 +38,7 @@
     </p-table>
 </div>
 
-<p-dialog [(visible)]="empresaDialog" [style]="{width: '450px'}" header="Detalhes da Empresa" [modal]="true">
+<p-dialog [(visible)]="empresaDialog" [style]="{width: '35vw'}" header="Detalhes da Empresa" [modal]="true">
     <ng-template pTemplate="content">
         <p-steps [model]="steps" [(activeIndex)]="activeIndex" [readonly]="true"
             [style]="{margin: '0 0 30px 0'}"></p-steps>
@@ -45,89 +46,89 @@
         <form [formGroup]="formSteps[activeIndex]">
             <div [ngSwitch]="activeIndex">
                 <div *ngSwitchCase="0">
-                    <div class="field">
-                        <label for="NomeEmpresa" class="block">Nome da Empresa</label>
-                        <input type="text" pInputText id="NomeEmpresa" formControlName="NomeEmpresa" required autofocus
-                            [ngClass]="{'p-invalid': submitted && formSteps[0].controls['NomeEmpresa'].invalid}" />
-                        <small class="p-error block"
-                            *ngIf="submitted && formSteps[0].controls['NomeEmpresa'].invalid">Nome é
-                            obrigatório.</small>
-                    </div>
-                    <div class="field">
-                        <label for="CNPJ_CEI" class="block">CNPJ / CEI</label>
-                        <p-inputMask mask="99.999.999/9999-99" placeholder="99.999.999/9999-99"
-                            formControlName="CNPJ_CEI"
-                            [ngClass]="{'p-invalid': submitted && formSteps[0].controls['CNPJ_CEI'].invalid}"
-                            [required]="true"></p-inputMask>
-                        <small class="p-error block"
-                            *ngIf="submitted && formSteps[0].controls['CNPJ_CEI'].invalid">CNPJ/CEI é
-                            obrigatório.</small>
+                    <div class="grid">
+                        <div class="col-12 md:col-6">
+                            <input type="text" placeholder="Nome da Empresa" pInputText id="NomeEmpresa" formControlName="NomeEmpresa" required
+                                autofocus
+                                [ngClass]="{'p-invalid': submitted && formSteps[0].controls['NomeEmpresa'].invalid}" />
+                            <small class="p-error block"
+                                *ngIf="submitted && formSteps[0].controls['NomeEmpresa'].invalid">Nome é
+                                obrigatório.</small>
+                        </div>
+                        <div class="col-12 md:col-6">
+                            <p-inputMask mask="99.999.999/9999-99" placeholder="CNPJ/CEI"
+                                formControlName="CNPJ_CEI"
+                                [ngClass]="{'p-invalid': submitted && formSteps[0].controls['CNPJ_CEI'].invalid}"
+                                [required]="true"></p-inputMask>
+                            <small class="p-error block"
+                                *ngIf="submitted && formSteps[0].controls['CNPJ_CEI'].invalid">CNPJ/CEI é
+                                obrigatório.</small>
+                        </div>
                     </div>
                 </div>
                 <div *ngSwitchCase="1">
-                    <div class="field">
-                        <label for="Rua" class="block">Rua</label>
-                        <input type="text" pInputText id="Rua" formControlName="Rua" required
-                            [ngClass]="{'p-invalid': submitted && formSteps[1].controls['Rua'].invalid}" />
-                        <small class="p-error block" *ngIf="submitted && formSteps[1].controls['Rua'].invalid">Rua é
-                            obrigatório.</small>
-                    </div>
-                    <div class="field">
-                        <label for="Numero" class="block">Número</label>
-                        <input type="number" pInputText id="Numero" formControlName="Numero" required
-                            [ngClass]="{'p-invalid': submitted && formSteps[1].controls['Numero'].invalid}" />
-                        <small class="p-error block" *ngIf="submitted && formSteps[1].controls['Numero'].invalid">Número
-                            é
-                            obrigatório.</small>
-                    </div>
-                    <div class="field">
-                        <label for="Complemento" class="block">Complemento</label>
-                        <input type="text" pInputText id="Complemento" formControlName="Complemento" />
-                    </div>
-                    <div class="field">
-                        <label for="Bairro" class="block">Bairro</label>
-                        <input type="text" pInputText id="Bairro" formControlName="Bairro" required
-                            [ngClass]="{'p-invalid': submitted && formSteps[1].controls['Bairro'].invalid}" />
-                        <small class="p-error block" *ngIf="submitted && formSteps[1].controls['Bairro'].invalid">Bairro
-                            é
-                            obrigatório.</small>
-                    </div>
-                    <div class="field">
-                        <label for="CEP" class="block">CEP</label>
-                        <p-inputMask mask="99999-999" placeholder="99999-999" formControlName="CEP"
-                            [ngClass]="{'p-invalid': submitted && formSteps[1].controls['CEP'].invalid}"
-                            [required]="true"></p-inputMask>
-                        <small class="p-error block" *ngIf="submitted && formSteps[1].controls['CEP'].invalid">CEP é
-                            obrigatório.</small>
-                    </div>
-                    <div class="field">
-                        <label for="IdMunicipio" class="block">Município</label>
-                        <p-dropdown [options]="municipios" optionLabel="NomeMunicipio" optionValue="Id"
-                            placeholder="Selecione um Municipio" formControlName="IdMunicipio"
-                            [ngClass]="{'p-invalid': submitted && formSteps[1].controls['IdMunicipio'].invalid}"></p-dropdown>
-                        <small class="p-error block"
-                            *ngIf="submitted && formSteps[1].controls['IdMunicipio'].invalid">Município é
-                            obrigatório.</small>
-                    </div>
-                    <div class="field">
-                        <label for="IdEstado" class="block">Estado</label>
-                        <p-dropdown [options]="estados" optionLabel="NomeEstado" optionValue="Id"
-                            placeholder="Selecione um Estado" formControlName="IdEstado"
-                            [ngClass]="{'p-invalid': submitted && formSteps[1].controls['IdEstado'].invalid}"></p-dropdown>
-                        <small class="p-error block"
-                            *ngIf="submitted && formSteps[1].controls['IdEstado'].invalid">Estado é
-                            obrigatório.</small>
+                    <div class="grid">
+                        <div class="col-12 md:col-6">
+                            <input type="text" placeholder="Rua" pInputText id="Rua" formControlName="Rua" required
+                                [ngClass]="{'p-invalid': submitted && formSteps[1].controls['Rua'].invalid}" />
+                            <small class="p-error block" *ngIf="submitted && formSteps[1].controls['Rua'].invalid">Rua é
+                                obrigatório.</small>
+                        </div>
+                        <div class="col-12 md:col-6">
+                            <input type="number" placeholder="Número" pInputText id="Numero" formControlName="Numero" required
+                                [ngClass]="{'p-invalid': submitted && formSteps[1].controls['Numero'].invalid}" />
+                            <small class="p-error block"
+                                *ngIf="submitted && formSteps[1].controls['Numero'].invalid">Número
+                                é
+                                obrigatório.</small>
+                        </div>
+                        <div class="col-12 md:col-6">
+                            <input type="text" placeholder="Complemento" pInputText id="Complemento" formControlName="Complemento" />
+                        </div>
+                        <div class="col-12 md:col-6">
+                            <input type="text" placeholder="Bairro" pInputText id="Bairro" formControlName="Bairro" required
+                                [ngClass]="{'p-invalid': submitted && formSteps[1].controls['Bairro'].invalid}" />
+                            <small class="p-error block"
+                                *ngIf="submitted && formSteps[1].controls['Bairro'].invalid">Bairro
+                                é
+                                obrigatório.</small>
+                        </div>
+                        <div class="col-12 md:col-6">
+                            <p-inputMask mask="99999-999" placeholder="CEP" formControlName="CEP"
+                                [ngClass]="{'p-invalid': submitted && formSteps[1].controls['CEP'].invalid}"
+                                [required]="true"></p-inputMask>
+                            <small class="p-error block" *ngIf="submitted && formSteps[1].controls['CEP'].invalid">CEP é
+                                obrigatório.</small>
+                        </div>
+                        <div class="col-12 md:col-6">
+                            <p-select [options]="municipios" optionLabel="NomeMunicipio" optionValue="Id"
+                                placeholder="Selecione o Municipio" formControlName="IdMunicipio" appendTo="body"
+                                [ngClass]="{'p-invalid': submitted && formSteps[1].controls['IdMunicipio'].invalid}"></p-select>
+                            <small class="p-error block"
+                                *ngIf="submitted && formSteps[1].controls['IdMunicipio'].invalid">Município é
+                                obrigatório.</small>
+                        </div>
+                        <div class="col-12 md:col-6">
+                            <p-select [options]="estados" optionLabel="NomeEstado" optionValue="Id"
+                                placeholder="Selecione o Estado" formControlName="IdEstado" appendTo="body"
+                                [ngClass]="{'p-invalid': submitted && formSteps[1].controls['IdEstado'].invalid}"></p-select>
+                            <small class="p-error block"
+                                *ngIf="submitted && formSteps[1].controls['IdEstado'].invalid">Estado é
+                                obrigatório.</small>
+                        </div>
                     </div>
                 </div>
                 <div *ngSwitchCase="2">
-                    <div class="field">
-                        <label for="Telefone" class="block">Telefone</label>
-                        <p-inputMask mask="(99) 99999-9999" placeholder="(99) 99999-9999"
-                            formControlName="Telefone"></p-inputMask>
-                    </div>
-                    <div class="field">
-                        <label for="Email" class="block">Email</label>
-                        <input type="email" pInputText id="Email" formControlName="Email" />
+                    <div class="grid">
+                        <div class="col-12 md:col-6">
+                            <label for="Telefone" class="block">Telefone</label>
+                            <p-inputMask mask="(99) 99999-9999" placeholder="(99) 99999-9999"
+                                formControlName="Telefone"></p-inputMask>
+                        </div>
+                        <div class="col-12 md:col-6">
+                            <label for="Email" class="block">Email</label>
+                            <input type="email" pInputText id="Email" formControlName="Email" />
+                        </div>
                     </div>
                 </div>
             </div>

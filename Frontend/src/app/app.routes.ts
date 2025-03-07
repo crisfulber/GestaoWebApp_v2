@@ -24,6 +24,7 @@ export const routes: Routes = [
     { path: 'setor', loadComponent: () => import('./components/features/setor/setor.component').then(m => m.SetorComponent) },
     { path: 'unidade', loadComponent: () => import('./components/features/unidade/unidade.component').then(m => m.UnidadeComponent) },
     { path: 'login', loadComponent: () => import('./components/login/login.component').then(m => m.LoginComponent) },
+    
     { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
     { path: '**', redirectTo: 'dashboard' },
 ];

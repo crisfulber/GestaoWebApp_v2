@@ -2,14 +2,14 @@
 <p-confirmDialog [style]="{width: '50vw'}"></p-confirmDialog>
 
 <div class="card">
-    <p-table [value]="funcoes" dataKey="id" [rows]="20" 
-        styleClass="p-datatable-gridlines" [paginator]="true"
-        [globalFilterFields]="['NomeFuncao', 'Setor.NomeSetor']" [rowHover]="true" #dt>
+    <span style="font-size: 1.5em; font-weight: 400;">Funções</span>
+    <hr>
+    <p-table [value]="funcoes" dataKey="id" [rows]="20" styleClass="p-datatable-gridlines p-datatable-striped"
+        [paginator]="true" [globalFilterFields]="['NomeFuncao', 'Setor.NomeSetor']" [rowHover]="true" #dt>
         <ng-template pTemplate="caption">
             <div class="flex align-items-center justify-content-between">
-                <button pButton pRipple label="Novo" icon="pi pi-plus" class="p-button mr-2"
+                <button pButton pRipple label="Novo" icon="pi pi-plus" class="p-button-outlined mb-2"
                     (click)="openNew()"></button>
-                    <span style="font-size: 1.2em; font-weight: bold;">Listagem de Funções</span>
                 <span class="p-input-icon-left">
                     <input pInputText type="text" (input)="dt.filterGlobal($any($event.target).value, 'contains')"
                         placeholder="Pesquisar..." />
@@ -18,18 +18,15 @@
         </ng-template>
         <ng-template pTemplate="header">
             <tr>
-                <th pSortableColumn="NomeFuncao">Função<p-sortIcon field="NomeFuncao"></p-sortIcon></th>
-                <th pSortableColumn="Setor.NomeSetor">Setor<p-sortIcon field="Setor.NomeSetor"></p-sortIcon></th>
-                <th pSortableColumn="Setor.Unidade.NomeUnidade">Unidade<p-sortIcon
-                        field="Setor.Unidade.NomeUnidade"></p-sortIcon></th>
-                <th></th>
+                <th pSortableColumn="NomeFuncao">Função <p-sortIcon field="NomeFuncao"></p-sortIcon></th>
+                <th pSortableColumn="Setor.NomeSetor">Setor <p-sortIcon field="Setor.NomeSetor"></p-sortIcon></th>
+                <th>Ações</th>
             </tr>
         </ng-template>
         <ng-template pTemplate="body" let-funcao>
             <tr>
                 <td>{{funcao.NomeFuncao}}</td>
                 <td>{{funcao.Setor?.NomeSetor}}</td>
-                <td>{{funcao.Setor?.Unidade?.NomeUnidade}}</td>
                 <td>
                     <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-info mr-2"
                         (click)="editFuncao(funcao)"></button>
@@ -44,16 +41,20 @@
 <p-dialog [(visible)]="funcaoDialog" [style]="{width: '450px'}" header="Detalhes da Função" [modal]="true"
     styleClass="p-fluid">
     <ng-template pTemplate="content">
-        <div class="field">
-            <label for="NomeFuncao" class="block">Nome</label>
-            <input type="text" pInputText id="NomeFuncao" [(ngModel)]="funcao.NomeFuncao" required autofocus />
-            <small class="p-error block" *ngIf="submitted && !funcao.NomeFuncao">Nome é obrigatório.</small>
-        </div>
-        <div class="field">
-            <label for="IdSetor" class="block">Setor</label>
-            <p-dropdown [options]="setores" optionLabel="NomeSetor" optionValue="Id" placeholder="Selecione um Setor"
-                [(ngModel)]="funcao.IdSetor" appendTo="body"></p-dropdown>
-            <small class="p-error block" *ngIf="submitted && !funcao.IdSetor">Setor é obrigatório.</small>
+        <div class="grid">
+            <div class="col-12 md:col-6">
+                <label for="NomeFuncao" class="block">Nome</label>
+                <input type="text" placeholder="Nome da Função" pInputText id="NomeFuncao" [(ngModel)]="funcao.NomeFuncao"
+                    required autofocus [ngClass]="{'p-invalid': submitted && !funcao.NomeFuncao}" />
+                <small class="p-error block" *ngIf="submitted && !funcao.NomeFuncao">Nome é obrigatório.</small>
+            </div>
+            <div class="col-12 md:col-6">
+                <label for="IdSetor" class="block">Setor</label>
+                <p-dropdown [options]="setores" optionLabel="NomeSetor" optionValue="Id"
+                    placeholder="Selecione um Setor" [(ngModel)]="funcao.IdSetor" appendTo="body"
+                    [ngClass]="{'p-invalid': submitted && !funcao.IdSetor}"></p-dropdown>
+                <small class="p-error block" *ngIf="submitted && !funcao.IdSetor">Setor é obrigatório.</small>
+            </div>
         </div>
     </ng-template>
 

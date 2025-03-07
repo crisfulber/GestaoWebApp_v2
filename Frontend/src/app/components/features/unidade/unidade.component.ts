@@ -22,11 +22,12 @@ import { MunicipioService } from '../../../services/municipio.service';
 import { EstadoService } from '../../../services/estado.service';
 import { Estado } from '../../interface/estado';
 import { Municipio } from '../../interface/municipio';
+import { Select } from 'primeng/select';
 
 @Component({
   selector: 'app-unidade',
   standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule, InputTextModule, ButtonModule,
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, InputTextModule, ButtonModule, Select,
     ToastModule, ConfirmDialogModule, TableModule, ToolbarModule, DialogModule, StepsModule, DropdownModule, InputMaskModule],
   templateUrl: './unidade.component.html',
   styleUrls: ['./unidade.component.scss'],

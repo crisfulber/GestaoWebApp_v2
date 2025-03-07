@@ -1,15 +1,15 @@
 <p-toast></p-toast>
-<p-confirmDialog [style]="{width: '50vw'}"></p-confirmDialog>
+<p-confirmDialog [style]="{ width: '50vw' }"></p-confirmDialog>
 
 <div class="card">
-    <p-table [value]="estados" dataKey="id" [rows]="20"
-        styleClass="p-datatable-gridlines" [paginator]="true"
-        [globalFilterFields]="['NomeEstado','Sigla']" [rowHover]="true" #dt>
+    <span style="font-size: 1.5em; font-weight: 400;">Estados</span>
+    <hr>
+    <p-table [value]="estados" dataKey="id" [rows]="20" styleClass="p-datatable-gridlines p-datatable-striped"
+        [paginator]="true" [globalFilterFields]="['NomeEstado','Sigla']" [rowHover]="true" #dt>
         <ng-template pTemplate="caption">
             <div class="flex align-items-center justify-content-between">
-                <button pButton pRipple label="Novo" icon="pi pi-plus" class="p-button mr-2"
+                <button pButton pRipple label="Novo" icon="pi pi-plus" class="p-button-outlined mb-2"
                     (click)="openNew()"></button>
-                    <span style="font-size: 1.2em; font-weight: bold;">Listagem de Estados</span>
                 <span class="p-input-icon-left">
                     <input pInputText type="text" (input)="dt.filterGlobal($any($event.target).value, 'contains')"
                         placeholder="Pesquisar..." />
@@ -18,8 +18,8 @@
         </ng-template>
         <ng-template pTemplate="header">
             <tr>
-                <th pSortableColumn="NomeEstado">Nome<p-sortIcon field="NomeEstado"></p-sortIcon></th>
-                <th pSortableColumn="Sigla">Sigla<p-sortIcon field="Sigla"></p-sortIcon></th>
+                <th pSortableColumn="NomeEstado">Nome <p-sortIcon field="NomeEstado"></p-sortIcon></th>
+                <th pSortableColumn="Sigla">Sigla <p-sortIcon field="Sigla"></p-sortIcon></th>
                 <th></th>
             </tr>
         </ng-template>
@@ -28,7 +28,7 @@
                 <td>{{estado.NomeEstado}}</td>
                 <td>{{estado.Sigla}}</td>
                 <td>
-                    <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-info mr-2"
+                    <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-info  mr-2"
                         (click)="editEstado(estado)"></button>
                     <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-danger"
                         (click)="deleteEstado(estado)"></button>

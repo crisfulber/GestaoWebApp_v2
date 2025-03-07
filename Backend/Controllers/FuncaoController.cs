@@ -24,7 +24,7 @@ namespace Backend.Controllers
         {
             try
             {
-                return await _context.Funcoes.ToListAsync();
+                return await _context.Funcoes.Include(f => f.Setor).ToListAsync();
             }
             catch (Exception ex)
             {
@@ -54,11 +54,33 @@ namespace Backend.Controllers
             }
         }
 
+        public class FuncaoDto
+        {
+            public string NomeFuncao { get; set; }
+            public int IdSetor { get; set; }
+        }
+
         [HttpPost]
-        public async Task<ActionResult<Funcao>> PostFuncao(Funcao funcao)
+        public async Task<ActionResult<Funcao>> PostFuncao(FuncaoDto funcaoDto)
         {
             try
             {
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
+
+                if (!_context.Setores.Any(e => e.Id == funcaoDto.IdSetor))
+                {
+                    return BadRequest("O IdSetor fornecido não existe.");
+                }
+
+                var funcao = new Funcao
+                {
+                    NomeFuncao = funcaoDto.NomeFuncao,
+                    IdSetor = funcaoDto.IdSetor
+                };
+
                 _context.Funcoes.Add(funcao);
                 await _context.SaveChangesAsync();
 
@@ -66,24 +88,38 @@ namespace Backend.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Erro ao criar um novo funcao.");
-                return StatusCode(500, "Erro ao criar um novo funcao.");
+                _logger.LogError(ex, $"Erro ao criar um novo setor: {ex.Message} {ex.StackTrace}");
+                return StatusCode(500, "Erro ao criar uma nova função.");
             }
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutFuncao(int id, Funcao funcao)
+        public async Task<IActionResult> PutFuncao(int id, FuncaoDto funcaoAtualizadoDto)
         {
-            if (id != funcao.Id)
+            if (!ModelState.IsValid)
             {
-                return BadRequest();
+                return BadRequest(ModelState);
             }
-
-            _context.Entry(funcao).State = EntityState.Modified;
 
             try
             {
+                if (!_context.Setores.Any(e => e.Id == funcaoAtualizadoDto.IdSetor))
+                {
+                    return BadRequest("O IdEstado fornecido não existe.");
+                }
+
+                var funcaoExistente = await _context.Funcoes.FindAsync(id);
+                if (funcaoExistente == null)
+                {
+                    return NotFound();
+                }
+
+                funcaoExistente.NomeFuncao = funcaoAtualizadoDto.NomeFuncao;
+                funcaoExistente.IdSetor = funcaoAtualizadoDto.IdSetor;
+
                 await _context.SaveChangesAsync();
+
+                return NoContent();
             }
             catch (DbUpdateConcurrencyException ex)
             {
@@ -93,17 +129,15 @@ namespace Backend.Controllers
                 }
                 else
                 {
-                    _logger.LogError(ex, $"Erro de concorrência ao atualizar o funcao com ID {id}.");
-                    return StatusCode(500, "Erro de concorrência ao atualizar o funcao.");
+                    _logger.LogError(ex, $"Erro de concorrência ao atualizar a funcao com ID {id}.");
+                    return StatusCode(500, "Erro de concorrência ao atualizar a funcao.");
                 }
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, $"Erro ao atualizar o funcao com ID {id}.");
-                return StatusCode(500, "Erro ao atualizar o funcao.");
+                _logger.LogError(ex, $"Erro ao atualizar a funcao com ID {id}.");
+                return StatusCode(500, "Erro ao atualizar a funcao.");
             }
-
-            return NoContent();
         }
 
         [HttpDelete("{id}")]
