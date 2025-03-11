@@ -26,10 +26,11 @@ namespace Backend.Data
         public DbSet<Dependente> Dependentes { get; set; }
         public DbSet<Banco> Bancos { get; set; }
         public DbSet<Conta> Contas { get; set; }
-        public DbSet<Salario> Salarios { get; set; }
         public DbSet<DadosPessoais> DadosPessoais { get; set; }
-        public DbSet<DadosTrabalho> DadosTrabalho { get; set; } 
-         public DbSet<Pessoa> Pessoas { get; set; }
+        public DbSet<DadosTrabalho> DadosTrabalho { get; set; }
+        public DbSet<Pessoa> Pessoas { get; set; }
+        public DbSet<Salario> Salarios { get; set; } // Adicionado
+        public DbSet<Periodo> Periodos { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -109,58 +110,58 @@ namespace Backend.Data
                 .OnDelete(DeleteBehavior.SetNull);
 
             modelBuilder.Entity<Pessoa>()
-                .HasOne(p => p.DadosPessoais) 
+                .HasOne(p => p.DadosPessoais)
                 .WithOne()
                 .HasForeignKey<Pessoa>(p => p.IdDadosPessoais)
                 .OnDelete(DeleteBehavior.SetNull);
 
             modelBuilder.Entity<Pessoa>()
-                .HasOne(p => p.Documento) 
+                .HasOne(p => p.Documento)
                 .WithOne()
                 .HasForeignKey<Pessoa>(p => p.IdDocumentos)
                 .OnDelete(DeleteBehavior.SetNull);
 
             modelBuilder.Entity<Pessoa>()
-                .HasOne(p => p.Dependente) 
+                .HasOne(p => p.Dependente)
                 .WithOne()
                 .HasForeignKey<Pessoa>(p => p.IdDependentes)
                 .OnDelete(DeleteBehavior.SetNull);
 
             modelBuilder.Entity<Pessoa>()
-                .HasOne(p => p.Endereco) 
+                .HasOne(p => p.Endereco)
                 .WithOne()
                 .HasForeignKey<Pessoa>(p => p.IdEnderecos)
                 .OnDelete(DeleteBehavior.SetNull);
 
             modelBuilder.Entity<Pessoa>()
-                .HasOne(p => p.Contato) 
+                .HasOne(p => p.Contato)
                 .WithOne()
                 .HasForeignKey<Pessoa>(p => p.IdContatos)
                 .OnDelete(DeleteBehavior.SetNull);
 
             modelBuilder.Entity<Pessoa>()
-                .HasOne(p => p.DadosTrabalho) 
+                .HasOne(p => p.DadosTrabalho)
                 .WithOne()
                 .HasForeignKey<Pessoa>(p => p.IdDadosTrabalho)
                 .OnDelete(DeleteBehavior.SetNull);
 
             modelBuilder.Entity<Pessoa>()
-                .HasOne(p => p.Funcao) 
+                .HasOne(p => p.Funcao)
                 .WithOne()
                 .HasForeignKey<Pessoa>(p => p.IdFuncoes)
                 .OnDelete(DeleteBehavior.SetNull);
 
             modelBuilder.Entity<Pessoa>()
-                .HasOne(p => p.Conta) 
+                .HasOne(p => p.Conta)
                 .WithOne()
                 .HasForeignKey<Pessoa>(p => p.IdContas)
                 .OnDelete(DeleteBehavior.SetNull);
 
-            modelBuilder.Entity<Pessoa>()
-                .HasOne(p => p.Salario) 
-                .WithOne()
-                .HasForeignKey<Pessoa>(p => p.IdSalarios)
-                .OnDelete(DeleteBehavior.SetNull);
+              modelBuilder.Entity<Salario>()  // Adicionado
+                .HasOne(s => s.Pessoa)
+                .WithMany()
+                .HasForeignKey(s => s.IdPessoa)
+                .OnDelete(DeleteBehavior.Restrict); // Ou outro DeleteBehavior apropriado
         }
     }
 }

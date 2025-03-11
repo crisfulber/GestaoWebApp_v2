@@ -4,6 +4,7 @@ using Backend.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Backend.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250308204232_AddIdPessoaToSalario")]
+    partial class AddIdPessoaToSalario
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -482,6 +485,9 @@ namespace Backend.Migrations
                     b.Property<int?>("IdFuncoes")
                         .HasColumnType("int");
 
+                    b.Property<int?>("IdSalarios")
+                        .HasColumnType("int");
+
                     b.Property<int?>("IdSetores")
                         .HasColumnType("int");
 
@@ -517,6 +523,9 @@ namespace Backend.Migrations
                     b.HasIndex("IdFuncoes")
                         .IsUnique();
 
+                    b.HasIndex("IdSalarios")
+                        .IsUnique();
+
                     b.HasIndex("IdSetores");
 
                     b.HasIndex("IdUnidades");
@@ -537,6 +546,9 @@ namespace Backend.Migrations
                         .HasColumnType("longtext");
 
                     b.Property<int>("IdPessoa")
+                        .HasColumnType("int");
+
+                    b.Property<int>("PessoaId1")
                         .HasColumnType("int");
 
                     b.Property<bool>("SalarioAtivo")
@@ -753,6 +765,11 @@ namespace Backend.Migrations
                         .HasForeignKey("Backend.Models.Pessoa", "IdFuncoes")
                         .OnDelete(DeleteBehavior.SetNull);
 
+                    b.HasOne("Backend.Models.Salario", "Salario")
+                        .WithOne()
+                        .HasForeignKey("Backend.Models.Pessoa", "IdSalarios")
+                        .OnDelete(DeleteBehavior.SetNull);
+
                     b.HasOne("Backend.Models.Setor", "Setor")
                         .WithMany()
                         .HasForeignKey("IdSetores");
@@ -777,6 +794,8 @@ namespace Backend.Migrations
 
                     b.Navigation("Funcao");
 
+                    b.Navigation("Salario");
+
                     b.Navigation("Setor");
 
                     b.Navigation("Unidade");
@@ -787,7 +806,7 @@ namespace Backend.Migrations
                     b.HasOne("Backend.Models.Pessoa", "Pessoa")
                         .WithMany()
                         .HasForeignKey("IdPessoa")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Pessoa");

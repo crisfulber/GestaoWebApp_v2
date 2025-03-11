@@ -19,6 +19,7 @@ export const routes: Routes = [
     { path: 'funcaoRegistro', loadComponent: () => import('./components/features/funcaoRegistro/funcaoRegistro.component').then(m => m.FuncaoRegistroComponent) },
     { path: 'municipio', loadComponent: () => import('./components/features/municipio/municipio.component').then(m => m.MunicipioComponent) },
     { path: 'nacionalidade', loadComponent: () => import('./components/features/nacionalidade/nacionalidade.component').then(m => m.NacionalidadeComponent) },
+    { path: 'periodo', loadComponent: () => import('./components/features/periodo/periodo.component').then(m => m.PeriodoComponent) },
     { path: 'pessoa', loadComponent: () => import('./components/features/pessoa/pessoa.component').then(m => m.PessoaComponent) },
     { path: 'salario', loadComponent: () => import('./components/features/salario/salario.component').then(m => m.SalarioComponent) },
     { path: 'setor', loadComponent: () => import('./components/features/setor/setor.component').then(m => m.SetorComponent) },

@@ -50,6 +50,7 @@ export class AppMenu {
                     { label: 'Salários', icon: 'pi pi-fw pi-dollar', routerLink: ['/salario'] },
                     { label: 'Funções', icon: 'pi pi-fw pi-id-card', routerLink: ['/funcao'] },
                     { label: 'Escalas', icon: 'pi pi-fw pi-clock', routerLink: ['/escala'] },
+                    { label: 'Período', icon: 'pi pi-fw pi-calendar', routerLink: ['/periodo'] },
                 ]
             },
             {

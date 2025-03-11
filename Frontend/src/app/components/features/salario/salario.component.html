@@ -1,15 +1,15 @@
 <p-toast></p-toast>
-<p-confirmDialog [style]="{ width: '50vw' }"></p-confirmDialog>
+<p-confirmDialog [style]="{width: '50vw'}"></p-confirmDialog>
 
 <div class="card">
-    <p-table [value]="salarios" dataKey="Id" [rows]="20"
-        styleClass="p-datatable-gridlines" [paginator]="true"
-        [globalFilterFields]="['Valor', 'DtAlteracao', 'Ativo']" [rowHover]="true" #dt>
+    <span style="font-size: 1.5em; font-weight: 400;">Listagem de Salários</span>
+    <hr>
+    <p-table [value]="salarios" dataKey="id" [rows]="20" styleClass="p-datatable-gridlines" [paginator]="true"
+        [globalFilterFields]="['Valor', 'DtAlteracao', 'pessoa.NomePessoa']" [rowHover]="true" #dt>
         <ng-template pTemplate="caption">
             <div class="flex align-items-center justify-content-between">
-                <button pButton pRipple label="Novo" icon="pi pi-plus" class="p-button mr-2"
+                <button pButton pRipple label="Novo" icon="pi pi-plus" class="p-button-outlined mr-2"
                     (click)="openNew()"></button>
-                <span style="font-size: 1.2em; font-weight: bold;">Listagem de Salários</span>
                 <span class="p-input-icon-left">
                     <input pInputText type="text" (input)="dt.filterGlobal($any($event.target).value, 'contains')"
                         placeholder="Pesquisar..." />
@@ -18,17 +18,23 @@
         </ng-template>
         <ng-template pTemplate="header">
             <tr>
-                <th pSortableColumn="Valor">Valor <p-sortIcon field="Valor"></p-sortIcon></th>
+                <th pSortableColumn="pessoa.NomePessoa">Colaborador <p-sortIcon field="pessoa.NomePessoa"></p-sortIcon>
+                </th>
+                <th pSortableColumn="Valor">Salário <p-sortIcon field="Valor"></p-sortIcon></th>
                 <th pSortableColumn="DtAlteracao">Data de Alteração <p-sortIcon field="DtAlteracao"></p-sortIcon></th>
-                <th pSortableColumn="Ativo">Atual <p-sortIcon field="Ativo"></p-sortIcon></th>
+                <th>Status</th>
                 <th></th>
             </tr>
         </ng-template>
         <ng-template pTemplate="body" let-salario>
             <tr>
-                <td>{{formatarValor(salario.Valor)}}</td>
+                <td>{{getPessoaNome(salario.IdPessoa)}}</td>
+                <td>{{salario.Valor | currency:'BRL':'symbol':'1.2-2'}}</td>
                 <td>{{formatarDataParaTela(salario.DtAlteracao)}}</td>
-                <td><i [className]="salario.Ativo ? 'pi pi-check-circle text-green' : 'pi pi-times-circle text-red'"></i></td>
+                <td>
+                    <i *ngIf="salario.SalarioAtivo" class="pi pi-check-circle" style="color: green;"></i>
+                    <i *ngIf="!salario.SalarioAtivo" class="pi pi-times-circle" style="color: red;"></i>
+                </td>
                 <td>
                     <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-info mr-2"
                         (click)="editSalario(salario)"></button>
@@ -40,29 +46,43 @@
     </p-table>
 </div>
 
-<p-dialog [(visible)]="salarioDialog" [style]="{width: '450px'}" header="Detalhes do Salário" [modal]="true"
+<p-dialog [(visible)]="salarioDialog" [style]="{width: '40vw'}" header="Detalhes do Salário" [modal]="true"
     styleClass="p-fluid">
     <ng-template pTemplate="content">
-        <div class="field">
-            <label for="Valor" class="block">Valor</label>
-            <p-inputNumber inputId="Valor" [(ngModel)]="salario.Valor" mode="currency" currency="BRL"
-                locale="pt-BR"></p-inputNumber>
-        </div>
-        <div class="field">
-            <label for="DtAlteracao" class="block">Data de Alteração</label>
-            <p-inputMask mask="99/99/9999" placeholder="dd/mm/aaaa" id="DtAlteracao"
-                [(ngModel)]="salario.DtAlteracao"></p-inputMask>
-        </div>
-        <div class="field flex center">
-            <p-checkbox inputId="Ativo" [(ngModel)]="salario.SalarioAtivo" [binary]="true"></p-checkbox>
-            <label for="Ativo" class="flex ml-2">Ativo</label>
-        </div>
+        <form [formGroup]="salarioForm">
+            <div class="grid">
+                <div class="col-12 md:col-6">
+                    <p-select [options]="pessoas" formControlName="IdPessoa" optionLabel="NomePessoa" optionValue="Id"
+                        placeholder="Selecione uma Pessoa" appendTo="body" required
+                        [ngClass]="{'ng-invalid ng-dirty': submitted && !salarioForm.get('IdPessoa')?.valid}"></p-select>
+                    <small class="p-error block" *ngIf="submitted && !salarioForm.get('IdPessoa')?.valid">Pessoa é
+                        obrigatória.</small>
+                </div>
+                <div class="col-12 md:col-6">
+                    <p-inputNumber id="Valor" formControlName="Valor" mode="currency" currency="BRL"
+                        locale="pt-BR"></p-inputNumber>
+                    <small class="p-error block" *ngIf="submitted && !salarioForm.get('Valor')?.valid">Valor é
+                        obrigatório.</small>
+                </div>
+                <div class="col-12 md:col-6">
+                    <p-inputMask mask="99/99/9999" [autoClear]="false" placeholder="dd/mm/aaaa"
+                        formControlName="DtAlteracao" id="DtAlteracao" required
+                        [ngClass]="{'ng-invalid ng-dirty': submitted && !salarioForm.get('DtAlteracao')?.valid}"></p-inputMask>
+                    <small class="p-error block" *ngIf="submitted && !salarioForm.get('DtAlteracao')?.valid">Data é
+                        obrigatória.</small>
+                </div>
+                <div class="col-12 md:col-6">
+                    <label for="SalarioAtivo" class="block">Salário Ativo</label>
+                    <p-checkbox id="SalarioAtivo" formControlName="SalarioAtivo" [binary]="true"></p-checkbox>
+                </div>
+            </div>
+        </form>
     </ng-template>
 
     <ng-template pTemplate="footer">
-        <button pButton pRipple label="Cancelar" icon="pi pi-times" class="p-button-secondary"
+        <button pButton pRipple label="Cancelar" icon="pi pi-times" class="p-button-secondary" [raised]="true"
             (click)="hideDialog()"></button>
-        <button pButton pRipple label="Salvar" icon="pi pi-check" class="p-button-rounded"
+        <button pButton pRipple label="Salvar" icon="pi pi-check" class="p-button" [raised]="true"
             (click)="saveSalario()"></button>
     </ng-template>
 </p-dialog>

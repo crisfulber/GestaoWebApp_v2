@@ -11,5 +11,4 @@ export interface Pessoa {
     IdSetores?: number | null;
     IdUnidades?: number | null;
     IdContas?: number | null;
-    IdSalarios?: number | null;
 }

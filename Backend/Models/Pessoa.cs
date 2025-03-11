@@ -45,7 +45,5 @@ namespace Backend.Models
         public int? IdContas { get; set; }
         public virtual Conta? Conta { get; set; }
 
-        public int? IdSalarios { get; set; }
-        public virtual Salario? Salario { get; set; }
     }
 }

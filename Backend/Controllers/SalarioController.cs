@@ -2,18 +2,22 @@ using Backend.Data;
 using Backend.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System.Globalization;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 
 namespace Backend.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class SalariosController : ControllerBase
+    public class SalarioController : ControllerBase
     {
         private readonly AppDbContext _context;
-        private readonly ILogger<SalariosController> _logger;
+        private readonly ILogger<SalarioController> _logger;
 
-        public SalariosController(AppDbContext context, ILogger<SalariosController> logger)
+        public SalarioController(AppDbContext context, ILogger<SalarioController> logger)
         {
             _context = context;
             _logger = logger;
@@ -28,8 +32,8 @@ namespace Backend.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Erro ao obter a lista de Salários.");
-                return StatusCode(500, "Erro ao obter a lista de Salários.");
+                _logger.LogError(ex, "Erro ao obter a lista de salários.");
+                return StatusCode(500, new { message = "Erro ao obter a lista de salários.", error = ex.Message });
             }
         }
 
@@ -42,7 +46,7 @@ namespace Backend.Controllers
 
                 if (salario == null)
                 {
-                    return NotFound();
+                    return NotFound(new { message = "Salário não encontrado." });
                 }
 
                 return salario;
@@ -50,7 +54,7 @@ namespace Backend.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, $"Erro ao obter o salário com ID {id}.");
-                return StatusCode(500, "Erro ao obter o salário.");
+                return StatusCode(500, new { message = "Erro ao obter o salário.", error = ex.Message });
             }
         }
 
@@ -72,7 +76,7 @@ namespace Backend.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Erro ao criar um novo salário.");
-                return StatusCode(500, "Erro ao criar um novo salário.");
+                return StatusCode(500, new { message = "Erro ao criar um novo salário.", error = ex.Message });
             }
         }
 
@@ -81,7 +85,7 @@ namespace Backend.Controllers
         {
             if (id != salarioAtualizado.Id)
             {
-                return BadRequest("O ID na rota não corresponde ao ID no corpo da requisição.");
+                return BadRequest(new { message = "O ID na rota não corresponde ao ID no corpo da requisição." });
             }
 
             if (!ModelState.IsValid)
@@ -94,12 +98,13 @@ namespace Backend.Controllers
                 var salarioExistente = await _context.Salarios.FindAsync(id);
                 if (salarioExistente == null)
                 {
-                    return NotFound();
+                    return NotFound(new { message = "Salário não encontrado." });
                 }
 
                 salarioExistente.Valor = salarioAtualizado.Valor;
                 salarioExistente.DtAlteracao = salarioAtualizado.DtAlteracao;
                 salarioExistente.SalarioAtivo = salarioAtualizado.SalarioAtivo;
+                salarioExistente.IdPessoa = salarioAtualizado.IdPessoa;
 
                 await _context.SaveChangesAsync();
 
@@ -109,18 +114,18 @@ namespace Backend.Controllers
             {
                 if (!SalarioExists(id))
                 {
-                    return NotFound();
+                    return NotFound(new { message = "Salário não encontrado." });
                 }
                 else
                 {
                     _logger.LogError(ex, $"Erro de concorrência ao atualizar o salário com ID {id}.");
-                    return StatusCode(500, "Erro de concorrência ao atualizar o salário.");
+                    return StatusCode(500, new { message = "Erro de concorrência ao atualizar o salário.", error = ex.Message });
                 }
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, $"Erro ao atualizar o salário com ID {id}.");
-                return StatusCode(500, "Erro ao atualizar o salário.");
+                return StatusCode(500, new { message = "Erro ao atualizar o salário.", error = ex.Message });
             }
         }
 
@@ -132,7 +137,7 @@ namespace Backend.Controllers
                 var salario = await _context.Salarios.FindAsync(id);
                 if (salario == null)
                 {
-                    return NotFound();
+                    return NotFound(new { message = "Salário não encontrado." });
                 }
 
                 _context.Salarios.Remove(salario);
@@ -143,7 +148,7 @@ namespace Backend.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, $"Erro ao excluir o salário com ID {id}.");
-                return StatusCode(500, "Erro ao excluir o salário.");
+                return StatusCode(500, new { message = "Erro ao excluir o salário.", error = ex.Message });
             }
         }
 

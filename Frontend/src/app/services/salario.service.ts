@@ -8,7 +8,7 @@ import { Salario } from '../components/interface/salario';
 })
 export class SalarioService {
 
-    private endpoint = 'Salarios';
+    private endpoint = 'Salario';
 
     constructor(private apiService: ApiService) { }
 

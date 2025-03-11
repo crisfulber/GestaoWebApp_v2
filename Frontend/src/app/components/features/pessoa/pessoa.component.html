@@ -4,7 +4,7 @@
 <div class="card">
     <span style="font-size: 1.5em; font-weight: 400;">Colaboradores</span>
     <hr>
-    <p-table [value]="pessoas" dataKey="Id" [rows]="20" styleClass="p-datatable-gridlines p-datatable-striped" 
+    <p-table [value]="pessoas" dataKey="Id" [rows]="20" styleClass="p-datatable-gridlines p-datatable-striped"
         [paginator]="true" [globalFilterFields]="['NomePessoa']" [rowHover]="true" #dt>
         <ng-template pTemplate="caption">
             <div class="flex align-items-center justify-content-between">
@@ -353,30 +353,6 @@
                         <div class="col-12 md:col-3">
                             <input type="text" pInputText id="PIX" formControlName="PIX" placeholder="Chave PIX"
                                 class="w-full">
-                        </div>
-                    </div>
-                </div>
-                <!--step10form salário-->
-                <div *ngSwitchCase="9" class="step-container" [formGroup]="step10Form">
-                    <div class="grid">
-                        <div class="col-12 md:col-4">
-                            <input type="text" pInputText id="Valor" formControlName="Valor" placeholder="Salário"
-                                class="w-full">
-                        </div>
-                        <div class="col-12">
-                            <div class="grid">
-                                <div class="col-12 md:col-3">
-                                    <p-inputMask mask="99/99/9999" inputId="DtAlteracao" formControlName="DtAlteracao"
-                                        placeholder="Data de Alteração" class="w-full"></p-inputMask>
-                                </div>
-                                <div class="col-12 md:col-2">
-                                    <div class="field flex align-items-center">
-                                        <p-checkbox inputId="SalarioAtivo" formControlName="SalarioAtivo"
-                                            [binary]="true"></p-checkbox>
-                                        <label for="SalarioAtivo" class="ml-2">Ativo</label>
-                                    </div>
-                                </div>
-                            </div>
                         </div>
                     </div>
                 </div>

@@ -110,7 +110,6 @@ namespace Backend.Controllers
                 pessoaExistente.IdSetores = pessoaAtualizada.IdSetores;
                 pessoaExistente.IdUnidades = pessoaAtualizada.IdUnidades;
                 pessoaExistente.IdContas = pessoaAtualizada.IdContas;
-                pessoaExistente.IdSalarios = pessoaAtualizada.IdSalarios;
 
                 await _context.SaveChangesAsync();
 
