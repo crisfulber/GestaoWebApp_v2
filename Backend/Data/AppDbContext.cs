@@ -31,6 +31,11 @@ namespace Backend.Data
         public DbSet<Pessoa> Pessoas { get; set; }
         public DbSet<Salario> Salarios { get; set; } 
         public DbSet<Periodo> Periodos { get; set; }
+        public DbSet<Desconto> Descontos { get; set; }
+        public DbSet<Adiantamento> Adiantamentos { get; set; }
+        public DbSet<TipoHora> TiposHora { get; set; }
+        public DbSet<HoraExtra> HorasExtras { get; set; }
+        public DbSet<HoraFalta> HorasFaltas { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

@@ -1,0 +1,122 @@
+<p-toast></p-toast>
+<p-confirmDialog></p-confirmDialog>
+
+<div class="card">
+  <p-table
+    [value]="tiposHora"
+    dataKey="Id"
+    [rows]="10"
+    [paginator]="true"
+    [rowHover]="true"
+    #dt
+    [globalFilterFields]="['Descricao', 'Valor']"
+    styleClass="p-datatable-gridlines"
+  >
+    <ng-template pTemplate="caption">
+      <div class="flex align-items-center justify-content-between">
+        <button
+          pButton
+          pRipple
+          label="Novo"
+          icon="pi pi-plus"
+          class="p-button mr-2"
+          (click)="openNew()"
+        ></button>
+        <span style="font-size: 1.2em; font-weight: bold"
+          >Listagem de Tipos de Hora</span
+        >
+        <span class="p-input-icon-left">
+          <input
+            pInputText
+            type="text"
+            (input)="dt.filterGlobal($any($event.target).value, 'contains')"
+            placeholder="Pesquisar..."
+          />
+          <i class="pi pi-search"></i>
+        </span>
+      </div>
+    </ng-template>
+
+    <ng-template pTemplate="header">
+      <tr>
+        <th pSortableColumn="Descricao">
+          Descrição <p-sortIcon field="Descricao"></p-sortIcon>
+        </th>
+        <th pSortableColumn="Valor">
+          Valor <p-sortIcon field="Valor"></p-sortIcon>
+        </th>
+        <th></th>
+      </tr>
+    </ng-template>
+
+    <ng-template pTemplate="body" let-th>
+      <tr>
+        <td>{{ th.Descricao }}</td>
+        <td>{{ th.Valor }}</td>
+        <td>
+          <button
+            pButton
+            pRipple
+            icon="pi pi-pencil"
+            class="p-button-rounded p-button-info mr-2"
+            (click)="editTipoHora(th)"
+          ></button>
+          <button
+            pButton
+            pRipple
+            icon="pi pi-trash"
+            class="p-button-rounded p-button-danger"
+            (click)="deleteTipoHora(th)"
+          ></button>
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+</div>
+
+<!-- Dialog -->
+<p-dialog
+  [(visible)]="tipoHoraDialog"
+  [style]="{ width: '450px' }"
+  header="Detalhes do TipoHora"
+  [modal]="true"
+  styleClass="p-fluid"
+>
+  <ng-template pTemplate="content">
+    <div class="field">
+      <label for="Descricao" class="block">Descrição</label>
+      <input pInputText id="Descricao" [(ngModel)]="tipoHora.Descricao" />
+    </div>
+
+    <div class="field">
+      <label for="Valor" class="block">Valor</label>
+      <p-inputNumber
+        inputId="Valor"
+        [(ngModel)]="tipoHora.Valor"
+        [mode]="'decimal'"
+        [minFractionDigits]="1"
+      ></p-inputNumber>
+    </div>
+  </ng-template>
+
+  <ng-template pTemplate="footer">
+    <button
+      pButton
+      pRipple
+      label="Cancelar"
+      icon="pi pi-times"
+      class="p-button-secondary"
+      [raised]="true"
+      (click)="hideDialog()"
+    ></button>
+    <button
+      pButton
+      pRipple
+      label="Salvar"
+      icon="pi pi-check"
+      class="p-button"
+      [raised]="true"
+      (click)="saveTipoHora()"
+    ></button>
+  </ng-template>
+</p-dialog>

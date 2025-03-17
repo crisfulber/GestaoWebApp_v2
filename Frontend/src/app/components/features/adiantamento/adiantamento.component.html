@@ -1,0 +1,158 @@
+<p-toast></p-toast>
+<p-confirmDialog></p-confirmDialog>
+
+<div class="card">
+  <p-table
+    [value]="adiantamentos"
+    dataKey="Id"
+    [rows]="10"
+    [paginator]="true"
+    [rowHover]="true"
+    #dt
+    [globalFilterFields]="['Pessoa', 'Valor', 'Data', 'Parcelas']"
+    styleClass="p-datatable-gridlines"
+  >
+    <ng-template pTemplate="caption">
+      <div class="flex align-items-center justify-content-between">
+        <button
+          pButton
+          pRipple
+          label="Novo"
+          icon="pi pi-plus"
+          class="p-button mr-2"
+          (click)="openNew()"
+        ></button>
+        <span style="font-size: 1.2em; font-weight: bold"
+          >Listagem de Adiantamentos</span
+        >
+        <span class="p-input-icon-left">
+          <input
+            pInputText
+            type="text"
+            (input)="dt.filterGlobal($any($event.target).value, 'contains')"
+            placeholder="Pesquisar..."
+          />
+          <i class="pi pi-search"></i>
+        </span>
+      </div>
+    </ng-template>
+
+    <ng-template pTemplate="header">
+      <tr>
+        <th pSortableColumn="IdPessoa">
+          Pessoa <p-sortIcon field="pessoa"></p-sortIcon>
+        </th>
+        <th pSortableColumn="Valor">
+          Valor <p-sortIcon field="Valor"></p-sortIcon>
+        </th>
+        <th pSortableColumn="Data">
+          Data <p-sortIcon field="Data"></p-sortIcon>
+        </th>
+        <th pSortableColumn="Parcelas">
+          Parcelas <p-sortIcon field="Parcelas"></p-sortIcon>
+        </th>
+        <th></th>
+      </tr>
+    </ng-template>
+
+    <ng-template pTemplate="body" let-adiantamento>
+      <tr>
+        <td>{{ adiantamento.Pessoa.NomePessoa }}</td>
+        <td>{{ adiantamento.Valor }}</td>
+        <td>{{ adiantamento.Data | date : "dd/MM/yyyy" }}</td>
+        <td>{{ adiantamento.Parcelas }}</td>
+        <td>
+          <button
+            pButton
+            pRipple
+            icon="pi pi-pencil"
+            class="p-button-rounded p-button-info mr-2"
+            (click)="editAdiantamento(adiantamento)"
+          ></button>
+          <button
+            pButton
+            pRipple
+            icon="pi pi-trash"
+            class="p-button-rounded p-button-danger"
+            (click)="deleteAdiantamento(adiantamento)"
+          ></button>
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+</div>
+
+<p-dialog
+  [(visible)]="adiantamentoDialog"
+  [style]="{ width: '450px' }"
+  header="Detalhes do Adiantamento"
+  [modal]="true"
+  styleClass="p-fluid"
+>
+  <ng-template pTemplate="content">
+    <div class="field">
+      <div class="field">
+        <label for="pessoa" class="block">Pessoa</label>
+        <p-dropdown
+          id="pessoa"
+          [(ngModel)]="adiantamento.IdPessoa"
+          optionLabel="NomePessoa"
+          optionValue="Id"
+          placeholder="Selecione a pessoa"
+          [options]="pessoas"
+        ></p-dropdown>
+      </div>
+    </div>
+
+    <div class="field">
+      <label for="Valor" class="block">Valor</label>
+      <p-inputNumber
+        inputId="Valor"
+        [(ngModel)]="adiantamento.Valor"
+        [mode]="'decimal'"
+        [minFractionDigits]="2"
+      ></p-inputNumber>
+    </div>
+
+    <div class="field">
+      <label for="Data" class="block">Data</label>
+      <p-date-picker
+        id="Data"
+        [(ngModel)]="adiantamento.Data"
+        dateFormat="dd/mm/yy"
+        showIcon="true"
+      ></p-date-picker>
+    </div>
+
+    <div class="field">
+      <label for="Parcelas" class="block">Parcelas</label>
+      <input
+        type="number"
+        pInputText
+        id="Parcelas"
+        [(ngModel)]="adiantamento.Parcelas"
+      />
+    </div>
+  </ng-template>
+
+  <ng-template pTemplate="footer">
+    <button
+      pButton
+      pRipple
+      label="Cancelar"
+      icon="pi pi-times"
+      class="p-button-secondary"
+      [raised]="true"
+      (click)="hideDialog()"
+    ></button>
+    <button
+      pButton
+      pRipple
+      label="Salvar"
+      icon="pi pi-check"
+      class="p-button"
+      [raised]="true"
+      (click)="saveAdiantamento()"
+    ></button>
+  </ng-template>
+</p-dialog>
