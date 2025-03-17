@@ -1,0 +1,160 @@
+<p-toast></p-toast>
+<p-confirmDialog></p-confirmDialog>
+
+<div class="card">
+  <p-table
+    [value]="horasFaltas"
+    dataKey="Id"
+    [rows]="10"
+    [paginator]="true"
+    [rowHover]="true"
+    #dt
+    [globalFilterFields]="['Pessoa', 'Data', 'Horas', 'TipoHora']"
+    styleClass="p-datatable-gridlines"
+  >
+    <ng-template pTemplate="caption">
+      <div class="flex align-items-center justify-content-between">
+        <button
+          pButton
+          pRipple
+          label="Novo"
+          icon="pi pi-plus"
+          class="p-button mr-2"
+          (click)="openNew()"
+        ></button>
+        <span style="font-size: 1.2em; font-weight: bold"
+          >Listagem de Horas de Falta</span
+        >
+        <span class="p-input-icon-left">
+          <input
+            pInputText
+            type="text"
+            (input)="dt.filterGlobal($any($event.target).value, 'contains')"
+            placeholder="Pesquisar..."
+          />
+          <i class="pi pi-search"></i>
+        </span>
+      </div>
+    </ng-template>
+
+    <ng-template pTemplate="header">
+      <tr>
+        <th pSortableColumn="IdPessoa">
+          Pessoa <p-sortIcon field="IdPessoa"></p-sortIcon>
+        </th>
+        <th pSortableColumn="Data">
+          Data <p-sortIcon field="Data"></p-sortIcon>
+        </th>
+        <th pSortableColumn="Horas">
+          Horas <p-sortIcon field="Horas"></p-sortIcon>
+        </th>
+        <th pSortableColumn="IdTipoHora">
+          TipoHora <p-sortIcon field="IdTipoHora"></p-sortIcon>
+        </th>
+        <th></th>
+      </tr>
+    </ng-template>
+
+    <ng-template pTemplate="body" let-hf>
+      <tr>
+        <td>{{ hf.Pessoa.NomePessoa }}</td>
+        <td>{{ hf.Data | date : "dd/MM/yyyy" }}</td>
+        <td>{{ hf.Horas }}</td>
+        <td>{{ hf.TipoHora.Descricao }}</td>
+        <td>
+          <button
+            pButton
+            pRipple
+            icon="pi pi-pencil"
+            class="p-button-rounded p-button-info mr-2"
+            (click)="editHoraFalta(hf)"
+          ></button>
+          <button
+            pButton
+            pRipple
+            icon="pi pi-trash"
+            class="p-button-rounded p-button-danger"
+            (click)="deleteHoraFalta(hf)"
+          ></button>
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+</div>
+
+<p-dialog
+  [(visible)]="horaFaltaDialog"
+  [style]="{ width: '450px' }"
+  header="Detalhes de Hora Falta"
+  [modal]="true"
+  styleClass="p-fluid"
+>
+  <ng-template pTemplate="content">
+    <div class="drop-row-two">
+      <div class="field">
+        <label for="pessoa" class="block">Pessoa</label>
+        <p-dropdown
+          id="pessoa"
+          [(ngModel)]="horaFalta.IdPessoa"
+          optionLabel="NomePessoa"
+          optionValue="Id"
+          placeholder="Selecione a pessoa"
+          [options]="pessoas"
+        ></p-dropdown>
+      </div>
+
+      <div class="field">
+        <label for="tipoHora" class="block">Tipo Hora</label>
+        <p-dropdown
+          id="tipoHora"
+          [(ngModel)]="horaFalta.IdTipoHora"
+          optionLabel="Descricao"
+          optionValue="Id"
+          placeholder="Selecione o tipo hora"
+          [options]="tipoHoras"
+        ></p-dropdown>
+      </div>
+    </div>
+
+    <div class="field">
+      <label for="Data" class="block">Data</label>
+      <p-calendar
+        id="Data"
+        [(ngModel)]="horaFalta.Data"
+        dateFormat="dd/mm/yy"
+        showIcon="true"
+      ></p-calendar>
+    </div>
+
+    <div class="field">
+      <label for="Horas" class="block">Horas</label>
+      <p-inputNumber
+        inputId="Horas"
+        [(ngModel)]="horaFalta.Horas"
+        [mode]="'decimal'"
+        [minFractionDigits]="1"
+      ></p-inputNumber>
+    </div>
+  </ng-template>
+
+  <ng-template pTemplate="footer">
+    <button
+      pButton
+      pRipple
+      label="Cancelar"
+      icon="pi pi-times"
+      class="p-button-secondary"
+      [raised]="true"
+      (click)="hideDialog()"
+    ></button>
+    <button
+      pButton
+      pRipple
+      label="Salvar"
+      icon="pi pi-check"
+      class="p-button"
+      [raised]="true"
+      (click)="saveHoraFalta()"
+    ></button>
+  </ng-template>
+</p-dialog>

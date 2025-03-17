@@ -25,6 +25,11 @@ export const routes: Routes = [
     { path: 'setor', loadComponent: () => import('./components/features/setor/setor.component').then(m => m.SetorComponent) },
     { path: 'unidade', loadComponent: () => import('./components/features/unidade/unidade.component').then(m => m.UnidadeComponent) },
     { path: 'login', loadComponent: () => import('./components/login/login.component').then(m => m.LoginComponent) },
+    { path: 'hora-extra', loadComponent: () => import('./components/features/hora-extra/hora-extra.component').then(m => m.HoraExtraComponent) },
+    { path: 'hora-falta', loadComponent: () => import('./components/features/hora-falta/hora-falta.component').then(m => m.HoraFaltaComponent) },
+    { path: 'desconto', loadComponent: () => import('./components/features/desconto/desconto.component').then(m => m.DescontoComponent) },
+    { path: 'tipo-hora', loadComponent: () => import('./components/features/tipo-hora/tipo-hora.component').then(m => m.TipoHoraComponent) },
+    { path: 'adiantamento', loadComponent: () => import('./components/features/adiantamento/adiantamento.component').then(m => m.AdiantamentoComponent) },
     
     { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
     { path: '**', redirectTo: 'dashboard' },

@@ -28,10 +28,12 @@ export class AppMenu {
                 label: 'Lançamentos',
                 items: [
                     { label: 'Bonificação', icon: 'pi pi-fw pi-wallet', routerLink: ['/'] },
-                    { label: 'Horas Extras', icon: 'pi pi-fw pi-calendar-plus', routerLink: ['/'] },
-                    { label: 'Horas Faltas', icon: 'pi pi-fw pi-calendar-minus', routerLink: ['/'] },
+                    { label: 'Horas Extras', icon: 'pi pi-fw pi-calendar-plus', routerLink: ['/hora-extra'] },
+                    { label: 'Horas Faltas', icon: 'pi pi-fw pi-calendar-minus', routerLink: ['/hora-falta'] },
                     { label: 'Outros Acréscimos', icon: 'pi pi-fw pi-plus', class: 'rotated-icon', routerLink: ['/'] },
-                    { label: 'Outros Descontos', icon: 'pi pi-fw pi-minus', routerLink: ['/'] },
+                    { label: 'Outros Descontos', icon: 'pi pi-fw pi-minus', routerLink: ['/desconto'] },
+                    { label: 'Adiantamento', icon: 'pi pi-fw pi-calendar-clock', routerLink: ['/adiantamento'] },
+                    { label: 'Tipo Hora', icon: 'pi pi-fw pi-clock', routerLink: ['/tipo-hora'] },
                 ]
             },
             {
