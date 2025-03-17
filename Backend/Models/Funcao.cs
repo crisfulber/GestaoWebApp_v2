@@ -9,8 +9,8 @@ namespace Backend.Models
         [Key]
         public int Id { get; set; }
 
-        [Required(ErrorMessage = "Por favor, insira o nome da função")]
-        public required string NomeFuncao { get; set; }
+        
+        public  string NomeFuncao { get; set; }
 
         [ForeignKey("Setor")]
         public int IdSetor { get; set; }

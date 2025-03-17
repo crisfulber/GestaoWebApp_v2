@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Backend.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250301122135_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20250313231542_Banco")]
+    partial class Banco
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -52,14 +52,14 @@ namespace Backend.Migrations
 
                     MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int?>("Agencia")
-                        .HasColumnType("int");
+                    b.Property<string>("Agencia")
+                        .HasColumnType("longtext");
 
                     b.Property<int?>("IdBanco")
                         .HasColumnType("int");
 
-                    b.Property<int?>("NumConta")
-                        .HasColumnType("int");
+                    b.Property<string>("NumConta")
+                        .HasColumnType("longtext");
 
                     b.Property<string>("PIX")
                         .HasColumnType("LONGTEXT");
@@ -103,6 +103,9 @@ namespace Backend.Migrations
                         .IsRequired()
                         .HasColumnType("LONGTEXT");
 
+                    b.Property<int?>("IdEscolaridade")
+                        .HasColumnType("int");
+
                     b.Property<int?>("IdEstadoCivil")
                         .HasColumnType("int");
 
@@ -116,7 +119,6 @@ namespace Backend.Migrations
                         .HasColumnType("LONGTEXT");
 
                     b.Property<string>("NomeMae")
-                        .IsRequired()
                         .HasColumnType("LONGTEXT");
 
                     b.Property<string>("NomePai")
@@ -154,15 +156,6 @@ namespace Backend.Migrations
                     b.Property<string>("DtRegistro")
                         .HasColumnType("LONGTEXT");
 
-                    b.Property<int?>("IdConta")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("IdFuncao")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("IdSalario")
-                        .HasColumnType("int");
-
                     b.Property<string>("NumRegistro")
                         .HasColumnType("LONGTEXT");
 
@@ -182,13 +175,12 @@ namespace Backend.Migrations
 
                     MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("CPF")
-                        .IsRequired()
+                    b.Property<string>("CPF_Dependente")
                         .HasMaxLength(14)
                         .HasColumnType("varchar(14)");
 
-                    b.Property<DateTime?>("DtNascimento")
-                        .HasColumnType("datetime(6)");
+                    b.Property<string>("DtNascimento_Dependente")
+                        .HasColumnType("longtext");
 
                     b.Property<string>("NomeDependente")
                         .HasColumnType("longtext");
@@ -207,18 +199,17 @@ namespace Backend.Migrations
                     MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("CPF")
-                        .IsRequired()
                         .HasMaxLength(14)
                         .HasColumnType("varchar(14)");
 
-                    b.Property<int?>("CTPS")
-                        .HasColumnType("int");
+                    b.Property<string>("CTPS")
+                        .HasColumnType("longtext");
 
-                    b.Property<DateTime?>("DtEmissaoCTPS")
-                        .HasColumnType("datetime(6)");
+                    b.Property<string>("DtEmissaoCTPS")
+                        .HasColumnType("longtext");
 
-                    b.Property<DateTime?>("DtEmissaoRG")
-                        .HasColumnType("datetime(6)");
+                    b.Property<string>("DtEmissaoRG")
+                        .HasColumnType("longtext");
 
                     b.Property<string>("OrgaoExpeditor")
                         .HasColumnType("longtext");
@@ -227,19 +218,23 @@ namespace Backend.Migrations
                         .HasMaxLength(14)
                         .HasColumnType("varchar(14)");
 
-                    b.Property<int>("RG")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("SerieCTPS")
-                        .HasColumnType("int");
-
-                    b.Property<string>("UF_CTPS")
+                    b.Property<string>("RG")
                         .HasColumnType("longtext");
 
-                    b.Property<string>("UF_RG")
+                    b.Property<string>("SerieCTPS")
                         .HasColumnType("longtext");
+
+                    b.Property<int?>("UF_CTPS_IdEstado")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("UF_RG_IdEstado")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("UF_CTPS_IdEstado");
+
+                    b.HasIndex("UF_RG_IdEstado");
 
                     b.ToTable("Documentos");
                 });
@@ -292,8 +287,8 @@ namespace Backend.Migrations
 
                     b.Property<string>("CEP")
                         .IsRequired()
-                        .HasMaxLength(9)
-                        .HasColumnType("varchar(9)");
+                        .HasMaxLength(10)
+                        .HasColumnType("varchar(10)");
 
                     b.Property<string>("Complemento")
                         .HasMaxLength(50)
@@ -435,6 +430,101 @@ namespace Backend.Migrations
                     b.ToTable("Nacionalidade");
                 });
 
+            modelBuilder.Entity("Backend.Models.Periodo", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("Ano")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Mes")
+                        .IsRequired()
+                        .HasMaxLength(3)
+                        .HasColumnType("varchar(3)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Periodos");
+                });
+
+            modelBuilder.Entity("Backend.Models.Pessoa", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int?>("IdContas")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("IdContatos")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("IdDadosPessoais")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("IdDadosTrabalho")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("IdDependentes")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("IdDocumentos")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("IdEnderecos")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("IdFuncoes")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("IdSetores")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("IdUnidades")
+                        .HasColumnType("int");
+
+                    b.Property<string>("NomePessoa")
+                        .HasColumnType("LONGTEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("IdContas")
+                        .IsUnique();
+
+                    b.HasIndex("IdContatos")
+                        .IsUnique();
+
+                    b.HasIndex("IdDadosPessoais")
+                        .IsUnique();
+
+                    b.HasIndex("IdDadosTrabalho")
+                        .IsUnique();
+
+                    b.HasIndex("IdDependentes")
+                        .IsUnique();
+
+                    b.HasIndex("IdDocumentos")
+                        .IsUnique();
+
+                    b.HasIndex("IdEnderecos")
+                        .IsUnique();
+
+                    b.HasIndex("IdFuncoes")
+                        .IsUnique();
+
+                    b.HasIndex("IdSetores");
+
+                    b.HasIndex("IdUnidades");
+
+                    b.ToTable("Pessoas");
+                });
+
             modelBuilder.Entity("Backend.Models.Salario", b =>
                 {
                     b.Property<int>("Id")
@@ -443,17 +533,21 @@ namespace Backend.Migrations
 
                     MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<bool>("Ativo")
+                    b.Property<DateTime>("DtAlteracao")
+                        .HasColumnType("DATE");
+
+                    b.Property<int>("IdPessoa")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("SalarioAtivo")
                         .HasColumnType("tinyint(1)");
 
-                    b.Property<string>("DtAlteracao")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
                     b.Property<decimal>("Valor")
-                        .HasColumnType("decimal(18, 2)");
+                        .HasColumnType("DECIMAL(18,2)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("IdPessoa");
 
                     b.ToTable("Salarios");
                 });
@@ -466,16 +560,11 @@ namespace Backend.Migrations
 
                     MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("IdUnidade")
-                        .HasColumnType("int");
-
                     b.Property<string>("NomeSetor")
                         .IsRequired()
                         .HasColumnType("longtext");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("IdUnidade");
 
                     b.ToTable("Setores");
                 });
@@ -560,6 +649,21 @@ namespace Backend.Migrations
                     b.Navigation("Banco");
                 });
 
+            modelBuilder.Entity("Backend.Models.Documento", b =>
+                {
+                    b.HasOne("Estado", "UF_CTPS_Estado")
+                        .WithMany()
+                        .HasForeignKey("UF_CTPS_IdEstado");
+
+                    b.HasOne("Estado", "UF_RG_Estado")
+                        .WithMany()
+                        .HasForeignKey("UF_RG_IdEstado");
+
+                    b.Navigation("UF_CTPS_Estado");
+
+                    b.Navigation("UF_RG_Estado");
+                });
+
             modelBuilder.Entity("Backend.Models.Empresa", b =>
                 {
                     b.HasOne("Backend.Models.Contato", "Contato")
@@ -601,21 +705,92 @@ namespace Backend.Migrations
                     b.HasOne("Backend.Models.Setor", "Setor")
                         .WithMany()
                         .HasForeignKey("IdSetor")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Setor");
                 });
 
-            modelBuilder.Entity("Backend.Models.Setor", b =>
+            modelBuilder.Entity("Backend.Models.Pessoa", b =>
                 {
+                    b.HasOne("Backend.Models.Conta", "Conta")
+                        .WithOne()
+                        .HasForeignKey("Backend.Models.Pessoa", "IdContas")
+                        .OnDelete(DeleteBehavior.SetNull);
+
+                    b.HasOne("Backend.Models.Contato", "Contato")
+                        .WithOne()
+                        .HasForeignKey("Backend.Models.Pessoa", "IdContatos")
+                        .OnDelete(DeleteBehavior.SetNull);
+
+                    b.HasOne("Backend.Models.DadosPessoais", "DadosPessoais")
+                        .WithOne()
+                        .HasForeignKey("Backend.Models.Pessoa", "IdDadosPessoais")
+                        .OnDelete(DeleteBehavior.SetNull);
+
+                    b.HasOne("Backend.Models.DadosTrabalho", "DadosTrabalho")
+                        .WithOne()
+                        .HasForeignKey("Backend.Models.Pessoa", "IdDadosTrabalho")
+                        .OnDelete(DeleteBehavior.SetNull);
+
+                    b.HasOne("Backend.Models.Dependente", "Dependente")
+                        .WithOne()
+                        .HasForeignKey("Backend.Models.Pessoa", "IdDependentes")
+                        .OnDelete(DeleteBehavior.SetNull);
+
+                    b.HasOne("Backend.Models.Documento", "Documento")
+                        .WithOne()
+                        .HasForeignKey("Backend.Models.Pessoa", "IdDocumentos")
+                        .OnDelete(DeleteBehavior.SetNull);
+
+                    b.HasOne("Backend.Models.Endereco", "Endereco")
+                        .WithOne()
+                        .HasForeignKey("Backend.Models.Pessoa", "IdEnderecos")
+                        .OnDelete(DeleteBehavior.SetNull);
+
+                    b.HasOne("Backend.Models.Funcao", "Funcao")
+                        .WithOne()
+                        .HasForeignKey("Backend.Models.Pessoa", "IdFuncoes")
+                        .OnDelete(DeleteBehavior.SetNull);
+
+                    b.HasOne("Backend.Models.Setor", "Setor")
+                        .WithMany()
+                        .HasForeignKey("IdSetores");
+
                     b.HasOne("Backend.Models.Unidade", "Unidade")
                         .WithMany()
-                        .HasForeignKey("IdUnidade")
+                        .HasForeignKey("IdUnidades");
+
+                    b.Navigation("Conta");
+
+                    b.Navigation("Contato");
+
+                    b.Navigation("DadosPessoais");
+
+                    b.Navigation("DadosTrabalho");
+
+                    b.Navigation("Dependente");
+
+                    b.Navigation("Documento");
+
+                    b.Navigation("Endereco");
+
+                    b.Navigation("Funcao");
+
+                    b.Navigation("Setor");
+
+                    b.Navigation("Unidade");
+                });
+
+            modelBuilder.Entity("Backend.Models.Salario", b =>
+                {
+                    b.HasOne("Backend.Models.Pessoa", "Pessoa")
+                        .WithMany()
+                        .HasForeignKey("IdPessoa")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.Navigation("Unidade");
+                    b.Navigation("Pessoa");
                 });
 
             modelBuilder.Entity("Backend.Models.Unidade", b =>

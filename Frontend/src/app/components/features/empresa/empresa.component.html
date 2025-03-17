@@ -48,7 +48,7 @@
                 <div *ngSwitchCase="0">
                     <div class="grid">
                         <div class="col-12 md:col-6">
-                            <input type="text" placeholder="Nome da Empresa" pInputText id="NomeEmpresa" formControlName="NomeEmpresa" required
+                            <input type="text" placeholder="Nome da Empresa" pInputText id="NomeEmpresa" formControlName="NomeEmpresa" 
                                 autofocus
                                 [ngClass]="{'p-invalid': submitted && formSteps[0].controls['NomeEmpresa'].invalid}" />
                             <small class="p-error block"
@@ -59,7 +59,7 @@
                             <p-inputMask mask="99.999.999/9999-99" placeholder="CNPJ/CEI"
                                 formControlName="CNPJ_CEI"
                                 [ngClass]="{'p-invalid': submitted && formSteps[0].controls['CNPJ_CEI'].invalid}"
-                                [required]="true"></p-inputMask>
+                                ></p-inputMask>
                             <small class="p-error block"
                                 *ngIf="submitted && formSteps[0].controls['CNPJ_CEI'].invalid">CNPJ/CEI é
                                 obrigatório.</small>
@@ -69,13 +69,13 @@
                 <div *ngSwitchCase="1">
                     <div class="grid">
                         <div class="col-12 md:col-6">
-                            <input type="text" placeholder="Rua" pInputText id="Rua" formControlName="Rua" required
+                            <input type="text" placeholder="Rua" pInputText id="Rua" formControlName="Rua" 
                                 [ngClass]="{'p-invalid': submitted && formSteps[1].controls['Rua'].invalid}" />
                             <small class="p-error block" *ngIf="submitted && formSteps[1].controls['Rua'].invalid">Rua é
                                 obrigatório.</small>
                         </div>
                         <div class="col-12 md:col-6">
-                            <input type="number" placeholder="Número" pInputText id="Numero" formControlName="Numero" required
+                            <input type="number" placeholder="Número" pInputText id="Numero" formControlName="Numero" 
                                 [ngClass]="{'p-invalid': submitted && formSteps[1].controls['Numero'].invalid}" />
                             <small class="p-error block"
                                 *ngIf="submitted && formSteps[1].controls['Numero'].invalid">Número
@@ -86,7 +86,7 @@
                             <input type="text" placeholder="Complemento" pInputText id="Complemento" formControlName="Complemento" />
                         </div>
                         <div class="col-12 md:col-6">
-                            <input type="text" placeholder="Bairro" pInputText id="Bairro" formControlName="Bairro" required
+                            <input type="text" placeholder="Bairro" pInputText id="Bairro" formControlName="Bairro" 
                                 [ngClass]="{'p-invalid': submitted && formSteps[1].controls['Bairro'].invalid}" />
                             <small class="p-error block"
                                 *ngIf="submitted && formSteps[1].controls['Bairro'].invalid">Bairro
@@ -96,7 +96,7 @@
                         <div class="col-12 md:col-6">
                             <p-inputMask mask="99999-999" placeholder="CEP" formControlName="CEP"
                                 [ngClass]="{'p-invalid': submitted && formSteps[1].controls['CEP'].invalid}"
-                                [required]="true"></p-inputMask>
+                                ></p-inputMask>
                             <small class="p-error block" *ngIf="submitted && formSteps[1].controls['CEP'].invalid">CEP é
                                 obrigatório.</small>
                         </div>

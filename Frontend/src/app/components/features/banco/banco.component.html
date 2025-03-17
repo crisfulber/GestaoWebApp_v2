@@ -25,7 +25,7 @@
         <ng-template pTemplate="body" let-banco>
             <tr>
                 <td>{{banco.NomeBanco}}</td>
-                <td>{{banco.Codigo}}</td>
+                <td>{{formatarCodigoBanco(banco.Codigo)}}</td>
                 <td>
                     <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-info mr-2"
                         (click)="editBanco(banco)"></button>
@@ -47,7 +47,7 @@
         <div class="field">
             <label for="Codigo" class="block">Codigo</label>
             <p-inputmask mask="999" placeholder="999" id="Codigo" [(ngModel)]="banco.Codigo"
-                required autofocus [ngClass]="{'ng-invalid ng-dirty': submitted && !banco.Codigo}" />
+                autofocus [ngClass]="{'ng-invalid ng-dirty': submitted && !banco.Codigo}" />
             <small class="p-error block" *ngIf="submitted && !banco.Codigo">Codigo é obrigatório.</small>
         </div>
     </ng-template>

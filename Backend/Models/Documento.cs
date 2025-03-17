@@ -9,13 +9,12 @@ namespace Backend.Models
         [Key]
         public int Id { get; set; }
 
-        [Required(ErrorMessage = "Por favor, insira o CPF")]
         [StringLength(14)]
-        public required string CPF { get; set; }
+        public string? CPF { get; set; }
 
-        public int? RG { get; set; }
+        public string? RG { get; set; }
 
-        public DateTime? DtEmissaoRG { get; set; }
+        public string? DtEmissaoRG { get; set; }
 
         public string? OrgaoExpeditor { get; set; }
 
@@ -24,11 +23,11 @@ namespace Backend.Models
         [ForeignKey("UF_RG_IdEstado")] 
         public Estado? UF_RG_Estado { get; set; } 
 
-        public int? CTPS { get; set; }
+        public string? CTPS { get; set; }
 
-        public int? SerieCTPS { get; set; }
+        public string? SerieCTPS { get; set; }
 
-        public DateTime? DtEmissaoCTPS { get; set; }
+        public string? DtEmissaoCTPS { get; set; }
 
         public int? UF_CTPS_IdEstado { get; set; } 
 

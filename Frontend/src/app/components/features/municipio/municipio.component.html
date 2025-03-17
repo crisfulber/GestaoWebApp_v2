@@ -43,7 +43,7 @@
     <ng-template pTemplate="content">
         <div class="field">
             <label for="NomeMunicipio" class="block">Município</label>
-            <input type="text" pInputText id="NomeMunicipio" [(ngModel)]="municipio.NomeMunicipio" required autofocus
+            <input type="text" pInputText id="NomeMunicipio" [(ngModel)]="municipio.NomeMunicipio"  autofocus
                 [ngClass]="{'ng-invalid ng-dirty': submitted && !municipio.NomeMunicipio}" />
             <small class="p-error block" *ngIf="submitted && !municipio.NomeMunicipio">Nome é obrigatório.</small>
         </div>

@@ -37,8 +37,8 @@ export class ContatoComponent implements OnInit {
     private fb: FormBuilder
   ) {
     this.contatoForm = this.fb.group({
-      Telefone: ['', Validators.required],
-      Email: ['', [Validators.required, Validators.email]]
+      Telefone: [''],
+      Email: ['']
     });
   }
 

@@ -14,7 +14,7 @@ namespace Backend.Models
         [StringLength(14)]
         public string? CPF_Dependente { get; set; }
 
-        public DateTime? DtNascimento_Dependente { get; set; }
+        public string? DtNascimento_Dependente { get; set; }
 
     }
 }

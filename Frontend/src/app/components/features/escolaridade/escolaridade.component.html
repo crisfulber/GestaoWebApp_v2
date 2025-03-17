@@ -43,7 +43,7 @@
     <ng-template pTemplate="content">
         <div class="field">
             <label for="NomeEscolaridade" class="block">Nome</label>
-            <input type="text" pInputText id="NomeEscolaridade" [(ngModel)]="escolaridade.NomeEscolaridade" required
+            <input type="text" pInputText id="NomeEscolaridade" [(ngModel)]="escolaridade.NomeEscolaridade" 
                 autofocus />
             <small class="p-error block" *ngIf="submitted && !escolaridade.NomeEscolaridade">Escolaridade é
                 obrigatória.</small>

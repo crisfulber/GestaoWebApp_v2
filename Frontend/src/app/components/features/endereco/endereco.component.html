@@ -51,13 +51,13 @@
     <ng-template pTemplate="content">
         <div class="field">
             <label for="Rua" class="block">Rua</label>
-            <input type="text" pInputText id="Rua" [(ngModel)]="endereco.Rua" required autofocus
+            <input type="text" pInputText id="Rua" [(ngModel)]="endereco.Rua"  autofocus
                 [ngClass]="{'ng-invalid ng-dirty': submitted && !endereco.Rua}" />
             <small class="p-error block" *ngIf="submitted && !endereco.Rua">Rua é obrigatório.</small>
         </div>
         <div class="field">
             <label for="Numero" class="block">Número</label>
-            <input type="number" pInputText id="Numero" [(ngModel)]="endereco.Numero" required
+            <input type="number" pInputText id="Numero" [(ngModel)]="endereco.Numero" 
                 [ngClass]="{'ng-invalid ng-dirty': submitted && !endereco.Numero}" />
             <small class="p-error block" *ngIf="submitted && !endereco.Numero">Número é obrigatório.</small>
         </div>
@@ -67,7 +67,7 @@
         </div>
         <div class="field">
             <label for="Bairro" class="block">Bairro</label>
-            <input type="text" pInputText id="Bairro" [(ngModel)]="endereco.Bairro" required
+            <input type="text" pInputText id="Bairro" [(ngModel)]="endereco.Bairro" 
                 [ngClass]="{'ng-invalid ng-dirty': submitted && !endereco.Bairro}" />
             <small class="p-error block" *ngIf="submitted && !endereco.Bairro">Bairro é obrigatório.</small>
         </div>
@@ -86,7 +86,7 @@
         </div>
         <div class="field">
             <label for="CEP" class="block">CEP</label>
-            <input type="text" pInputText id="CEP" [(ngModel)]="endereco.CEP" required
+            <input type="text" pInputText id="CEP" [(ngModel)]="endereco.CEP" 
                 [ngClass]="{'ng-invalid ng-dirty': submitted && !endereco.CEP}" />
             <small class="p-error block" *ngIf="submitted && !endereco.CEP">CEP é obrigatório.</small>
         </div>

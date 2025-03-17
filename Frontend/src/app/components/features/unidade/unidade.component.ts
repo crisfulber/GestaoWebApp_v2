@@ -63,17 +63,17 @@ export class UnidadeComponent implements OnInit {
   ) {
     this.formSteps = [
       this.fb.group({
-        NomeUnidade: ['', Validators.required],
-        IdEmpresa: [null, Validators.required]
+        NomeUnidade: [''],
+        IdEmpresa: [null]
       }),
       this.fb.group({
-        Rua: ['', Validators.required],
-        Numero: ['', Validators.required],
+        Rua: [''],
+        Numero: [''],
         Complemento: [''],
-        Bairro: ['', Validators.required],
-        CEP: ['', Validators.required],
-        IdMunicipio: [null, Validators.required],
-        IdEstado: [null, Validators.required]
+        Bairro: [''],
+        CEP: [''],
+        IdMunicipio: [null],
+        IdEstado: [null]
       })
     ];
   }

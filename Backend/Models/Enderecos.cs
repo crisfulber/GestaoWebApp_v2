@@ -8,23 +8,23 @@ namespace Backend.Models
         [Key]
         public int Id { get; set; }
 
-        [Required(ErrorMessage = "Rua é obrigatória")]
+        
         [StringLength(100)]
-        public required string Rua { get; set; }
+        public  string Rua { get; set; }
 
-        [Required(ErrorMessage = "Número é obrigatório")]
+        
         public int Numero { get; set; }
 
         [StringLength(50)]
         public string? Complemento { get; set; }
 
-        [Required(ErrorMessage = "Bairro é obrigatório")]
+       
         [StringLength(50)]
-        public required string Bairro { get; set; }
+        public  string Bairro { get; set; }
 
-        [Required(ErrorMessage = "CEP é obrigatório")]
+        
         [StringLength(10)]
-        public required string CEP { get; set; }
+        public  string CEP { get; set; }
 
         [ForeignKey("Municipio")]
         public int IdMunicipio { get; set; }

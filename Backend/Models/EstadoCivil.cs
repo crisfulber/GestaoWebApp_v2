@@ -9,7 +9,7 @@ namespace Backend.Models
         [Key]
         public int Id { get; set; }
 
-        [Required(ErrorMessage = "Por favor, insira a estado civil")]
-        public required string SituacaoCivil { get; set; }
+        
+        public  string SituacaoCivil { get; set; }
     }
 }

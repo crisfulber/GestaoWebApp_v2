@@ -50,7 +50,7 @@
                     <div class="grid">
                         <div class="col-12 md:col-6">
                             <input type="text" placeholder="Nome da Unidade" pInputText id="NomeUnidade"
-                                formControlName="NomeUnidade" required autofocus
+                                formControlName="NomeUnidade"  autofocus
                                 [ngClass]="{'p-invalid': submitted && formSteps[0].controls['NomeUnidade'].invalid}" />
                             <small class="p-error block"
                                 *ngIf="submitted && formSteps[0].controls['NomeUnidade'].invalid">Nome é
@@ -69,14 +69,14 @@
                 <div *ngSwitchCase="1">
                     <div class="grid">
                         <div class="col-12 md:col-6">
-                            <input type="text" placeholder="Rua" pInputText id="Rua" formControlName="Rua" required
+                            <input type="text" placeholder="Rua" pInputText id="Rua" formControlName="Rua" 
                                 [ngClass]="{'p-invalid': submitted && formSteps[1].controls['Rua'].invalid}" />
                             <small class="p-error block" *ngIf="submitted && formSteps[1].controls['Rua'].invalid">Rua é
                                 obrigatório.</small>
                         </div>
                         <div class="col-12 md:col-6">
                             <input type="number" placeholder="Número" pInputText id="Numero"
-                                formControlName="Numero" required
+                                formControlName="Numero" 
                                 [ngClass]="{'p-invalid': submitted && formSteps[1].controls['Numero'].invalid}" />
                             <small class="p-error block"
                                 *ngIf="submitted && formSteps[1].controls['Numero'].invalid">Número
@@ -89,7 +89,7 @@
                         </div>
                         <div class="col-12 md:col-6">
                             <input type="text" placeholder="Bairro" pInputText id="Bairro" formControlName="Bairro"
-                                required [ngClass]="{'p-invalid': submitted && formSteps[1].controls['Bairro'].invalid}" />
+                                 [ngClass]="{'p-invalid': submitted && formSteps[1].controls['Bairro'].invalid}" />
                             <small class="p-error block"
                                 *ngIf="submitted && formSteps[1].controls['Bairro'].invalid">Bairro
                                 é
@@ -98,7 +98,7 @@
                         <div class="col-12 md:col-6">
                             <p-inputMask mask="99999-999" placeholder="CEP" formControlName="CEP"
                                 [ngClass]="{'p-invalid': submitted && formSteps[1].controls['CEP'].invalid}"
-                                [required]="true"></p-inputMask>
+                                ></p-inputMask>
                             <small class="p-error block" *ngIf="submitted && formSteps[1].controls['CEP'].invalid">CEP é
                                 obrigatório.</small>
                         </div>

@@ -1,6 +1,6 @@
 public class Estado
 {
     public int Id { get; set; }
-    public required string NomeEstado { get; set; }
-    public required string Sigla { get; set; }
+    public string NomeEstado { get; set; }
+    public string Sigla { get; set; }
 }

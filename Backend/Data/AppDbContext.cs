@@ -29,7 +29,7 @@ namespace Backend.Data
         public DbSet<DadosPessoais> DadosPessoais { get; set; }
         public DbSet<DadosTrabalho> DadosTrabalho { get; set; }
         public DbSet<Pessoa> Pessoas { get; set; }
-        public DbSet<Salario> Salarios { get; set; } // Adicionado
+        public DbSet<Salario> Salarios { get; set; } 
         public DbSet<Periodo> Periodos { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -96,12 +96,10 @@ namespace Backend.Data
 
             modelBuilder.Entity<Contato>()
                 .Property(c => c.Telefone)
-                .HasColumnType("varchar(16)")
-                .IsRequired(false);
+                .HasColumnType("varchar(16)");
 
             modelBuilder.Entity<Contato>()
-                .Property(c => c.Email)
-                .IsRequired(false);
+                .Property(c => c.Email);
 
             modelBuilder.Entity<Empresa>()
                 .HasOne(e => e.Contato)

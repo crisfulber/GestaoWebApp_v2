@@ -61,7 +61,7 @@
         <div class="field">
             <label for="CPF" class="block">CPF</label>
             <p-inputmask mask="999.999.999-99" placeholder="999.999.999-99" id="CPF" [(ngModel)]="documento.CPF"
-                required autofocus [ngClass]="{'ng-invalid ng-dirty': submitted && !documento.CPF}" />
+                 autofocus [ngClass]="{'ng-invalid ng-dirty': submitted && !documento.CPF}" />
             <small class="p-error block" *ngIf="submitted && !documento.CPF">CPF é obrigatório.</small>
         </div>
         <div class="field">

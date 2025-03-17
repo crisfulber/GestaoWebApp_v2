@@ -19,8 +19,8 @@
             <tr>
                 <th pSortableColumn="NumRegistro">Número do Registro <p-sortIcon field="NumRegistro"></p-sortIcon></th>
                 <th pSortableColumn="DtInicio">Data de Início <p-sortIcon field="DtInicio"></p-sortIcon></th>
-                <th pSortableColumn="DtRegistro">Data de Registro <p-sortIcon field="DtRegistro"></p-sortIcon>
-                </th>
+                <th pSortableColumn="DtRegistro">Data de Registro <p-sortIcon field="DtRegistro"></p-sortIcon></th>
+                <th pSortableColumn="Ativo">Ativo <p-sortIcon field="Ativo"></p-sortIcon></th>
                 <th></th>
             </tr>
         </ng-template>
@@ -29,6 +29,9 @@
                 <td>{{dadosTrabalho.NumRegistro}}</td>
                 <td>{{dadosTrabalho.DtInicio}}</td>
                 <td>{{dadosTrabalho.DtRegistro}}</td>
+                <td>
+                    <i [className]="!dadosTrabalho.Ativo ? 'pi pi-check-circle' : 'pi pi-times-circle'"
+                        [ngStyle]="{ color: !dadosTrabalho.Ativo ? 'green' : 'red' }"></i></td>
                 <td>
                     <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-info mr-2"
                         (click)="editDadosTrabalho(dadosTrabalho)"></button>

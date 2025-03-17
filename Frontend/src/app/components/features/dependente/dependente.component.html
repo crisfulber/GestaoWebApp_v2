@@ -50,7 +50,7 @@
         <div class="field">
             <label for="CPF_Dependente" class="block">CPF</label>
             <p-inputmask mask="999.999.999-99" placeholder="999.999.999-99" id="CPF_Dependente" [(ngModel)]="dependente.CPF_Dependente"
-                required autofocus [ngClass]="{'ng-invalid ng-dirty': submitted && !dependente.CPF_Dependente}" />
+                 autofocus [ngClass]="{'ng-invalid ng-dirty': submitted && !dependente.CPF_Dependente}" />
             <small class="p-error block" *ngIf="submitted && !dependente.CPF_Dependente">CPF é obrigatório.</small>
         </div>
         <div class="field">

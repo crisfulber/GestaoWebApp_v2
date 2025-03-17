@@ -11,7 +11,7 @@ namespace Backend.Models
         [Column(TypeName = "LONGTEXT")]
         public string? NomePai { get; set; }
 
-        [Required]
+         
         [Column(TypeName = "LONGTEXT")]
         public string? NomeMae { get; set; }
 
@@ -19,7 +19,7 @@ namespace Backend.Models
 
         public int? IdNacionalidade { get; set; }
 
-        [Required]
+         
         [Column(TypeName = "LONGTEXT")]
         public string DtNascimento { get; set; }
 

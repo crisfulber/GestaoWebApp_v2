@@ -43,13 +43,13 @@
     <ng-template pTemplate="content">
         <div class="field">
             <label for="NomeEstado" class="block">Nome</label>
-            <input type="text" pInputText id="NomeEstado" [(ngModel)]="estado.NomeEstado" required autofocus
+            <input type="text" pInputText id="NomeEstado" [(ngModel)]="estado.NomeEstado"  autofocus
                 [ngClass]="{'ng-invalid ng-dirty': submitted && !estado.NomeEstado}" />
             <small class="p-error block" *ngIf="submitted && !estado.NomeEstado">Nome é obrigatório.</small>
         </div>
         <div class="field">
             <label for="Sigla" class="block">Sigla</label>
-            <input type="text" pInputText id="Sigla" [(ngModel)]="estado.Sigla" required
+            <input type="text" pInputText id="Sigla" [(ngModel)]="estado.Sigla" 
                 [ngClass]="{'ng-invalid ng-dirty': submitted && !estado.Sigla}" />
             <small class="p-error block" *ngIf="submitted && !estado.Sigla">Sigla é obrigatória.</small>
         </div>

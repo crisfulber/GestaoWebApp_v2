@@ -43,6 +43,14 @@ export class BancoComponent implements OnInit {
     this.loadBancos();
   }
 
+  formatarCodigoBanco(codigo: number | string): string {
+    if (typeof codigo === 'number') {
+      return codigo.toString().padStart(3, '0');
+    } else {
+      return codigo.padStart(3, '0');
+    }
+  }
+
   loadBancos() {
     this.bancoService.getBancos().subscribe({
       next: (data) => {

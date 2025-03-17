@@ -49,14 +49,14 @@ namespace Backend.Migrations
 
                     MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int?>("Agencia")
-                        .HasColumnType("int");
+                    b.Property<string>("Agencia")
+                        .HasColumnType("longtext");
 
                     b.Property<int?>("IdBanco")
                         .HasColumnType("int");
 
-                    b.Property<int?>("NumConta")
-                        .HasColumnType("int");
+                    b.Property<string>("NumConta")
+                        .HasColumnType("longtext");
 
                     b.Property<string>("PIX")
                         .HasColumnType("LONGTEXT");
@@ -116,7 +116,6 @@ namespace Backend.Migrations
                         .HasColumnType("LONGTEXT");
 
                     b.Property<string>("NomeMae")
-                        .IsRequired()
                         .HasColumnType("LONGTEXT");
 
                     b.Property<string>("NomePai")
@@ -177,8 +176,8 @@ namespace Backend.Migrations
                         .HasMaxLength(14)
                         .HasColumnType("varchar(14)");
 
-                    b.Property<DateTime?>("DtNascimento_Dependente")
-                        .HasColumnType("datetime(6)");
+                    b.Property<string>("DtNascimento_Dependente")
+                        .HasColumnType("longtext");
 
                     b.Property<string>("NomeDependente")
                         .HasColumnType("longtext");
@@ -197,18 +196,17 @@ namespace Backend.Migrations
                     MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("CPF")
-                        .IsRequired()
                         .HasMaxLength(14)
                         .HasColumnType("varchar(14)");
 
-                    b.Property<int?>("CTPS")
-                        .HasColumnType("int");
+                    b.Property<string>("CTPS")
+                        .HasColumnType("longtext");
 
-                    b.Property<DateTime?>("DtEmissaoCTPS")
-                        .HasColumnType("datetime(6)");
+                    b.Property<string>("DtEmissaoCTPS")
+                        .HasColumnType("longtext");
 
-                    b.Property<DateTime?>("DtEmissaoRG")
-                        .HasColumnType("datetime(6)");
+                    b.Property<string>("DtEmissaoRG")
+                        .HasColumnType("longtext");
 
                     b.Property<string>("OrgaoExpeditor")
                         .HasColumnType("longtext");
@@ -217,11 +215,11 @@ namespace Backend.Migrations
                         .HasMaxLength(14)
                         .HasColumnType("varchar(14)");
 
-                    b.Property<int?>("RG")
-                        .HasColumnType("int");
+                    b.Property<string>("RG")
+                        .HasColumnType("longtext");
 
-                    b.Property<int?>("SerieCTPS")
-                        .HasColumnType("int");
+                    b.Property<string>("SerieCTPS")
+                        .HasColumnType("longtext");
 
                     b.Property<int?>("UF_CTPS_IdEstado")
                         .HasColumnType("int");
@@ -532,9 +530,8 @@ namespace Backend.Migrations
 
                     MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("DtAlteracao")
-                        .IsRequired()
-                        .HasColumnType("longtext");
+                    b.Property<DateTime>("DtAlteracao")
+                        .HasColumnType("DATE");
 
                     b.Property<int>("IdPessoa")
                         .HasColumnType("int");
@@ -543,7 +540,7 @@ namespace Backend.Migrations
                         .HasColumnType("tinyint(1)");
 
                     b.Property<decimal>("Valor")
-                        .HasColumnType("decimal(18, 2)");
+                        .HasColumnType("DECIMAL(18,2)");
 
                     b.HasKey("Id");
 

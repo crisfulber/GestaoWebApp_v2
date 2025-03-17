@@ -9,7 +9,7 @@ namespace Backend.Models
         [Key]
         public int Id { get; set; }
 
-        [Required(ErrorMessage = "Por favor, insira a escolaridade")]
-        public required string NomeEscolaridade { get; set; }
+        
+        public  string NomeEscolaridade { get; set; }
     }
 }

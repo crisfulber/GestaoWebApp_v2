@@ -61,17 +61,17 @@ export class EmpresaComponent implements OnInit {
     ) {
         this.formSteps = [
             this.fb.group({
-                NomeEmpresa: ['', Validators.required],
-                CNPJ_CEI: ['', Validators.required]
+                NomeEmpresa: [''],
+                CNPJ_CEI: ['']
             }),
             this.fb.group({
-                Rua: ['', Validators.required],
-                Numero: ['', Validators.required],
+                Rua: [''],
+                Numero: [''],
                 Complemento: [''],
-                Bairro: ['', Validators.required],
-                CEP: ['', Validators.required],
-                IdMunicipio: [null, Validators.required],
-                IdEstado: [null, Validators.required]
+                Bairro: [''],
+                CEP: [''],
+                IdMunicipio: [null],
+                IdEstado: [null]
             }),
             this.fb.group({
                 Telefone: [''],

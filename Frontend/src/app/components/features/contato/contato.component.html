@@ -46,13 +46,13 @@
                 <p-inputMask mask="(99) 99999-9999" placeholder="(99) 99999-9999" id="Telefone"
                     formControlName="Telefone"
                     [ngClass]="{'p-invalid': submitted && contatoForm.controls['Telefone'].invalid}"
-                    [required]="true"></p-inputMask>
+                    ></p-inputMask>
                 <small class="p-error block" *ngIf="submitted && contatoForm.controls['Telefone'].invalid">Telefone é
                     obrigatório.</small>
             </div>
             <div class="field">
                 <label for="Email" class="block">Email</label>
-                <input type="email" pInputText id="Email" formControlName="Email" required
+                <input type="email" pInputText id="Email" formControlName="Email" 
                     [ngClass]="{'p-invalid': submitted && contatoForm.controls['Email'].invalid}" />
                 <small class="p-error block" *ngIf="submitted && contatoForm.controls['Email'].invalid">Email é
                     obrigatório.</small>

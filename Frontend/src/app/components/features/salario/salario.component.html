@@ -53,7 +53,7 @@
             <div class="grid">
                 <div class="col-12 md:col-6">
                     <p-select [options]="pessoas" formControlName="IdPessoa" optionLabel="NomePessoa" optionValue="Id"
-                        placeholder="Selecione uma Pessoa" appendTo="body" required
+                        placeholder="Selecione uma Pessoa" appendTo="body" 
                         [ngClass]="{'ng-invalid ng-dirty': submitted && !salarioForm.get('IdPessoa')?.valid}"></p-select>
                     <small class="p-error block" *ngIf="submitted && !salarioForm.get('IdPessoa')?.valid">Pessoa é
                         obrigatória.</small>
@@ -66,7 +66,7 @@
                 </div>
                 <div class="col-12 md:col-6">
                     <p-inputMask mask="99/99/9999" [autoClear]="false" placeholder="dd/mm/aaaa"
-                        formControlName="DtAlteracao" id="DtAlteracao" required
+                        formControlName="DtAlteracao" id="DtAlteracao" 
                         [ngClass]="{'ng-invalid ng-dirty': submitted && !salarioForm.get('DtAlteracao')?.valid}"></p-inputMask>
                     <small class="p-error block" *ngIf="submitted && !salarioForm.get('DtAlteracao')?.valid">Data é
                         obrigatória.</small>

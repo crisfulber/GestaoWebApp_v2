@@ -9,8 +9,8 @@ namespace Backend.Models
         [Key]
         public int Id { get; set; }
 
-        [Required(ErrorMessage = "Por favor, insira o nome da unidade")]
-        public required string NomeUnidade { get; set; }
+        
+        public string NomeUnidade { get; set; }
 
         [ForeignKey("Empresa")]
         public int IdEmpresa { get; set; }

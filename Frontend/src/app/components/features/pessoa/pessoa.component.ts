@@ -154,38 +154,38 @@ export class PessoaComponent implements OnInit {
     });
     this.step2Form = this.fb.group({
       NomePai: [''],
-      NomeMae: ['', Validators.required],
+      NomeMae: [''],
       IdMunicipio: [''],
       IdNacionalidade: [''],
       IdEscolaridade: [''],
-      DtNascimento: ['', [Validators.required]],
+      DtNascimento: [''],
       IdEstadoCivil: [''],
       NomeConjuge: ['']
     });
     this.step3Form = this.fb.group({
-      CPF: ['', Validators.required],
+      CPF: [''],
       RG: [''],
-      DtEmissaoRG: ['', [Validators.required]],
+      DtEmissaoRG: [''],
       OrgaoExpeditor: [''],
       UF_RG_IdEstado: [''],
       CTPS: [''],
       SerieCTPS: [''],
-      DtEmissaoCTPS: ['', [Validators.required]],
+      DtEmissaoCTPS: [''],
       UF_CTPS_IdEstado: [''],
       PIS: ['']
     });
     this.step4Form = this.fb.group({
       NomeDependente: [''],
       CPF_Dependente: [''],
-      DtNascimento_Dependente: ['', [Validators.required]],
+      DtNascimento_Dependente: [''],
     });
     this.step5Form = this.fb.group({
-      Rua: ['', Validators.required],
-      Numero: ['', Validators.required],
+      Rua: [''],
+      Numero: [''],
       Complemento: [''],
-      Bairro: ['', Validators.required],
-      IdMunicipio: ['', Validators.required],
-      IdEstado: ['', Validators.required],
+      Bairro: [''],
+      IdMunicipio: [''],
+      IdEstado: [''],
       CEP: ['']
     });
     this.step6Form = this.fb.group({
@@ -194,7 +194,7 @@ export class PessoaComponent implements OnInit {
     });
     this.step7Form = this.fb.group({
       NumRegistro: [''],
-      DtInicio: ['', [Validators.required]],
+      DtInicio: [''],
       DtRegistro: [''],
       Ativo: [false],
       Almoco: [false],
@@ -203,12 +203,12 @@ export class PessoaComponent implements OnInit {
       Bonifica: [false]
     });
     this.step8Form = this.fb.group({
-      IdFuncao: ['', Validators.required],
-      IdSetor: ['', Validators.required],
-      IdUnidade: ['', Validators.required]
+      IdFuncao: [''],
+      IdSetor: [''],
+      IdUnidade: ['']
     });
     this.step9Form = this.fb.group({
-      IdBanco: ['', Validators.required],
+      IdBanco: [''],
       Agencia: [''],
       NumConta: [''],
       PIX: ['']
@@ -331,6 +331,14 @@ export class PessoaComponent implements OnInit {
 
     console.error("Formato de data inválido para envio ao banco:", data);
     return data;
+  }
+
+  formatarCodigoBanco(codigo: number | string): string {
+    if (typeof codigo === 'number') {
+      return codigo.toString().padStart(3, '0');
+    } else {
+      return codigo.padStart(3, '0');
+    }
   }
 
   loadPessoas() {

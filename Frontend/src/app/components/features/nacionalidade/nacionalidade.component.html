@@ -41,7 +41,7 @@
     <ng-template pTemplate="content">
         <div class="field">
             <label for="NomeNacionalidade" class="block">Nacionalidade</label>
-            <input type="text" pInputText id="NomeNacionalidade" [(ngModel)]="nacionalidade.NomeNacionalidade" required autofocus />
+            <input type="text" pInputText id="NomeNacionalidade" [(ngModel)]="nacionalidade.NomeNacionalidade"  autofocus />
             <small class="p-error block" *ngIf="submitted && !nacionalidade.NomeNacionalidade">Nacionalidade é obrigatório.</small>
         </div>
     </ng-template>

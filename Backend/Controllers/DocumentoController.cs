@@ -65,7 +65,6 @@ namespace Backend.Controllers
         {
             try
             {
-                // Verificar se os estados existem
                 if (documento.UF_RG_IdEstado.HasValue && !_context.Estados.Any(e => e.Id == documento.UF_RG_IdEstado.Value))
                 {
                     return BadRequest("UF_RG_IdEstado inválido.");
@@ -105,7 +104,6 @@ namespace Backend.Controllers
 
             try
             {
-                // Verificar se os estados existem
                 if (documento.UF_RG_IdEstado.HasValue && !_context.Estados.Any(e => e.Id == documento.UF_RG_IdEstado.Value))
                 {
                     return BadRequest("UF_RG_IdEstado inválido.");

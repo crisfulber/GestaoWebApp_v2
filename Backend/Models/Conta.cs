@@ -11,9 +11,9 @@ namespace Backend.Models
         [ForeignKey("Banco")]
         public int? IdBanco { get; set; }
 
-        public int? Agencia { get; set; }
+        public string? Agencia { get; set; }
 
-        public int? NumConta { get; set; }
+        public string? NumConta { get; set; }
 
         [Column(TypeName = "LONGTEXT")]
         public string? PIX { get; set; }

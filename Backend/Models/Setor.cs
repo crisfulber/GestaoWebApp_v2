@@ -9,8 +9,8 @@ namespace Backend.Models
         [Key]
         public int Id { get; set; }
 
-        [Required(ErrorMessage = "Por favor, insira o nome do setor")]
-        public required string NomeSetor { get; set; }
+        
+        public string NomeSetor { get; set; }
 
     }
 }

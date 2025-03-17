@@ -45,7 +45,7 @@
             <div class="col-12 md:col-6">
                 <label for="NomeFuncao" class="block">Nome</label>
                 <input type="text" placeholder="Nome da Função" pInputText id="NomeFuncao" [(ngModel)]="funcao.NomeFuncao"
-                    required autofocus [ngClass]="{'p-invalid': submitted && !funcao.NomeFuncao}" />
+                     autofocus [ngClass]="{'p-invalid': submitted && !funcao.NomeFuncao}" />
                 <small class="p-error block" *ngIf="submitted && !funcao.NomeFuncao">Nome é obrigatório.</small>
             </div>
             <div class="col-12 md:col-6">

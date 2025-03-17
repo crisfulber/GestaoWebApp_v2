@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Backend.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialCreate : Migration
+    public partial class Banco : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -56,7 +56,7 @@ namespace Backend.Migrations
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     NomePai = table.Column<string>(type: "LONGTEXT", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    NomeMae = table.Column<string>(type: "LONGTEXT", nullable: false)
+                    NomeMae = table.Column<string>(type: "LONGTEXT", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     IdMunicipio = table.Column<int>(type: "int", nullable: true),
                     IdNacionalidade = table.Column<int>(type: "int", nullable: true),
@@ -64,7 +64,8 @@ namespace Backend.Migrations
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     IdEstadoCivil = table.Column<int>(type: "int", nullable: true),
                     NomeConjuge = table.Column<string>(type: "LONGTEXT", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4")
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    IdEscolaridade = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -88,10 +89,7 @@ namespace Backend.Migrations
                     Almoco = table.Column<bool>(type: "tinyint(1)", nullable: false),
                     Adiantamento = table.Column<bool>(type: "tinyint(1)", nullable: false),
                     ValeTransporte = table.Column<bool>(type: "tinyint(1)", nullable: false),
-                    Bonifica = table.Column<bool>(type: "tinyint(1)", nullable: false),
-                    IdFuncao = table.Column<int>(type: "int", nullable: true),
-                    IdConta = table.Column<int>(type: "int", nullable: true),
-                    IdSalario = table.Column<int>(type: "int", nullable: true)
+                    Bonifica = table.Column<bool>(type: "tinyint(1)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -107,41 +105,14 @@ namespace Backend.Migrations
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     NomeDependente = table.Column<string>(type: "longtext", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    CPF = table.Column<string>(type: "varchar(14)", maxLength: 14, nullable: false)
+                    CPF_Dependente = table.Column<string>(type: "varchar(14)", maxLength: 14, nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    DtNascimento = table.Column<DateTime>(type: "datetime(6)", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Dependentes", x => x.Id);
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
-
-            migrationBuilder.CreateTable(
-                name: "Documentos",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    CPF = table.Column<string>(type: "varchar(14)", maxLength: 14, nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    RG = table.Column<int>(type: "int", nullable: false),
-                    DtEmissaoRG = table.Column<DateTime>(type: "datetime(6)", nullable: true),
-                    OrgaoExpeditor = table.Column<string>(type: "longtext", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    UF_RG = table.Column<string>(type: "longtext", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    CTPS = table.Column<int>(type: "int", nullable: true),
-                    SerieCTPS = table.Column<int>(type: "int", nullable: true),
-                    DtEmissaoCTPS = table.Column<DateTime>(type: "datetime(6)", nullable: true),
-                    UF_CTPS = table.Column<string>(type: "longtext", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    PIS = table.Column<string>(type: "varchar(14)", maxLength: 14, nullable: true)
+                    DtNascimento_Dependente = table.Column<string>(type: "longtext", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4")
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Documentos", x => x.Id);
+                    table.PrimaryKey("PK_Dependentes", x => x.Id);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
@@ -241,19 +212,33 @@ namespace Backend.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
-                name: "Salarios",
+                name: "Periodos",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    Valor = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    DtAlteracao = table.Column<string>(type: "longtext", nullable: false)
+                    Mes = table.Column<string>(type: "varchar(3)", maxLength: 3, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    Ativo = table.Column<bool>(type: "tinyint(1)", nullable: false)
+                    Ano = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Salarios", x => x.Id);
+                    table.PrimaryKey("PK_Periodos", x => x.Id);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "Setores",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    NomeSetor = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4")
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Setores", x => x.Id);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
@@ -264,8 +249,10 @@ namespace Backend.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     IdBanco = table.Column<int>(type: "int", nullable: true),
-                    Agencia = table.Column<int>(type: "int", nullable: true),
-                    NumConta = table.Column<int>(type: "int", nullable: true),
+                    Agencia = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    NumConta = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     PIX = table.Column<string>(type: "LONGTEXT", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4")
                 },
@@ -278,6 +265,47 @@ namespace Backend.Migrations
                         principalTable: "Bancos",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "Documentos",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    CPF = table.Column<string>(type: "varchar(14)", maxLength: 14, nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    RG = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    DtEmissaoRG = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    OrgaoExpeditor = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    UF_RG_IdEstado = table.Column<int>(type: "int", nullable: true),
+                    CTPS = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    SerieCTPS = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    DtEmissaoCTPS = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    UF_CTPS_IdEstado = table.Column<int>(type: "int", nullable: true),
+                    PIS = table.Column<string>(type: "varchar(14)", maxLength: 14, nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4")
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Documentos", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Documentos_Estados_UF_CTPS_IdEstado",
+                        column: x => x.UF_CTPS_IdEstado,
+                        principalTable: "Estados",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Documentos_Estados_UF_RG_IdEstado",
+                        column: x => x.UF_RG_IdEstado,
+                        principalTable: "Estados",
+                        principalColumn: "Id");
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
@@ -304,6 +332,28 @@ namespace Backend.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
+                name: "Funcoes",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    NomeFuncao = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    IdSetor = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Funcoes", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Funcoes_Setores_IdSetor",
+                        column: x => x.IdSetor,
+                        principalTable: "Setores",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
                 name: "Enderecos",
                 columns: table => new
                 {
@@ -316,7 +366,7 @@ namespace Backend.Migrations
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     Bairro = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    CEP = table.Column<string>(type: "varchar(9)", maxLength: 9, nullable: false)
+                    CEP = table.Column<string>(type: "varchar(10)", maxLength: 10, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     IdMunicipio = table.Column<int>(type: "int", nullable: false),
                     IdEstado = table.Column<int>(type: "int", nullable: false)
@@ -400,44 +450,106 @@ namespace Backend.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
-                name: "Setores",
+                name: "Pessoas",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    NomeSetor = table.Column<string>(type: "longtext", nullable: false)
+                    NomePessoa = table.Column<string>(type: "LONGTEXT", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    IdUnidade = table.Column<int>(type: "int", nullable: false)
+                    IdDadosPessoais = table.Column<int>(type: "int", nullable: true),
+                    IdDocumentos = table.Column<int>(type: "int", nullable: true),
+                    IdDependentes = table.Column<int>(type: "int", nullable: true),
+                    IdEnderecos = table.Column<int>(type: "int", nullable: true),
+                    IdContatos = table.Column<int>(type: "int", nullable: true),
+                    IdDadosTrabalho = table.Column<int>(type: "int", nullable: true),
+                    IdFuncoes = table.Column<int>(type: "int", nullable: true),
+                    IdSetores = table.Column<int>(type: "int", nullable: true),
+                    IdUnidades = table.Column<int>(type: "int", nullable: true),
+                    IdContas = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Setores", x => x.Id);
+                    table.PrimaryKey("PK_Pessoas", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Setores_Unidade_IdUnidade",
-                        column: x => x.IdUnidade,
-                        principalTable: "Unidade",
+                        name: "FK_Pessoas_Contas_IdContas",
+                        column: x => x.IdContas,
+                        principalTable: "Contas",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.SetNull);
+                    table.ForeignKey(
+                        name: "FK_Pessoas_Contatos_IdContatos",
+                        column: x => x.IdContatos,
+                        principalTable: "Contatos",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.SetNull);
+                    table.ForeignKey(
+                        name: "FK_Pessoas_DadosPessoais_IdDadosPessoais",
+                        column: x => x.IdDadosPessoais,
+                        principalTable: "DadosPessoais",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.SetNull);
+                    table.ForeignKey(
+                        name: "FK_Pessoas_DadosTrabalho_IdDadosTrabalho",
+                        column: x => x.IdDadosTrabalho,
+                        principalTable: "DadosTrabalho",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.SetNull);
+                    table.ForeignKey(
+                        name: "FK_Pessoas_Dependentes_IdDependentes",
+                        column: x => x.IdDependentes,
+                        principalTable: "Dependentes",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.SetNull);
+                    table.ForeignKey(
+                        name: "FK_Pessoas_Documentos_IdDocumentos",
+                        column: x => x.IdDocumentos,
+                        principalTable: "Documentos",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.SetNull);
+                    table.ForeignKey(
+                        name: "FK_Pessoas_Enderecos_IdEnderecos",
+                        column: x => x.IdEnderecos,
+                        principalTable: "Enderecos",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.SetNull);
+                    table.ForeignKey(
+                        name: "FK_Pessoas_Funcoes_IdFuncoes",
+                        column: x => x.IdFuncoes,
+                        principalTable: "Funcoes",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.SetNull);
+                    table.ForeignKey(
+                        name: "FK_Pessoas_Setores_IdSetores",
+                        column: x => x.IdSetores,
+                        principalTable: "Setores",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Pessoas_Unidade_IdUnidades",
+                        column: x => x.IdUnidades,
+                        principalTable: "Unidade",
+                        principalColumn: "Id");
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
-                name: "Funcoes",
+                name: "Salarios",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    NomeFuncao = table.Column<string>(type: "longtext", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    IdSetor = table.Column<int>(type: "int", nullable: false)
+                    Valor = table.Column<decimal>(type: "DECIMAL(18,2)", nullable: false),
+                    DtAlteracao = table.Column<DateTime>(type: "DATE", nullable: false),
+                    SalarioAtivo = table.Column<bool>(type: "tinyint(1)", nullable: false),
+                    IdPessoa = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Funcoes", x => x.Id);
+                    table.PrimaryKey("PK_Salarios", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Funcoes_Setores_IdSetor",
-                        column: x => x.IdSetor,
-                        principalTable: "Setores",
+                        name: "FK_Salarios_Pessoas_IdPessoa",
+                        column: x => x.IdPessoa,
+                        principalTable: "Pessoas",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 })
@@ -447,6 +559,16 @@ namespace Backend.Migrations
                 name: "IX_Contas_IdBanco",
                 table: "Contas",
                 column: "IdBanco");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Documentos_UF_CTPS_IdEstado",
+                table: "Documentos",
+                column: "UF_CTPS_IdEstado");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Documentos_UF_RG_IdEstado",
+                table: "Documentos",
+                column: "UF_RG_IdEstado");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Empresas_IdContato",
@@ -479,9 +601,67 @@ namespace Backend.Migrations
                 column: "IdEstado");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Setores_IdUnidade",
-                table: "Setores",
-                column: "IdUnidade");
+                name: "IX_Pessoas_IdContas",
+                table: "Pessoas",
+                column: "IdContas",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Pessoas_IdContatos",
+                table: "Pessoas",
+                column: "IdContatos",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Pessoas_IdDadosPessoais",
+                table: "Pessoas",
+                column: "IdDadosPessoais",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Pessoas_IdDadosTrabalho",
+                table: "Pessoas",
+                column: "IdDadosTrabalho",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Pessoas_IdDependentes",
+                table: "Pessoas",
+                column: "IdDependentes",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Pessoas_IdDocumentos",
+                table: "Pessoas",
+                column: "IdDocumentos",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Pessoas_IdEnderecos",
+                table: "Pessoas",
+                column: "IdEnderecos",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Pessoas_IdFuncoes",
+                table: "Pessoas",
+                column: "IdFuncoes",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Pessoas_IdSetores",
+                table: "Pessoas",
+                column: "IdSetores");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Pessoas_IdUnidades",
+                table: "Pessoas",
+                column: "IdUnidades");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Salarios_IdPessoa",
+                table: "Salarios",
+                column: "IdPessoa");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Unidade_IdEmpresa",
@@ -498,6 +678,30 @@ namespace Backend.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
+                name: "Escala");
+
+            migrationBuilder.DropTable(
+                name: "Escolaridade");
+
+            migrationBuilder.DropTable(
+                name: "EstadoCivil");
+
+            migrationBuilder.DropTable(
+                name: "FuncaoRegistro");
+
+            migrationBuilder.DropTable(
+                name: "Nacionalidade");
+
+            migrationBuilder.DropTable(
+                name: "Periodos");
+
+            migrationBuilder.DropTable(
+                name: "Salarios");
+
+            migrationBuilder.DropTable(
+                name: "Pessoas");
+
+            migrationBuilder.DropTable(
                 name: "Contas");
 
             migrationBuilder.DropTable(
@@ -513,34 +717,16 @@ namespace Backend.Migrations
                 name: "Documentos");
 
             migrationBuilder.DropTable(
-                name: "Escala");
-
-            migrationBuilder.DropTable(
-                name: "Escolaridade");
-
-            migrationBuilder.DropTable(
-                name: "EstadoCivil");
-
-            migrationBuilder.DropTable(
-                name: "FuncaoRegistro");
-
-            migrationBuilder.DropTable(
                 name: "Funcoes");
 
             migrationBuilder.DropTable(
-                name: "Nacionalidade");
-
-            migrationBuilder.DropTable(
-                name: "Salarios");
+                name: "Unidade");
 
             migrationBuilder.DropTable(
                 name: "Bancos");
 
             migrationBuilder.DropTable(
                 name: "Setores");
-
-            migrationBuilder.DropTable(
-                name: "Unidade");
 
             migrationBuilder.DropTable(
                 name: "Empresas");

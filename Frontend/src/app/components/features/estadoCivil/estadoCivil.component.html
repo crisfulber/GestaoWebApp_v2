@@ -43,7 +43,7 @@
     <ng-template pTemplate="content">
         <div class="field">
             <label for="SituacaoCivil" class="block">Nome</label>
-            <input type="text" pInputText id="SituacaoCivil" [(ngModel)]="estadocivil.SituacaoCivil" required
+            <input type="text" pInputText id="SituacaoCivil" [(ngModel)]="estadocivil.SituacaoCivil" 
                 autofocus />
             <small class="p-error block" *ngIf="submitted && !estadocivil.SituacaoCivil">Estado Civil é
                 obrigatório.</small>

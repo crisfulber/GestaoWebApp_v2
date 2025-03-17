@@ -42,14 +42,14 @@
         <div class="grid">
             <div class="col-12 md:col-6">
                 <label for="Mes">Mês</label>
-                <input type="text" placeholder="Mês (ex: JAN)" pInputText id="Mes" [(ngModel)]="periodo.Mes" required
+                <input type="text" placeholder="Mês (ex: JAN)" pInputText id="Mes" [(ngModel)]="periodo.Mes" 
                     autofocus [ngClass]="{'p-invalid': submitted && !periodo.Mes}" maxlength="3" />
                 <small class="p-error block" *ngIf="submitted && !periodo.Mes">Mês é obrigatório.</small>
             </div>
             <div class="col-12 md:col-6">
                 <label for="Ano">Ano</label>
                 <p-inputNumber inputId="Ano" [(ngModel)]="periodo.Ano" inputId="minmax" mode="decimal" [min]="0"
-                    [max]="100" required [ngClass]="{'p-invalid': submitted && !periodo.Ano}"></p-inputNumber>
+                    [max]="100"  [ngClass]="{'p-invalid': submitted && !periodo.Ano}"></p-inputNumber>
                 <small class="p-error block" *ngIf="submitted && !periodo.Ano">Ano é obrigatório.</small>
             </div>
         </div>

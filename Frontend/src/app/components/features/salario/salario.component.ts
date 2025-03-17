@@ -49,9 +49,9 @@ export class SalarioComponent implements OnInit {
     private fb: FormBuilder
   ) {
     this.salarioForm = this.fb.group({
-      IdPessoa: ['', Validators.required],
-      Valor: [0, Validators.required],
-      DtAlteracao: ['', Validators.required],
+      IdPessoa: [''],
+      Valor: [0],
+      DtAlteracao: [''],
       SalarioAtivo: [false]
     });
   }

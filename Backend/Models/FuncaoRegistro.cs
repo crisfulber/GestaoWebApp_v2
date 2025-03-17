@@ -9,10 +9,10 @@ namespace Backend.Models
         [Key]
         public int Id { get; set; }
 
-        [Required(ErrorMessage = "Por favor, insira a função")]
-        public required string Funcao { get; set; }
+        
+        public  string Funcao { get; set; }
 
-        [Required(ErrorMessage = "Por favor, insira o CBO")]
+        
         public int CBO { get; set; }
     }
 }

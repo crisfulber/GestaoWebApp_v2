@@ -43,12 +43,12 @@
     <ng-template pTemplate="content">
         <div class="field">
             <label for="Funcao" class="block">Função</label>
-            <input type="text" pInputText id="Funcao" [(ngModel)]="funcaoRegistro.Funcao" required autofocus />
+            <input type="text" pInputText id="Funcao" [(ngModel)]="funcaoRegistro.Funcao"  autofocus />
             <small class="p-error block" *ngIf="submitted && !funcaoRegistro.Funcao">Função é obrigatória.</small>
         </div>
         <div class="field">
             <label for="CBO" class="block">CBO</label>
-            <input type="number" pInputText id="CBO" [(ngModel)]="funcaoRegistro.CBO" required />
+            <input type="number" pInputText id="CBO" [(ngModel)]="funcaoRegistro.CBO"  />
             <small class="p-error block" *ngIf="submitted && !funcaoRegistro.CBO">CBO é obrigatório.</small>
         </div>
     </ng-template>
