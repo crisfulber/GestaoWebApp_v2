@@ -1,6 +1,8 @@
 import { Routes } from '@angular/router';
 
 export const routes: Routes = [
+    { path: 'adiantamento', loadComponent: () => import('./components/features/adiantamento/adiantamento.component').then(m => m.AdiantamentoComponent) },
+    { path: 'acrescimo', loadComponent: () => import('./components/features/acrescimo/acrescimo.component').then(m => m.AcrescimoComponent) },
     { path: 'banco', loadComponent: () => import('./components/features/banco/banco.component').then(m => m.BancoComponent) },
     { path: 'conta', loadComponent: () => import('./components/features/conta/conta.component').then(m => m.ContaComponent) },
     { path: 'contato', loadComponent: () => import('./components/features/contato/contato.component').then(m => m.ContatoComponent) },
@@ -29,7 +31,6 @@ export const routes: Routes = [
     { path: 'hora-falta', loadComponent: () => import('./components/features/hora-falta/hora-falta.component').then(m => m.HoraFaltaComponent) },
     { path: 'desconto', loadComponent: () => import('./components/features/desconto/desconto.component').then(m => m.DescontoComponent) },
     { path: 'tipo-hora', loadComponent: () => import('./components/features/tipo-hora/tipo-hora.component').then(m => m.TipoHoraComponent) },
-    { path: 'adiantamento', loadComponent: () => import('./components/features/adiantamento/adiantamento.component').then(m => m.AdiantamentoComponent) },
     
     { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
     { path: '**', redirectTo: 'dashboard' },

@@ -29,13 +29,14 @@ namespace Backend.Data
         public DbSet<DadosPessoais> DadosPessoais { get; set; }
         public DbSet<DadosTrabalho> DadosTrabalho { get; set; }
         public DbSet<Pessoa> Pessoas { get; set; }
-        public DbSet<Salario> Salarios { get; set; } 
+        public DbSet<Salario> Salarios { get; set; }
         public DbSet<Periodo> Periodos { get; set; }
         public DbSet<Desconto> Descontos { get; set; }
         public DbSet<Adiantamento> Adiantamentos { get; set; }
         public DbSet<TipoHora> TiposHora { get; set; }
         public DbSet<HoraExtra> HorasExtras { get; set; }
         public DbSet<HoraFalta> HorasFaltas { get; set; }
+        public DbSet<Acrescimo> Acrescimos { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -160,11 +161,11 @@ namespace Backend.Data
                 .HasForeignKey<Pessoa>(p => p.IdContas)
                 .OnDelete(DeleteBehavior.SetNull);
 
-              modelBuilder.Entity<Salario>()  // Adicionado
-                .HasOne(s => s.Pessoa)
-                .WithMany()
-                .HasForeignKey(s => s.IdPessoa)
-                .OnDelete(DeleteBehavior.Restrict); // Ou outro DeleteBehavior apropriado
+            modelBuilder.Entity<Salario>()
+              .HasOne(s => s.Pessoa)
+              .WithMany()
+              .HasForeignKey(s => s.IdPessoa)
+              .OnDelete(DeleteBehavior.Restrict);
         }
     }
 }

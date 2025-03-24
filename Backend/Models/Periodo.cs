@@ -15,7 +15,7 @@ namespace Backend.Models
         public string Mes { get; set; }
 
         
-        [Range(0, 99, ErrorMessage = "O campo Ano deve ter 2 digitos")]
+        [Range(0, 9999, ErrorMessage = "O campo Ano deve ter 4 digitos")]
         public int Ano { get; set; }
     }
 }

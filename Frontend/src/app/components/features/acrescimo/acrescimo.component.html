@@ -2,9 +2,9 @@
 <p-confirmDialog [style]="{width: '50vw'}"></p-confirmDialog>
 
 <div class="card">
-    <span style="font-size: 1.5em; font-weight: 400;">Outros Descontos</span>
+    <span style="font-size: 1.5em; font-weight: 400;">Outros Acréscimos</span>
     <hr>
-    <p-table [value]="descontos" dataKey="Id" [rows]="20" styleClass="p-datatable-gridlines p-datatable-striped"
+    <p-table [value]="acrescimos" dataKey="Id" [rows]="20" styleClass="p-datatable-gridlines p-datatable-striped"
         [paginator]="true" [globalFilterFields]="[' ']" [rowHover]="true" #dt>
         <ng-template pTemplate="caption">
             <div class="flex align-items-center justify-content-between">
@@ -35,46 +35,46 @@
       </tr>
     </ng-template>
 
-    <ng-template pTemplate="body" let-desconto>
+    <ng-template pTemplate="body" let-acrescimo>
       <tr>
-        <td>{{ desconto.Pessoa.NomePessoa }}</td>
-        <td>{{ desconto.Valor }}</td>
-        <td>{{ desconto.Data | date : "dd/MM/yyyy" }}</td>
-        <td>{{ desconto.Parcelas }}</td>
+        <td>{{ acrescimo.Pessoa.NomePessoa }}</td>
+        <td>{{ acrescimo.Valor }}</td>
+        <td>{{ acrescimo.Data | date : "dd/MM/yyyy" }}</td>
+        <td>{{ acrescimo.Parcelas }}</td>
         <td>
           <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-info mr-2"
-            (click)="editDesconto(desconto)"></button>
+            (click)="editAcrescimo(acrescimo)"></button>
           <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-danger"
-            (click)="deleteDesconto(desconto)"></button>
+            (click)="deleteAcrescimo(acrescimo)"></button>
         </td>
       </tr>
     </ng-template>
   </p-table>
 </div>
 
-<p-dialog [(visible)]="descontoDialog" [style]="{ width: '450px' }" header="Detalhes do Desconto" [modal]="true"
+<p-dialog [(visible)]="acrescimoDialog" [style]="{ width: '450px' }" header="Detalhes do Acrescimo" [modal]="true"
   styleClass="p-fluid">
   <ng-template pTemplate="content">
     <div class="field">
       <label for="pessoa" class="block">Pessoa</label>
-      <p-dropdown id="pessoa" [(ngModel)]="desconto.IdPessoa" optionLabel="NomePessoa" optionValue="Id"
+      <p-dropdown id="pessoa" [(ngModel)]="acrescimo.IdPessoa" optionLabel="NomePessoa" optionValue="Id"
         placeholder="Selecione a pessoa" [options]="pessoas"></p-dropdown>
     </div>
 
     <div class="field">
       <label for="Valor" class="block">Valor</label>
-      <p-inputNumber inputId="Valor" [(ngModel)]="desconto.Valor" [mode]="'decimal'"
+      <p-inputNumber inputId="Valor" [(ngModel)]="acrescimo.Valor" [mode]="'decimal'"
         [minFractionDigits]="2"></p-inputNumber>
     </div>
 
     <div class="field">
       <label for="Data" class="block">Data</label>
-      <p-calendar id="Data" [(ngModel)]="desconto.Data" dateFormat="dd/mm/yy" showIcon="true"></p-calendar>
+      <p-calendar id="Data" [(ngModel)]="acrescimo.Data" dateFormat="dd/mm/yy" showIcon="true"></p-calendar>
     </div>
 
     <div class="field">
       <label for="Parcelas" class="block">Parcelas</label>
-      <input type="number" pInputText id="Parcelas" [(ngModel)]="desconto.Parcelas" />
+      <input type="number" pInputText id="Parcelas" [(ngModel)]="acrescimo.Parcelas" />
     </div>
   </ng-template>
 
@@ -82,6 +82,6 @@
     <button pButton pRipple label="Cancelar" icon="pi pi-times" class="p-button-secondary" [raised]="true"
       (click)="hideDialog()"></button>
     <button pButton pRipple label="Salvar" icon="pi pi-check" class="p-button" [raised]="true"
-      (click)="saveDesconto()"></button>
+      (click)="saveAcrescimo()"></button>
   </ng-template>
 </p-dialog>

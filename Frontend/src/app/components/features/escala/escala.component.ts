@@ -93,6 +93,7 @@ export class EscalaComponent implements OnInit {
 
     if (this.escala.NomeEscala?.trim()) {
       this.escala.NomeEscala = this.escala.NomeEscala.toUpperCase();
+      this.escala.Descricao = this.escala.Descricao?.toUpperCase();
       if (this.escala.Id) {
         this.escalaService.updateEscala(this.escala.Id, this.escala).subscribe({
           next: () => {

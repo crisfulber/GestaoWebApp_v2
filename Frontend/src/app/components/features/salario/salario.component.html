@@ -2,7 +2,7 @@
 <p-confirmDialog [style]="{width: '50vw'}"></p-confirmDialog>
 
 <div class="card">
-    <span style="font-size: 1.5em; font-weight: 400;">Listagem de Salários</span>
+    <span style="font-size: 1.5em; font-weight: 400;">Salários</span>
     <hr>
     <p-table [value]="salarios" dataKey="id" [rows]="20" styleClass="p-datatable-gridlines" [paginator]="true"
         [globalFilterFields]="['Valor', 'DtAlteracao', 'pessoa.NomePessoa']" [rowHover]="true" #dt>
@@ -53,27 +53,27 @@
             <div class="grid">
                 <div class="col-12 md:col-6">
                     <p-select [options]="pessoas" formControlName="IdPessoa" optionLabel="NomePessoa" optionValue="Id"
-                        placeholder="Selecione uma Pessoa" appendTo="body" 
+                        placeholder="Selecione um Colaborador" appendTo="body" 
                         [ngClass]="{'ng-invalid ng-dirty': submitted && !salarioForm.get('IdPessoa')?.valid}"></p-select>
                     <small class="p-error block" *ngIf="submitted && !salarioForm.get('IdPessoa')?.valid">Pessoa é
                         obrigatória.</small>
                 </div>
                 <div class="col-12 md:col-6">
-                    <p-inputNumber id="Valor" formControlName="Valor" mode="currency" currency="BRL"
+                    <p-inputNumber id="Valor" formControlName="Valor" mode="currency" currency="BRL" placeholder="Valor"
                         locale="pt-BR"></p-inputNumber>
                     <small class="p-error block" *ngIf="submitted && !salarioForm.get('Valor')?.valid">Valor é
                         obrigatório.</small>
                 </div>
                 <div class="col-12 md:col-6">
-                    <p-inputMask mask="99/99/9999" [autoClear]="false" placeholder="dd/mm/aaaa"
+                    <p-inputMask mask="99/99/9999" [autoClear]="false" placeholder="Data de Alteração"
                         formControlName="DtAlteracao" id="DtAlteracao" 
                         [ngClass]="{'ng-invalid ng-dirty': submitted && !salarioForm.get('DtAlteracao')?.valid}"></p-inputMask>
                     <small class="p-error block" *ngIf="submitted && !salarioForm.get('DtAlteracao')?.valid">Data é
                         obrigatória.</small>
                 </div>
-                <div class="col-12 md:col-6">
-                    <label for="SalarioAtivo" class="block">Salário Ativo</label>
+                <div class="col-12 md:col-6 field flex align-items-center">
                     <p-checkbox id="SalarioAtivo" formControlName="SalarioAtivo" [binary]="true"></p-checkbox>
+                    <label for="SalarioAtivo" class="ml-2">Salário Ativo</label>
                 </div>
             </div>
         </form>

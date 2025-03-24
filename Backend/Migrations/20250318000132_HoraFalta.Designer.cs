@@ -4,6 +4,7 @@ using Backend.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Backend.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250318000132_HoraFalta")]
+    partial class HoraFalta
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -21,33 +24,6 @@ namespace Backend.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
             MySqlModelBuilderExtensions.AutoIncrementColumns(modelBuilder);
-
-            modelBuilder.Entity("Backend.Models.Acrescimo", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<DateTime?>("Data")
-                        .HasColumnType("DATE");
-
-                    b.Property<int?>("IdPessoa")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("Parcelas")
-                        .HasColumnType("int");
-
-                    b.Property<decimal?>("Valor")
-                        .HasColumnType("DECIMAL(6,2)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("IdPessoa");
-
-                    b.ToTable("Acrescimos");
-                });
 
             modelBuilder.Entity("Backend.Models.Adiantamento", b =>
                 {
@@ -792,15 +768,6 @@ namespace Backend.Migrations
                     b.HasIndex("IdEstado");
 
                     b.ToTable("Municipios");
-                });
-
-            modelBuilder.Entity("Backend.Models.Acrescimo", b =>
-                {
-                    b.HasOne("Backend.Models.Pessoa", "Pessoa")
-                        .WithMany()
-                        .HasForeignKey("IdPessoa");
-
-                    b.Navigation("Pessoa");
                 });
 
             modelBuilder.Entity("Backend.Models.Adiantamento", b =>
