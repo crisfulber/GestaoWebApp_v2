@@ -30,8 +30,8 @@
                 <td>{{dadosTrabalho.DtInicio}}</td>
                 <td>{{dadosTrabalho.DtRegistro}}</td>
                 <td>
-                    <i [className]="!dadosTrabalho.Ativo ? 'pi pi-check-circle' : 'pi pi-times-circle'"
-                        [ngStyle]="{ color: !dadosTrabalho.Ativo ? 'green' : 'red' }"></i></td>
+                    <i [className]="dadosTrabalho.Ativo ? 'pi pi-check-circle' : 'pi pi-times-circle'"
+                        [ngStyle]="{ color: dadosTrabalho.Ativo ? 'green' : 'red' }"></i></td>
                 <td>
                     <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-info mr-2"
                         (click)="editDadosTrabalho(dadosTrabalho)"></button>

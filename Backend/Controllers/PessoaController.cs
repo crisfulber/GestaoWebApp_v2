@@ -26,7 +26,11 @@ namespace Backend.Controllers
         {
             try
             {
-                return await _context.Pessoas.ToListAsync();
+                return await _context.Pessoas
+                .Include(p => p.DadosTrabalho)
+                    .OrderByDescending(p => p.DadosTrabalho.Ativo)
+                    .ThenBy(p => p.NomePessoa)
+                .ToListAsync();
             }
             catch (Exception ex)
             {
@@ -44,7 +48,7 @@ namespace Backend.Controllers
 
                 if (pessoa == null)
                 {
-                    return NotFound(new { message = "Pessoa não encontrada." }); 
+                    return NotFound(new { message = "Pessoa não encontrada." });
                 }
 
                 return pessoa;
@@ -63,7 +67,7 @@ namespace Backend.Controllers
             {
                 if (!ModelState.IsValid)
                 {
-                    return BadRequest(ModelState); 
+                    return BadRequest(ModelState);
                 }
 
                 _context.Pessoas.Add(pessoa);

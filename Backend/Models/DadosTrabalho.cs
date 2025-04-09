@@ -11,7 +11,6 @@ namespace Backend.Models
         [Column(TypeName = "LONGTEXT")]
         public string? NumRegistro { get; set; }
 
-         
         [Column(TypeName = "LONGTEXT")]
         public string DtInicio { get; set; }
 

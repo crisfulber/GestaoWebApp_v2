@@ -46,7 +46,7 @@ namespace Backend.Migrations
 
                     b.HasIndex("IdPessoa");
 
-                    b.ToTable("Acrescimos");
+                    b.ToTable("Acrescimos", (string)null);
                 });
 
             modelBuilder.Entity("Backend.Models.Adiantamento", b =>
@@ -73,7 +73,7 @@ namespace Backend.Migrations
 
                     b.HasIndex("IdPessoa");
 
-                    b.ToTable("Adiantamentos");
+                    b.ToTable("Adiantamentos", (string)null);
                 });
 
             modelBuilder.Entity("Backend.Models.Banco", b =>
@@ -92,7 +92,7 @@ namespace Backend.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Bancos");
+                    b.ToTable("Bancos", (string)null);
                 });
 
             modelBuilder.Entity("Backend.Models.Conta", b =>
@@ -119,7 +119,7 @@ namespace Backend.Migrations
 
                     b.HasIndex("IdBanco");
 
-                    b.ToTable("Contas");
+                    b.ToTable("Contas", (string)null);
                 });
 
             modelBuilder.Entity("Backend.Models.Contato", b =>
@@ -139,7 +139,7 @@ namespace Backend.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Contatos");
+                    b.ToTable("Contatos", (string)null);
                 });
 
             modelBuilder.Entity("Backend.Models.DadosPessoais", b =>
@@ -177,7 +177,7 @@ namespace Backend.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("DadosPessoais");
+                    b.ToTable("DadosPessoais", (string)null);
                 });
 
             modelBuilder.Entity("Backend.Models.DadosTrabalho", b =>
@@ -215,7 +215,7 @@ namespace Backend.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("DadosTrabalho");
+                    b.ToTable("DadosTrabalho", (string)null);
                 });
 
             modelBuilder.Entity("Backend.Models.Dependente", b =>
@@ -238,7 +238,7 @@ namespace Backend.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Dependentes");
+                    b.ToTable("Dependentes", (string)null);
                 });
 
             modelBuilder.Entity("Backend.Models.Desconto", b =>
@@ -265,7 +265,7 @@ namespace Backend.Migrations
 
                     b.HasIndex("IdPessoa");
 
-                    b.ToTable("Descontos");
+                    b.ToTable("Descontos", (string)null);
                 });
 
             modelBuilder.Entity("Backend.Models.Documento", b =>
@@ -314,7 +314,7 @@ namespace Backend.Migrations
 
                     b.HasIndex("UF_RG_IdEstado");
 
-                    b.ToTable("Documentos");
+                    b.ToTable("Documentos", (string)null);
                 });
 
             modelBuilder.Entity("Backend.Models.Empresa", b =>
@@ -347,7 +347,7 @@ namespace Backend.Migrations
 
                     b.HasIndex("IdEndereco");
 
-                    b.ToTable("Empresas");
+                    b.ToTable("Empresas", (string)null);
                 });
 
             modelBuilder.Entity("Backend.Models.Endereco", b =>
@@ -392,7 +392,7 @@ namespace Backend.Migrations
 
                     b.HasIndex("IdMunicipio");
 
-                    b.ToTable("Enderecos");
+                    b.ToTable("Enderecos", (string)null);
                 });
 
             modelBuilder.Entity("Backend.Models.Escala", b =>
@@ -412,7 +412,7 @@ namespace Backend.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Escala");
+                    b.ToTable("Escala", (string)null);
                 });
 
             modelBuilder.Entity("Backend.Models.Escolaridade", b =>
@@ -429,7 +429,7 @@ namespace Backend.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Escolaridade");
+                    b.ToTable("Escolaridade", (string)null);
                 });
 
             modelBuilder.Entity("Backend.Models.EstadoCivil", b =>
@@ -446,7 +446,7 @@ namespace Backend.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("EstadoCivil");
+                    b.ToTable("EstadoCivil", (string)null);
                 });
 
             modelBuilder.Entity("Backend.Models.Funcao", b =>
@@ -468,7 +468,7 @@ namespace Backend.Migrations
 
                     b.HasIndex("IdSetor");
 
-                    b.ToTable("Funcoes");
+                    b.ToTable("Funcoes", (string)null);
                 });
 
             modelBuilder.Entity("Backend.Models.FuncaoRegistro", b =>
@@ -488,7 +488,7 @@ namespace Backend.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("FuncaoRegistro");
+                    b.ToTable("FuncaoRegistro", (string)null);
                 });
 
             modelBuilder.Entity("Backend.Models.HoraExtra", b =>
@@ -517,7 +517,7 @@ namespace Backend.Migrations
 
                     b.HasIndex("IdTipoHora");
 
-                    b.ToTable("HorasExtras");
+                    b.ToTable("HorasExtras", (string)null);
                 });
 
             modelBuilder.Entity("Backend.Models.HoraFalta", b =>
@@ -546,7 +546,7 @@ namespace Backend.Migrations
 
                     b.HasIndex("IdTipoHora");
 
-                    b.ToTable("HorasFaltas");
+                    b.ToTable("HorasFaltas", (string)null);
                 });
 
             modelBuilder.Entity("Backend.Models.Nacionalidade", b =>
@@ -563,7 +563,7 @@ namespace Backend.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Nacionalidade");
+                    b.ToTable("Nacionalidade", (string)null);
                 });
 
             modelBuilder.Entity("Backend.Models.Periodo", b =>
@@ -584,7 +584,7 @@ namespace Backend.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Periodos");
+                    b.ToTable("Periodos", (string)null);
                 });
 
             modelBuilder.Entity("Backend.Models.Pessoa", b =>
@@ -658,7 +658,7 @@ namespace Backend.Migrations
 
                     b.HasIndex("IdUnidades");
 
-                    b.ToTable("Pessoas");
+                    b.ToTable("Pessoas", (string)null);
                 });
 
             modelBuilder.Entity("Backend.Models.Salario", b =>
@@ -685,7 +685,7 @@ namespace Backend.Migrations
 
                     b.HasIndex("IdPessoa");
 
-                    b.ToTable("Salarios");
+                    b.ToTable("Salarios", (string)null);
                 });
 
             modelBuilder.Entity("Backend.Models.Setor", b =>
@@ -702,7 +702,7 @@ namespace Backend.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Setores");
+                    b.ToTable("Setores", (string)null);
                 });
 
             modelBuilder.Entity("Backend.Models.TipoHora", b =>
@@ -721,7 +721,7 @@ namespace Backend.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("TiposHora");
+                    b.ToTable("TiposHora", (string)null);
                 });
 
             modelBuilder.Entity("Backend.Models.Unidade", b =>
@@ -748,7 +748,7 @@ namespace Backend.Migrations
 
                     b.HasIndex("IdEndereco");
 
-                    b.ToTable("Unidade");
+                    b.ToTable("Unidade", (string)null);
                 });
 
             modelBuilder.Entity("Estado", b =>
@@ -769,7 +769,7 @@ namespace Backend.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Estados");
+                    b.ToTable("Estados", (string)null);
                 });
 
             modelBuilder.Entity("Municipio", b =>
@@ -791,7 +791,7 @@ namespace Backend.Migrations
 
                     b.HasIndex("IdEstado");
 
-                    b.ToTable("Municipios");
+                    b.ToTable("Municipios", (string)null);
                 });
 
             modelBuilder.Entity("Backend.Models.Acrescimo", b =>

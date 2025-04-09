@@ -19,6 +19,7 @@
         <ng-template pTemplate="header">
             <tr>
                 <th pSortableColumn="NomePessoa">Nome <p-sortIcon field="NomePessoa"></p-sortIcon></th>
+                <th pSortableColumn="DtInicio">Data Inicio <p-sortIcon field="DtInicio"></p-sortIcon></th>
                 <th pSortableColumn="Ativo">Ativo <p-sortIcon field="Ativo"></p-sortIcon></th>
                 <th>Ações</th>
             </tr>
@@ -26,10 +27,10 @@
         <ng-template pTemplate="body" let-pessoa>
             <tr>
                 <td>{{pessoa.NomePessoa}}</td>
+                <td>{{pessoa.DadosTrabalho.DtInicio}}</td>
                 <td>
-                    <i [className]="!pessoa.Ativo ? 'pi pi-check-circle' : 'pi pi-times-circle'"
-                        [ngStyle]="{ color: !pessoa.Ativo ? 'green' : 'red' }"></i>
-                </td>
+                    <i [className]="pessoa.DadosTrabalho.Ativo ? 'pi pi-check-circle' : 'pi pi-times-circle'"
+                        [ngStyle]="{ color: pessoa.DadosTrabalho.Ativo ? 'green' : 'red' }"></i></td>
                 <td>
                     <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-info mr-2"
                         (click)="editPessoa(pessoa)"></button>

@@ -1,3 +1,5 @@
+import { DadosTrabalho } from "./dadosTrabalho";
+
 export interface Pessoa {
     Id: number;
     NomePessoa?: string;
@@ -11,4 +13,5 @@ export interface Pessoa {
     IdSetores?: number | null;
     IdUnidades?: number | null;
     IdContas?: number | null;
+    DadosTrabalho?: DadosTrabalho;
 }

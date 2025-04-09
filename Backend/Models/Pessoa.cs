@@ -32,7 +32,7 @@ namespace Backend.Models
 
         [ForeignKey("Funcao")]
         public int? IdFuncoes { get; set; }
-        public virtual Funcao? Funcao { get; set; }
+        public Funcao? Funcao { get; set; }
 
         [ForeignKey("Setor")]
         public int? IdSetores { get; set; }
